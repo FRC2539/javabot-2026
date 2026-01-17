@@ -40,7 +40,7 @@ public class ClimberSubsystem extends SubsystemBase {
 //#region Internal Controls
     // TODO: Assemble a command that travels from the current stage to the new target stage
     private static Command setTargetLevel(Stage mode) {
-        // Sets TargetStage to L1 on completion. Utilizes L|A|_L|B|() functions
+        // Sets TargetStage to L1 on completion. Utilizes L[x]_L[y]() functions
         return Commands.runOnce(() -> { if (AllowUnimplementedErrors) System.err.println("Command not implemented"); });
     }
 

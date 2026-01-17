@@ -25,15 +25,16 @@ public class HopperSubsystem extends SubsystemBase {
 
 
 //#region External Controls
-    // TODO: Interface with the hopper counter 
+    // TODO: Interface with the hopper counter
+    // TODO: (Externally) Add an manual method for adding/removing fuel
     public static void AddFuel() {
-
+        if (AllowUnimplementedErrors) System.err.println("Function not implemented");
     }
     public static void RemoveFuel() {
-
+        if (AllowUnimplementedErrors) System.err.println("Function not implemented");
     }
     public static void SetFuel(int count) {
-        
+        if (AllowUnimplementedErrors) System.err.println("Function not implemented");
     }
 //#endregion
 }

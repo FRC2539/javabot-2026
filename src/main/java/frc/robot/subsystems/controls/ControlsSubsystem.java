@@ -31,7 +31,7 @@ public class ControlsSubsystem extends SubsystemBase {
     public void bindButtons() {
         // TODO: Driver/operator control schemes
         
-        // Example
+        // Examples:
         operatorController.getLeftTrigger().and(operatorController.getRightTrigger().negate()).whileTrue(TurretSubsystem.Prepare());
         operatorController.getRightTrigger().whileTrue(TurretSubsystem.Shoot());
     }

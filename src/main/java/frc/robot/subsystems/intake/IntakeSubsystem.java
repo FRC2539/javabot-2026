@@ -45,7 +45,9 @@ public class IntakeSubsystem extends SubsystemBase {
 
 //#region Internal Controls
     @Override
-    public void periodic() {}
+    public void periodic() {
+        // TODO: Detect when pieces enter into the hopper, and interface with the hopper's FuelCount
+    }
 
     // TODO: Stop the rollers
     private static Command stopSpinning() {
@@ -75,10 +77,15 @@ public class IntakeSubsystem extends SubsystemBase {
 //#region External Controls
     // TODO: Stow the intake using internal controls
     public static Command Stow() {
+        // Stop rollers, move up
         return Commands.runOnce(() -> { if (AllowUnimplementedErrors) System.err.println("Command not implemented"); });
     } 
     // TODO: Engage the intake using internal controls
     public static Command Engage() {
+        return Commands.runOnce(() -> { if (AllowUnimplementedErrors) System.err.println("Command not implemented"); });
+    }
+    // TODO: Engage the extake using internal controls
+    public static Command EngageExtake() {
         return Commands.runOnce(() -> { if (AllowUnimplementedErrors) System.err.println("Command not implemented"); });
     }
 //#endregion

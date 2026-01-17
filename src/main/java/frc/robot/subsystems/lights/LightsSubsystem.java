@@ -1,7 +1,5 @@
 package frc.robot.subsystems.lights;
 
-import java.util.function.DoubleSupplier;
-
 import com.ctre.phoenix6.hardware.CANdle;
 
 import edu.wpi.first.wpilibj.RobotBase;
@@ -13,6 +11,7 @@ public class LightsSubsystem extends SubsystemBase {
     public LightsSubsystem() {
         if (!RobotBase.isReal()) return;
         candle = new CANdle(CANDLE_PORT, "CANivore");
+        TurnOn();
     }
 
 //#region Internal Data
@@ -45,14 +44,14 @@ public class LightsSubsystem extends SubsystemBase {
 //#region External Controls
     // TODO: Turn lights on/off
     public static void TurnOn() {
-
+        if (AllowUnimplementedErrors) System.err.println("Function not implemented");
     }
     public static void TurnOff() {
-        
+        if (AllowUnimplementedErrors) System.err.println("Function not implemented");
     }
     // TODO: Set lights brightness
     public static void SetGlobalBrightness(double scale) {
-
+        if (AllowUnimplementedErrors) System.err.println("Function not implemented");
     }
 //#endregion
 }

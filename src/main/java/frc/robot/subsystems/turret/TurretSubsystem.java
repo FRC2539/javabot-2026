@@ -10,23 +10,25 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class TurretSubsystem extends SubsystemBase {
     static final boolean AllowUnimplementedErrors = false;
     public TurretSubsystem() {
+        // TODO: Initialize "turretRotation" supplier; Read absolute rotation of the turret
+        // TODO: Initialize "indexerSpeed" supplier; Read the speed of the indexer 
+        // TODO: Initialize "shooterSpeed" supplier; Read the speed of the shooter
+        // TODO: Initialize "indexerHasPiece" supplier; Read a sensor in the turret
+        // TODO: Initialize "shooterHasPiece" supplier; Read a sensor by the indexer
+
+        // TODO: Initialize "targetRotation" supplier; Calculate the ideal absolute rotation of the turret to score
+        // TODO: Initialize "targetSpeed" supplier; Calculate the ideal speed of the turret to score
     }
     
 //#region Internal Data
-    // TODO: Read absolute rotation of the turret
-    private static DoubleSupplier rotation = (() -> { if (AllowUnimplementedErrors) System.err.println("Supplier not initialized"); return 0; });
-    // TODO: Read the speed of the indexer 
+    private static DoubleSupplier turretRotation = (() -> { if (AllowUnimplementedErrors) System.err.println("Supplier not initialized"); return 0; });
     private static DoubleSupplier indexerSpeed = (() -> { if (AllowUnimplementedErrors) System.err.println("Supplier not initialized"); return 0; });
-    // TODO: Read the speed of the shooter
     private static DoubleSupplier shooterSpeed = (() -> { if (AllowUnimplementedErrors) System.err.println("Supplier not initialized"); return 0; });
-    // TODO: Read a sensor in the turret
     private static BooleanSupplier indexerHasPiece = (() -> { if (AllowUnimplementedErrors) System.err.println("Supplier not initialized"); return false; });
-    // TODO: Read a sensor by the indexer
     private static BooleanSupplier shooterHasPiece = (() -> { if (AllowUnimplementedErrors) System.err.println("Supplier not initialized"); return false; });
-    
-    // TODO: Calculate the ideal absolute rotation of the turret to score
+
+    // Targeting
     private static DoubleSupplier targetRotation = (() -> { if (AllowUnimplementedErrors) System.err.println("Supplier not initialized"); return 0; });
-    // TODO: Calculate the ideal speed of the turret to score
     private static DoubleSupplier targetSpeed = (() -> { if (AllowUnimplementedErrors) System.err.println("Supplier not initialized"); return 0; });
 //#endregion
 
@@ -45,20 +47,22 @@ public class TurretSubsystem extends SubsystemBase {
 
         Inactive, // Ignoring aim
         Moving, // Moving to shooting position
-        Ready // Currently aligned with target, within tolerence
+        Ready // Currently aligned with target, within tolerence, ready to shoot
     }
-
-    public static double Rotation() { return rotation.getAsDouble(); }
     
     // Course data
     public static ShootingStatus TurretShootingStatus;
     public static AimingStatus TurretAimingStatus;
-
+    
     // Fine data 
+    public static double TurretRotation() { return turretRotation.getAsDouble(); }
     public static double IndexerSpeed() { return indexerSpeed.getAsDouble(); }
     public static double ShooterSpeed() { return shooterSpeed.getAsDouble(); }
     public static boolean IndexerHasPiece() { return indexerHasPiece.getAsBoolean(); }
     public static boolean ShooterHasPiece() { return shooterHasPiece.getAsBoolean(); }
+
+    public static double TargetRotation() { return targetRotation.getAsDouble(); }
+    public static double TargetSpeed() { return targetSpeed.getAsDouble(); }
 //#endregion
 
 
@@ -66,37 +70,27 @@ public class TurretSubsystem extends SubsystemBase {
 
 //#region Internal Controls
     // TODO: Get the shooter to a calculated speed
-    private static Command shooterSpinUp() {
+    private static Command spinUp() {
         // Uses targetSpeed supplier
-        // Sets ShootingStatus
-        return Commands.runOnce(() -> { if (AllowUnimplementedErrors) System.err.println("Command not implemented"); });
-    }
-    // TODO: Keep the shooter to a calculated speed
-    private static Command shooterMaintainSpeed() {
-        // Uses targetSpeed supplier
-        // Sets ShootingStatus
+        // Updates ShootingStatus
         return Commands.runOnce(() -> { if (AllowUnimplementedErrors) System.err.println("Command not implemented"); });
     }
     // TODO: Follow a calcualted target rotation  
     private static Command followTarget() {
         // Uses targetRotation supplier
-        // Sets AimingStatus
+        // Updates AimingStatus
         return Commands.runOnce(() -> { if (AllowUnimplementedErrors) System.err.println("Command not implemented"); });
     }
 //#endregion
 
 
 //#region External Controls
-    // TODO: Prepare for a shot, without actually making one
+    // TODO: Prepare for a shot, and hold
     public static Command Prepare() {
-        // Uses Prepare() before command starts (if already prepared, it should bypass)
-        // Calls stopShooting() when command is ended
         return Commands.runOnce(() -> { if (AllowUnimplementedErrors) System.err.println("Command not implemented"); });
     }
     // TODO: Prepare for, then engage in shots continuously while allowed. Should ideally finish or reintake the last shot before ending
     public static Command Shoot() {
-        // Uses Prepare() before command starts (if already prepared, it should bypass)
-        // Calls stopShooting() when command is ended
         return Commands.runOnce(() -> { if (AllowUnimplementedErrors) System.err.println("Command not implemented"); });
     }
     // TODO: Allow changes to targetRotation and targetSpeed supplier calculations

@@ -28,8 +28,9 @@ public class RobotContainer {
   private void configureBindings() {
     // Comment out subsystems from here to activate/deactivate them
     
-    // Side note: All subsystems define suppliers in their constructors, 
-    // so attempting to reach data from an inactive subsystem is safe.
+    // Side note: All subsystems will redefine suppliers in their constructors.
+    // Otherwise, suppliers print a warning message in the console (only if enabled manually) and return default values,
+    // so attempting to access data from an inactive subsystem is still safe.
     //
     // Do not initialize suppliers (to anything but warning messages) outside of constructors.
 

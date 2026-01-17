@@ -13,6 +13,8 @@ public class VisionSubsystem extends SubsystemBase {
 
 
 //#region Shared Data
+    // TODO: Odometry?
+    // TODO: Where are game pieces?
 //#endregion
 
 
