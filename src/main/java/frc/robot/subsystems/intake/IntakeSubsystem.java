@@ -10,11 +10,10 @@ public class IntakeSubsystem extends SubsystemBase {
     static final boolean AllowUnimplementedErrors = false;
     static boolean hasInit;
     public IntakeSubsystem() {
-        
+        // TODO: Initialize "hasPiece" supplier; Read the sensor on the intake
     }
     
 //#region Internal Data
-    // TODO: Read the sensor on the intake
     private static BooleanSupplier hasPiece = (() -> { if (AllowUnimplementedErrors) System.err.println("Supplier not initialized"); return false; });
 //#endregion
 

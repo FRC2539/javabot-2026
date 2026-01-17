@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class ClimberSubsystem extends SubsystemBase {
     static final boolean AllowUnimplementedErrors = false;
     public ClimberSubsystem() {
-        // TODO: Initialize "height" to read climber absolute position 
+        // TODO: Initialize "height" supplier; Read climber absolute position 
     }
 
 //#region Internal Data 

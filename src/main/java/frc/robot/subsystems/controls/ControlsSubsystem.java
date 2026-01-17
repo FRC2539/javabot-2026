@@ -8,7 +8,7 @@ import frc.robot.subsystems.turret.TurretSubsystem;
 public class ControlsSubsystem extends SubsystemBase {
     static final boolean AllowUnimplementedErrors = false;
     public ControlsSubsystem() {
-        BindButtons();
+        bindButtons();
     }
 
 //#region Internal Data
@@ -28,10 +28,11 @@ public class ControlsSubsystem extends SubsystemBase {
     
 
 //#region Internal Controls
-    public void BindButtons() {
+    public void bindButtons() {
         // TODO: Driver/operator control schemes
         
         // Example
+        operatorController.getLeftTrigger().and(operatorController.getRightTrigger().negate()).whileTrue(TurretSubsystem.Prepare());
         operatorController.getRightTrigger().whileTrue(TurretSubsystem.Shoot());
     }
 //#endregion

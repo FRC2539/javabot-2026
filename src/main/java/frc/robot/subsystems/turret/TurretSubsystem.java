@@ -43,7 +43,7 @@ public class TurretSubsystem extends SubsystemBase {
     public enum AimingStatus {
         INVALID,
 
-        Inactive, // Not considering aiming
+        Inactive, // Ignoring aim
         Moving, // Moving to shooting position
         Ready // Currently aligned with target, within tolerence
     }
@@ -51,8 +51,8 @@ public class TurretSubsystem extends SubsystemBase {
     public static double Rotation() { return rotation.getAsDouble(); }
     
     // Course data
-    public static ShootingStatus ShootingStatus;
-    public static AimingStatus AimingStatus;
+    public static ShootingStatus TurretShootingStatus;
+    public static AimingStatus TurretAimingStatus;
 
     // Fine data 
     public static double IndexerSpeed() { return indexerSpeed.getAsDouble(); }
@@ -65,36 +65,46 @@ public class TurretSubsystem extends SubsystemBase {
     
 
 //#region Internal Controls
-    // TODO: Prepare for, then engage in shots continuously while allowed. Should ideally complete or reintake the last shot before shutting down
-    public Command shoot() {
-        return Commands.runOnce(() -> { if (AllowUnimplementedErrors) System.err.println("Command not implemented"); });        
-    }
-    // TODO: Get the shooter to a constant speed
-    public Command shooterSpinUp() {
+    // TODO: Get the shooter to a calculated speed
+    private static Command shooterSpinUp() {
         // Uses targetSpeed supplier
+        // Sets ShootingStatus
         return Commands.runOnce(() -> { if (AllowUnimplementedErrors) System.err.println("Command not implemented"); });
     }
-    // TODO: Follow a target rotation, calcualted using 
-    public Command followTarget() {
+    // TODO: Keep the shooter to a calculated speed
+    private static Command shooterMaintainSpeed() {
+        // Uses targetSpeed supplier
+        // Sets ShootingStatus
+        return Commands.runOnce(() -> { if (AllowUnimplementedErrors) System.err.println("Command not implemented"); });
+    }
+    // TODO: Follow a calcualted target rotation  
+    private static Command followTarget() {
         // Uses targetRotation supplier
+        // Sets AimingStatus
         return Commands.runOnce(() -> { if (AllowUnimplementedErrors) System.err.println("Command not implemented"); });
     }
 //#endregion
 
 
 //#region External Controls
-    // TODO: Engage shooting on command, and disengage when finished
-    public static Command Shoot() {
+    // TODO: Prepare for a shot, without actually making one
+    public static Command Prepare() {
+        // Uses Prepare() before command starts (if already prepared, it should bypass)
         // Calls stopShooting() when command is ended
         return Commands.runOnce(() -> { if (AllowUnimplementedErrors) System.err.println("Command not implemented"); });
     }
-
+    // TODO: Prepare for, then engage in shots continuously while allowed. Should ideally finish or reintake the last shot before ending
+    public static Command Shoot() {
+        // Uses Prepare() before command starts (if already prepared, it should bypass)
+        // Calls stopShooting() when command is ended
+        return Commands.runOnce(() -> { if (AllowUnimplementedErrors) System.err.println("Command not implemented"); });
+    }
     // TODO: Allow changes to targetRotation and targetSpeed supplier calculations
     public static void ChangeSpeedOffset(double changeBy) {
-
+        if (AllowUnimplementedErrors) System.err.println("Function not implemented");
     }
     public static void ChangeRotationOffset(double changeBy) {
-
+        if (AllowUnimplementedErrors) System.err.println("Function not implemented");
     }
 //#endregion
 }

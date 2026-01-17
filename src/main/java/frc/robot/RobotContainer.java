@@ -26,17 +26,28 @@ public class RobotContainer {
   private List<SubsystemBase> subsystems = new ArrayList<>();
 
   private void configureBindings() {
+    // Comment out subsystems from here to activate/deactivate them
+    
+    // Side note: All subsystems define suppliers in their constructors, 
+    // so attempting to reach data from an inactive subsystem is safe.
+    //
+    // Do not initialize suppliers (to anything but warning messages) outside of constructors.
+
+    // Vision
     subsystems.add(new VisionSubsystem());
 
+    // Piece Managment
     subsystems.add(new IntakeSubsystem());
-    // TODO: Find out how many fuel are initially in the robot? Only considered when preloading/restarting the robot, though
-    subsystems.add(new HopperSubsystem(0));
+    subsystems.add(new HopperSubsystem());
     subsystems.add(new TurretSubsystem());
 
+    // Climber
     subsystems.add(new ClimberSubsystem());
 
+    // Lights
     subsystems.add(new LightsSubsystem());
 
+    // Controls
     subsystems.add(new ControlsSubsystem());
   }
 
