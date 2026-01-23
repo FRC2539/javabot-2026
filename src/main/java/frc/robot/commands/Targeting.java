@@ -1,29 +1,33 @@
 package frc.robot.commands;
 
-import java.util.List;
-import java.util.Map;
-
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
+import edu.wpi.first.math.interpolation.Interpolatable;
 import edu.wpi.first.math.interpolation.InterpolatingTreeMap;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.interpolation.InverseInterpolator;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class Targeting extends Command {
+    
+    public record ShotSettings(Double timeOfFlight, Double hoodAngle) implements Interpolatable<ShotSettings> {
+        @Override
+        public ShotSettings interpolate(ShotSettings endValue, double t) {
+            return new ShotSettings(
+                MathUtil.interpolate(this.timeOfFlight, endValue.timeOfFlight, t),
+                MathUtil.interpolate(this.hoodAngle, endValue.hoodAngle, t)
+            );
+        }
+    }
 
+    // 6.75 in (26)
+    // 8.25 ()
 
-    public static InterpolatingDoubleTreeMap DistanceHoodMap = 
-        new InterpolatingDoubleTreeMap();
+    private final InterpolatingTreeMap<Double, ShotSettings> shotMap = new InterpolatingTreeMap<>(
+        InverseInterpolator.forDouble(), 
+        ShotSettings::interpolate
+    );
 
-    public static InterpolatingDoubleTreeMap DistanceTOFMap = 
-        new InterpolatingDoubleTreeMap();
-
-    public static final List<Double> distKeys = List.of(2.0, 4.0, 6.0, 8.0, 10.0);
-
-
-    private double latency = 0.040;
+    private double latency = 0.020;
     private Translation2d robotPosition;
     private Translation2d hubPosition;
     private Translation2d robotVelocity;
@@ -32,7 +36,6 @@ public class Targeting extends Command {
 
     }
 
-
     @Override
     public void initialize() { 
         
@@ -40,45 +43,58 @@ public class Targeting extends Command {
 
     @Override
     public void execute() { 
-        Translation2d futurePosition = robotPosition.plus(
-            robotVelocity.times(latency)
-        );
-
-        // Find the vector pointing from our (future) self to the center of the Hub.
+        Translation2d futurePosition = robotPosition.plus(robotVelocity.times(latency));
         Translation2d realDisplacementToHub = hubPosition.minus(futurePosition);
 
-        // straight-line distance (hypotenuse) to the target.
-        double realDistance = realDisplacementToHub.getNorm(); 
+        double realDistance = realDisplacementToHub.getNorm();
+        double estimatedFlightTime = shotMap.get(realDistance).timeOfFlight;
 
-        // Its a unit vector now yippee
-        Translation2d targetDirection = realDisplacementToHub.div(realDistance);
+        /* 
+            * We cannot calculate the shot in a single pass because the "Final Distance" and 
+            * "Time of Flight" (ToF) are codependent. 
+            * * 1. To know where the target will be, we need the ToF.
+            * 2. To know the ToF, we need the Final Distance from our Look-Up Table.
+            * 3. To know the Final Distance, we need to know where we'll be when the ball arrives (ToF).
+            *
+            * This circular dependency creates a moving target. If we only do one pass, 
+            * we will consistently undershoot (if moving away) or overshoot (if moving toward) 
+            * because we aren't accounting for how the flight time changes as we move.
+            *
+            * By iterating 3-5 times, the Time of Flight and Predicted Distance "converge" 
+            * on a single stable solution where the physics of the ball and the motion of 
+            * the robot agree.
+        */
+        
+        for (int i = 0; i < 7; i++) { // 7 iterations
 
-        double estimatedFlightTime = DistanceTOFMap.get(realDistance);
+            // Where will the hub be relative to us when the ball arrives?
+            // (Subtracting velocity because if we move forward, hub effectively moves toward us)
+            Translation2d predictedDisplacement = realDisplacementToHub.minus(robotVelocity.times(estimatedFlightTime));
+            
+            double predictedDistance = predictedDisplacement.getNorm();
+            
+            // Look up the NEW flight time for this predicted distance
+            double newFlightTime = shotMap.get(predictedDistance).timeOfFlight;
+            
+            // Check if it's converged
+            if (Math.abs(newFlightTime - estimatedFlightTime) < 0.02) {
+                estimatedFlightTime = newFlightTime;
+                break; 
+            }
+            estimatedFlightTime = newFlightTime;
+        }
 
-        double baselineSpeed = realDistance / estimatedFlightTime;
+        double finalDistance = realDisplacementToHub.minus(robotVelocity.times(estimatedFlightTime)).getNorm();
+        Translation2d targetDirection = realDisplacementToHub.minus(robotVelocity.times(estimatedFlightTime)).div(finalDistance);
 
-        // This would be our "true" neededVelocity assuming we were stationary.
+        double baselineSpeed = finalDistance / estimatedFlightTime;
         Translation2d targetVelocity = targetDirection.times(baselineSpeed);
 
-        // Since the ball inherits our robot's current velocity, we subtract our velocity from the target velocity
-        Translation2d neededVelocity = targetVelocity.minus(robotVelocity);
-        // /*
+        // This is the *extra* XY velocity that we need to impart on the ball (either via flywheel speed, hood angle, or both) to land in the hub.
+        //Translation2d neededVelocity = targetVelocity.minus(robotVelocity);   
 
-        // * Convert the required shooter-relative velocity back into a "Virtual Distance."
-        // * By finding the distance that (roughly) corresponds to this specific velocity in our 
-        // * Distance -> Speed model (technically Distance -> TOF), we can reuse our existing (stationary) lookup 
-        // * table for Hood Angle even though we're moving.
-        // */
+        ShotSettings targetSettings = shotMap.get(finalDistance);
 
-        for (Double dist : distKeys) {
-            double tof = DistanceTOFMap.get(dist);
-
-            double speed = dist / tof;
-
-            if (speed >= neededVelocity.getNorm()) {
-                estimatedIdealHoodAngle = DistanceHoodMap.get(dist);
-            }
-        }   
     }
 
     @Override
