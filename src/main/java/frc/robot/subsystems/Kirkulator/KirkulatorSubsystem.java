@@ -1,72 +1,59 @@
 package frc.robot.subsystems.Kirkulator;
 
-import com.ctre.phoenix6.signals.RGBWColor;
+import org.littletonrobotics.junction.AutoLogOutput;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.constants.KirkulatorConstants;
-import frc.robot.subsystems.Kirkulator.KirkulatorIO.KirkulatorIOInputs;
+import frc.robot.util.LoggedTunableNumber;
+import frc.robot.util.Subsystemutil;
 
-import org.littletonrobotics.junction.Logger;
+public class KirkulatorSubsystem extends Subsystemutil {
 
-public class KirkulatorSubsystem extends SubsystemBase {
+  private static final LoggedTunableNumber kirkulatorShootVolts =
+      new LoggedTunableNumber("Hopper/ShootVolts", 12.0);
+  private static final LoggedTunableNumber kirkulatorReverseVolts =
+      new LoggedTunableNumber("Hopper/ReverseVolts", -12.0);
+  private static final LoggedTunableNumber kirkulatorAdjustVolts =
+      new LoggedTunableNumber("Hopper/AdjustVolts", 0.0);
 
   private KirkulatorIO kirkulatorIO;
-
-  private static final double passiveVoltage = 2;
-  private static final double shootingVoltage = 8;
+  
+  @AutoLogOutput private Goal goal = Goal.STOP;
 
   public KirkulatorSubsystem(KirkulatorIO kirkulatorIO) {
     this.kirkulatorIO = kirkulatorIO;
-    setDefaultCommand(setVoltage(passiveVoltage));
+  }
+  public void periodic() {
+    
 
-    Command dynamicIdleCommand =
-        Commands.run(
-                () -> {
-                  double idleVoltage =
-                          Intaking() ? shootingVoltage : passiveVoltage;
+    double kirkulatorVoltage = 0.0;
 
-                  kirkulatorIO.setVoltage(idleVoltage);
-                },
-                this)
-            .withName("idle");
-
-    setDefaultCommand(dynamicIdleCommand);
+    switch (goal) {
+      case SHOOT -> {
+        kirkulatorVoltage = kirkulatorShootVolts.get();
+      }
+      case REVERSE -> {
+        kirkulatorVoltage = kirkulatorReverseVolts.get();
+      }
+      case STOP -> {
+        kirkulatorVoltage = 0.0;
+      }
+      case ADJUST -> {
+        kirkulatorVoltage = kirkulatorAdjustVolts.get();
+      }
+    }
+    kirkulatorIO.setVoltage(kirkulatorVoltage);
   }
 
   @Override
-  public void periodic() {
+  public void periodicAfterScheduler() {
   }
 
-  public Command setVoltage() {
-    return Commands.race(
-        setVoltage(shootingVoltage));
+  public enum Goal {
+    SHOOT,
+    REVERSE,
+    STOP,
+    ADJUST
   }
-
-  public boolean Intaking() {
-    return false;
-  }
-
-  public Command setVoltagePassive() {
-    return Commands.race(
-        setVoltage(passiveVoltage));
-  }
-
-  public Command setVoltage(double voltage) {
-    return Commands.run(
-        () -> {
-          kirkulatorIO.setVoltage(voltage);
-        },
-        this);
-  }
-
-  public Command setReverse(double voltage) {
-    return Commands.run(
-        () -> {
-          kirkulatorIO.setVoltage(-voltage);
-        },
-        this);
-  }
-
 }

@@ -18,8 +18,6 @@ public class KirkulatorIOTalonFX implements KirkulatorIO {
 
   public void updateInputs(KirkulatorIOInputs inputs) {
     inputs.voltage = kirkulatorMotor.getMotorVoltage().refresh().getValueAsDouble();
-    inputs.passiveVoltage = kirkulatorMotor.getVelocity().refresh().getValueAsDouble();
-    inputs.shootingVoltage = kirkulatorMotor.getVelocity().refresh().getValueAsDouble();
 
   }
 
@@ -27,8 +25,4 @@ public class KirkulatorIOTalonFX implements KirkulatorIO {
     kirkulatorMotor.setVoltage(voltage);
   }
 
-  @Override
-  public void updateInputs(KirkulatorIO kirkulatorIO) {
-    throw new UnsupportedOperationException("Unimplemented method 'updateInputs'");
-  }
 }
