@@ -34,11 +34,13 @@ public class ShootOnTheFlyCommand extends Command {
     );
 
     private double latency = 0.020;
-    
+    private boolean calculateSling = false;
     private Translation2d robotPosition;
     private Translation2d hubPosition;
     private Translation2d robotVelocity;
+    private Rotation2d angularRobotVelocity;
     private Rotation2d robotRotation;
+    private final Translation2d turretOffset = new Translation2d(-0.127, 0.0);
     Translation2d filteredVelocity;
     
     public ShootOnTheFlyCommand() {
@@ -59,8 +61,18 @@ public class ShootOnTheFlyCommand extends Command {
         filteredVelocity = new Translation2d(smoothedVx, smoothedVy);
 
         Translation2d futureRobotPos = robotPosition.plus(filteredVelocity.times(latency));
-        Translation2d realDisplacementToHub = hubPosition.minus(futureRobotPos);
 
+        // Our turret isnt centered,
+        Translation2d futureTurretPos = futureRobotPos.plus(turretOffset.rotateBy(robotRotation));
+
+        Translation2d realDisplacementToHub = hubPosition.minus(futureTurretPos);
+
+        Translation2d totalBallVelocity = filteredVelocity;
+
+        if (calculateSling) {
+            totalBallVelocity = filteredVelocity.plus(calculateTangentialTurretVelocity());
+        }
+        
         double realDistance = realDisplacementToHub.getNorm();
         double estimatedFlightTime = shotMap.get(realDistance).timeOfFlight;
 
@@ -83,7 +95,7 @@ public class ShootOnTheFlyCommand extends Command {
         Translation2d virtualTarget = hubPosition;
         double virtualDistance = realDistance;
         for (int i = 0; i < 7; i++) { // 7 iterations
-            virtualTarget = hubPosition.minus(filteredVelocity.times(estimatedFlightTime));
+            virtualTarget = hubPosition.minus(totalBallVelocity.times(estimatedFlightTime));
 
             virtualDistance = futureRobotPos.getDistance(virtualTarget);
 
@@ -100,6 +112,19 @@ public class ShootOnTheFlyCommand extends Command {
         Rotation2d robotRelativeTurretAngle = fieldRelativeTurretAngle.minus(robotRotation);
 
         double neededHoodAngle = shotMap.get(virtualDistance).hoodAngle;
+    }
+
+    /* If we shoot while the robot has a rotational velocity, that velocity is imparted onto the ball. 
+     * The function below returns that additional velocity imparted onto the ball compared to if we were not rotating at all.
+    */
+    private Translation2d calculateTangentialTurretVelocity() {
+        double omega = angularRobotVelocity.getRadians();
+        Translation2d tangentialVelocity = turretOffset
+            .rotateBy(Rotation2d.fromDegrees(90)) // Perpendicular to the lever arm
+            .rotateBy(robotRotation)             // Align with robot's field heading
+            .times(omega);
+
+        return tangentialVelocity;
     }
 
 }
