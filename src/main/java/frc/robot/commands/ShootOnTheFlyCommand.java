@@ -9,6 +9,9 @@ import edu.wpi.first.math.interpolation.InterpolatingTreeMap;
 import edu.wpi.first.math.interpolation.InverseInterpolator;
 import edu.wpi.first.wpilibj2.command.Command;
 
+/* Shooting on the move is really just a vector problem, where from a strictly XY perspective V_ball = V_shooter + V_robot,
+ * where we're trying to solve for V_shooter (the XY velocity imparted onto the ball that we can control indirectly through hood angle / wheel RPM)
+*/
 public class ShootOnTheFlyCommand extends Command {
     
     public record ShotSettings(Double timeOfFlight, Double hoodAngle) implements Interpolatable<ShotSettings> {
@@ -34,6 +37,7 @@ public class ShootOnTheFlyCommand extends Command {
     private Translation2d robotPosition;
     private Translation2d hubPosition;
     private Translation2d robotVelocity;
+    private Rotation2d robotRotation;
     Translation2d filteredVelocity;
     
     public ShootOnTheFlyCommand() {
@@ -48,7 +52,7 @@ public class ShootOnTheFlyCommand extends Command {
     @Override
     public void execute() { 
         
-        /* pass our robot velocity through a linear filter to smooth out encoder noise and hopefully reduce turret/hoot jitter. */
+        /* pass our robot velocity through a linear filter to smooth out encoder noise and hopefully reduce turret/hoot jitter, inspired by 6328 */
         double smoothedVx = vxFilter.calculate(robotVelocity.getX());
         double smoothedVy = vyFilter.calculate(robotVelocity.getY());
         filteredVelocity = new Translation2d(smoothedVx, smoothedVy);
@@ -59,20 +63,22 @@ public class ShootOnTheFlyCommand extends Command {
         double realDistance = realDisplacementToHub.getNorm();
         double estimatedFlightTime = shotMap.get(realDistance).timeOfFlight;
 
-        /* 
-            * We cannot calculate the shot in a single pass because the Final Distance and 
-            * Time of Flight (ToF) are dependent on each other.
-            * 1. To know where the target will be, we need the ToF.
-            * 2. To know the ToF, we need the Final Distance from our Look-Up Table.
-            * 3. To know the Final Distance, we need to know where we'll be when the ball arrives (ToF).
-            *
-            * This is a problem, if we only do one pass, 
-            * we will undershoot (if moving away) or overshoot (if moving toward) 
-            * because we aren't accounting for how the flight time changes as we move.
-            *
-            * By using a for loop we can converge on the right flight time and distance pair that gets us the speed we need.
+        /* When we're moving, the ball inherits the robot's speed when we shoot (relative to the field).
+         * If we plug our *actual* distance from the hub (realDistance) into our shot map, 
+         * we'll miss because our robot's velocity has changed the ball's trajectory.
+         * The fundamental problem here is that our [Distance -> Hood Angle] map assumes that our robot is *stationary* when we shoot. 
+         * To fix this, we calculate a virtual distance, a point in space where if the robot were STATIONARY, 
+         * shooting would result in the ball landing in the actual hub. This problem is a circular dependency, 
+         * to find the Virtual Distance, we need the ball's "real" TOF (using our current "real" robot pos & velocity),
+         * But since we're moving, we can't use our [Distance -> ToF] map.
+         * This loop below converges on a virtual distance that when plugged into our shotMap, 
+         * gives us an adjusted hood angle that cancels out our robot's field velocity and leaves us with the "correct" shot to the hub.
         */
 
+        /* adapted from 1690's software presentation from 2024, the equation for this virtual distance can't be solved algebraically and has to be approximated.
+         * https://www.youtube.com/watch?v=vUtVXz7ebEE&
+        */
+        
         for (int i = 0; i < 7; i++) { // 7 iterations
 
             // Where will the hub be relative to us when the ball arrives?
@@ -93,13 +99,17 @@ public class ShootOnTheFlyCommand extends Command {
         }
 
         double finalDistance = realDisplacementToHub.minus(filteredVelocity.times(estimatedFlightTime)).getNorm();
-        Translation2d targetDirection = realDisplacementToHub.minus(filteredVelocity.times(estimatedFlightTime)).div(finalDistance);
 
-        ShotSettings targetSettings = shotMap.get(finalDistance); // hood angle!
+        Translation2d virtualDisplacement = realDisplacementToHub.minus(filteredVelocity.times(estimatedFlightTime));
 
-        Rotation2d angleNeeded = targetDirection.getAngle(); // this minus our robot's current heading is the angle the *turret* needs to rotate to.
+        // This is the angle from the robot to our target
+        Rotation2d fieldRelativeTurretAngle = virtualDisplacement.getAngle();
 
-        // Rotation2d turretLocalAngle = targetFieldAngle.minus(robotRotation);
+        Rotation2d robotRelativeTurretAngle = fieldRelativeTurretAngle.minus(robotRotation);
+
+        double neededHoodAngle = shotMap.get(finalDistance).hoodAngle;
+
+        // TODO: command turret annd hood to positions
     }
 
 }
