@@ -26,7 +26,7 @@ public class ShooterIOTalonFX implements ShooterIO {
 
     @Override
     public void updateInputs(ShooterIOInputs inputs) {
-        inputs.velocity = leftMotor.getVelocity().getValueAsDouble();
+        inputs.wheelVelocity = leftMotor.getVelocity().getValueAsDouble();
         inputs.leftMotorTemperatureCelcius = leftMotor.getDeviceTemp().getValueAsDouble();
         inputs.rightMotorTemperatureCelcius = rightMotor.getDeviceTemp().getValueAsDouble();
     }

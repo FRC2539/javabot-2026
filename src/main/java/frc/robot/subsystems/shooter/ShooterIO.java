@@ -7,10 +7,9 @@ public interface ShooterIO {
 
     @AutoLog
     public class ShooterIOInputs {
-        public double velocity = 0; // RPS
+        public double wheelVelocity = 0; // RPS
         public double leftMotorTemperatureCelcius = 0;
         public double rightMotorTemperatureCelcius = 0;
-
     }
 
     public boolean isAtSetpoint();

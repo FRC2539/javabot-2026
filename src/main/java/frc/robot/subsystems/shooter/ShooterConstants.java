@@ -1,6 +1,7 @@
 package frc.robot.subsystems.shooter;
 
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -10,6 +11,7 @@ public class ShooterConstants {
 
     public static final double goalDeadbandRPS = 15; 
     public static final double IdleRPS = 1.5;
+    public static final double GearRatioToWheel = 1;
 
     public static final int leftShooterMotorID = 100;
     public static final int rightShooterMotorID = 100;
@@ -23,22 +25,26 @@ public class ShooterConstants {
         .withKV(0);
 
     public static final CurrentLimitsConfigs currentLimits = new CurrentLimitsConfigs()
-        .withSupplyCurrentLimit(100)
-        .withStatorCurrentLimit(100);
+        .withSupplyCurrentLimit(80);
+        //.withStatorCurrentLimit(100);
 
     public static final MotionMagicConfigs motionMagicConfig = new MotionMagicConfigs()
         .withMotionMagicAcceleration(0)
         .withMotionMagicCruiseVelocity(0)
         .withMotionMagicJerk(0);
 
+    public static final FeedbackConfigs feedbackConfig = new FeedbackConfigs().withSensorToMechanismRatio(GearRatioToWheel);
+
     public static TalonFXConfiguration leftMotorConfig = new TalonFXConfiguration()
         .withSlot0(SlotConfigs)
         .withCurrentLimits(currentLimits)
-        .withMotionMagic(motionMagicConfig);
+        .withMotionMagic(motionMagicConfig)
+        .withFeedback(feedbackConfig);
 
     public static TalonFXConfiguration rightMotorConfig = new TalonFXConfiguration()
         .withSlot0(SlotConfigs)
         .withCurrentLimits(currentLimits)
-        .withMotionMagic(motionMagicConfig);
+        .withMotionMagic(motionMagicConfig)
+        .withFeedback(feedbackConfig);
     
 }
