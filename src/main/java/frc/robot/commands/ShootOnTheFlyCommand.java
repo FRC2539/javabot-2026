@@ -34,6 +34,7 @@ public class ShootOnTheFlyCommand extends Command {
     );
 
     private double latency = 0.020;
+    
     private Translation2d robotPosition;
     private Translation2d hubPosition;
     private Translation2d robotVelocity;
@@ -57,8 +58,8 @@ public class ShootOnTheFlyCommand extends Command {
         double smoothedVy = vyFilter.calculate(robotVelocity.getY());
         filteredVelocity = new Translation2d(smoothedVx, smoothedVy);
 
-        Translation2d futurePosition = robotPosition.plus(filteredVelocity.times(latency));
-        Translation2d realDisplacementToHub = hubPosition.minus(futurePosition);
+        Translation2d futureRobotPos = robotPosition.plus(filteredVelocity.times(latency));
+        Translation2d realDisplacementToHub = hubPosition.minus(futureRobotPos);
 
         double realDistance = realDisplacementToHub.getNorm();
         double estimatedFlightTime = shotMap.get(realDistance).timeOfFlight;
@@ -78,38 +79,27 @@ public class ShootOnTheFlyCommand extends Command {
         /* adapted from 1690's software presentation from 2024, the equation for this virtual distance can't be solved algebraically and has to be approximated.
          * https://www.youtube.com/watch?v=vUtVXz7ebEE&
         */
-        
-        for (int i = 0; i < 7; i++) { // 7 iterations
 
-            // Where will the hub be relative to us when the ball arrives?
-            // (Subtracting velocity because if we move forward, hub effectively moves toward us)
-            Translation2d predictedDisplacement = realDisplacementToHub.minus(filteredVelocity.times(estimatedFlightTime));
-            
-            double predictedDistance = predictedDisplacement.getNorm();
-            
-            // Look up the new flight time for this hypothetical distance
-            double newFlightTime = shotMap.get(predictedDistance).timeOfFlight;
-            
-            // Have we converged?
-            if (Math.abs(newFlightTime - estimatedFlightTime) < 0.02) {
-                estimatedFlightTime = newFlightTime;
-                break; 
-            }
+        Translation2d virtualTarget = hubPosition;
+        double virtualDistance = realDistance;
+        for (int i = 0; i < 7; i++) { // 7 iterations
+            virtualTarget = hubPosition.minus(filteredVelocity.times(estimatedFlightTime));
+
+            virtualDistance = futureRobotPos.getDistance(virtualTarget);
+
+            double newFlightTime = shotMap.get(virtualDistance).timeOfFlight;
+
+            if (Math.abs(newFlightTime - estimatedFlightTime) < 0.02) break;
             estimatedFlightTime = newFlightTime;
         }
 
-        double finalDistance = realDisplacementToHub.minus(filteredVelocity.times(estimatedFlightTime)).getNorm();
+        Translation2d aimingVector = virtualTarget.minus(futureRobotPos);
 
-        Translation2d virtualDisplacement = realDisplacementToHub.minus(filteredVelocity.times(estimatedFlightTime));
-
-        // This is the angle from the robot to our target
-        Rotation2d fieldRelativeTurretAngle = virtualDisplacement.getAngle();
+        Rotation2d fieldRelativeTurretAngle = aimingVector.getAngle();
 
         Rotation2d robotRelativeTurretAngle = fieldRelativeTurretAngle.minus(robotRotation);
 
-        double neededHoodAngle = shotMap.get(finalDistance).hoodAngle;
-
-        // TODO: command turret annd hood to positions
+        double neededHoodAngle = shotMap.get(virtualDistance).hoodAngle;
     }
 
 }
