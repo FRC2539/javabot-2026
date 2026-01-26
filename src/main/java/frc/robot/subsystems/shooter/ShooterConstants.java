@@ -25,6 +25,7 @@ public class ShooterConstants {
         .withKV(0);
 
     public static final CurrentLimitsConfigs currentLimits = new CurrentLimitsConfigs()
+        .withSupplyCurrentLimitEnable(true)
         .withSupplyCurrentLimit(80);
         //.withStatorCurrentLimit(100);
 
