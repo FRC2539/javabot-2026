@@ -13,7 +13,7 @@ public class ShooterSubsystem extends SubsystemBase {
     public ShooterSubsystem(ShooterIO io) {
         shooterIO = io;
 
-        setDefaultCommand(Commands.run(() -> setTargetRPM(ShooterConstants.IdleRPS)));
+        setDefaultCommand(Commands.run(() -> setTargetRPM(ShooterConstants.IdleRPM)));
     }
 
     @Override
@@ -27,7 +27,7 @@ public class ShooterSubsystem extends SubsystemBase {
         shooterIO.setControlVelocity(targetRPM / 60);
     }
 
-    
+
     public Command setShooterRPM(double desiredRPM) {
         return run(() -> setTargetRPM(desiredRPM));
     }

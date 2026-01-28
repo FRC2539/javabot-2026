@@ -10,7 +10,7 @@ public class ShooterConstants {
     public static final String shooterCanBus = "";
 
     public static final double goalDeadbandRPS = 15; 
-    public static final double IdleRPS = 1.5;
+    public static final double IdleRPM = 1.5;
     public static final double GearRatioToWheel = 1;
 
     public static final int leftShooterMotorID = 100;
