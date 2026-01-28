@@ -3,103 +3,104 @@ package frc.robot.subsystems.climber;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.util.LoggedTunableNumber;
-import org.littletonrobotics.junction.Logger;
+import frc.robot.constants.ClimberConstants;
 
 public class ClimberSubsystem extends SubsystemBase {
 
   private final ClimberIO io;
-  private final ClimberIOInputsAutoLogged inputs =
-      new ClimberIOInputsAutoLogged();
+  private final ClimberIOInputsAutoLogged inputs = new ClimberIOInputsAutoLogged();
 
-  private static final LoggedTunableNumber climbVoltage =
-      new LoggedTunableNumber("/climber/ClimbVoltage", 8.0);
-
-  private static final LoggedTunableNumber tolerance =
-      new LoggedTunableNumber("/climber/Tolerance", 0.5);
+  private double leftSetpoint = 0.0;
+  private double rightSetpoint = 0.0;
 
   public ClimberSubsystem(ClimberIO io) {
     this.io = io;
-  }
-
-  public enum ClimbPosition {
-    STOWED(0.0),
-    MID(35.0),
-    CLIMB(70.0);
-
-    public final double rotations;
-
-    ClimbPosition(double rotations) {
-      this.rotations = rotations;
-    }
-  }
-
-  private boolean leftAt(double pos) {
-    return Math.abs(inputs.leftPosition - pos) < tolerance.get();
-  }
-
-  private boolean rightAt(double pos) {
-    return Math.abs(inputs.rightPosition - pos) < tolerance.get();
-  }
-
-  private void driveLeft(double target) {
-    io.setLeftVoltage(
-        Math.signum(target - inputs.leftPosition) * climbVoltage.get());
-  }
-
-  private void driveRight(double target) {
-    io.setRightVoltage(
-        Math.signum(target - inputs.rightPosition) * climbVoltage.get());
-  }
-
-  private void stop() {
-    io.setLeftVoltage(0);
-    io.setRightVoltage(0);
-  }
-
-
-
-  private Command moveLeftTo(double target) {
-    return Commands.run(() -> driveLeft(target), this)
-        .until(() -> leftAt(target))
-        .andThen(() -> io.setLeftVoltage(0));
-  }
-
-  private Command moveRightTo(double target) {
-    return Commands.run(() -> driveRight(target), this)
-        .until(() -> rightAt(target))
-        .andThen(() -> io.setRightVoltage(0));
-  }
-
-
-  public Command climbToPosition(ClimbPosition position) {
-    return Commands.sequence(
-        moveLeftTo(position.rotations),
-        moveRightTo(position.rotations),
-        moveLeftTo(position.rotations));
-  }
-
-  public Command moveUpVoltage(double volts) {
-    return run(() -> {
-      io.setLeftVoltage(volts);
-      io.setRightVoltage(volts);
-    });
-  }
-
-  public Command moveDownVoltage(double volts) {
-    return run(() -> {
-      io.setLeftVoltage(-volts);
-      io.setRightVoltage(-volts);
-    });
-  }
-
-  public Command stopCommand() {
-    return runOnce(this::stop);
+    if (io != null) io.setBrakeMode(true);
   }
 
   @Override
   public void periodic() {
+    if (io == null) return;
+
     io.updateInputs(inputs);
-    Logger.processInputs("RealOutputs/Climber", inputs);
+    io.setLeftPosition(leftSetpoint);
+    io.setRightPosition(rightSetpoint);
+  }
+
+  public void setLeftPosition(double rotations) {
+    leftSetpoint = Math.max(ClimberConstants.lowerLimitRotations,
+                            Math.min(rotations, ClimberConstants.upperLimitRotations));
+  }
+
+  public void setRightPosition(double rotations) {
+    rightSetpoint = Math.max(ClimberConstants.lowerLimitRotations,
+                             Math.min(rotations, ClimberConstants.upperLimitRotations));
+  }
+
+  public boolean leftAtSetpoint() {
+    return Math.abs(inputs.leftPositionRotations - leftSetpoint) < ClimberConstants.positionTolerance;
+  }
+
+  public boolean rightAtSetpoint() {
+    return Math.abs(inputs.rightPositionRotations - rightSetpoint) < ClimberConstants.positionTolerance;
+  }
+
+//command helpers
+
+public Command moveLeftTo(double rotations) {
+    // Pass "this" as the second argument to runOnce and waitUntil to require the subsystem
+    return Commands.sequence(
+        Commands.runOnce(() -> setLeftPosition(rotations), this),
+        Commands.waitUntil(this::leftAtSetpoint) //,this
+    );
+}
+
+public Command moveRightTo(double rotations) {
+    return Commands.sequence(
+        Commands.runOnce(() -> setRightPosition(rotations), this),
+        Commands.waitUntil(this::rightAtSetpoint) //,this
+    );
+}
+
+
+  public Command alternatingClimbCommand() {
+    double top = ClimberConstants.upperLimitRotations;
+    double bottom = ClimberConstants.lowerLimitRotations;
+
+    return Commands.sequence(
+      // 1) Left climber goes up
+      moveLeftTo(top),
+
+      // 2) Left pulls while Right goes up
+      Commands.parallel(
+        moveLeftTo(bottom),
+        moveRightTo(top)),
+
+      // 3) Right pulls
+      moveRightTo(bottom),
+
+      // 4) Left goes up while Right pulls
+      Commands.parallel(
+        moveLeftTo(top),
+        moveRightTo(bottom)),
+
+      // 5) Left final pull
+      moveLeftTo(bottom)
+    );
+  }
+
+  public Command moveLeftVoltage(double volts) {
+    return Commands.run(() -> io.setLeftVoltage(volts), this);
+  }
+
+  public Command moveRightVoltage(double volts) {
+    return Commands.run(() -> io.setRightVoltage(volts), this);
+  }
+
+  public Command stop() {
+    return Commands.runOnce(() -> {
+      io.setLeftVoltage(0.0);
+      io.setRightVoltage(0.0);
+    });
   }
 }

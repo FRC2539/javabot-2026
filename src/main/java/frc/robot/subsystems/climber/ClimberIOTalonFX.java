@@ -4,48 +4,66 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import frc.robot.constants.ClimberConstants;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+
 
 public class ClimberIOTalonFX implements ClimberIO {
 
-  private final TalonFX left =
-      new TalonFX(ClimberConstants.leftMotorId, ClimberConstants.canBus);
-
-  private final TalonFX right =
-      new TalonFX(ClimberConstants.rightMotorId, ClimberConstants.canBus);
+  //#region Motors
+  private final TalonFX leftMotor = new TalonFX(ClimberConstants.leftMotorId, ClimberConstants.canBus);
+  private final TalonFX rightMotor = new TalonFX(ClimberConstants.rightMotorId, ClimberConstants.canBus);
 
   public ClimberIOTalonFX() {
-    TalonFXConfiguration cfg = new TalonFXConfiguration();
+    CurrentLimitsConfigs currentLimits = new CurrentLimitsConfigs();
+    currentLimits.SupplyCurrentLimit = ClimberConstants.currentLimit;
+    currentLimits.StatorCurrentLimit = ClimberConstants.currentLimit;
+    currentLimits.StatorCurrentLimitEnable = true;
+    currentLimits.StatorCurrentLimitEnable = true;
 
-    cfg.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+    TalonFXConfiguration config = new TalonFXConfiguration()
+        .withCurrentLimits(currentLimits);
 
-    cfg.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
-    cfg.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
+    leftMotor.getConfigurator().apply(config);
+    rightMotor.getConfigurator().apply(config);
 
-    cfg.SoftwareLimitSwitch.ForwardSoftLimitThreshold =
-        ClimberConstants.upperLimit;
-    cfg.SoftwareLimitSwitch.ReverseSoftLimitThreshold =
-        ClimberConstants.lowerLimit;
+    leftMotor.setNeutralMode(NeutralModeValue.Brake);
+    rightMotor.setNeutralMode(NeutralModeValue.Brake);
+  }
 
-    left.getConfigurator().apply(cfg);
-    right.getConfigurator().apply(cfg);
+  //#region IO
+  @Override
+  public void updateInputs(ClimberIOInputs inputs) {
+    inputs.leftPositionRotations = leftMotor.getPosition().refresh().getValueAsDouble();
+    inputs.rightPositionRotations = rightMotor.getPosition().refresh().getValueAsDouble();
+    inputs.leftVoltage = leftMotor.getMotorVoltage().refresh().getValueAsDouble();
+    inputs.rightVoltage = rightMotor.getMotorVoltage().refresh().getValueAsDouble();
   }
 
   @Override
-  public void updateInputs(ClimberIOInputs inputs) {
-    inputs.leftPosition = left.getPosition().refresh().getValueAsDouble();
-    inputs.rightPosition = right.getPosition().refresh().getValueAsDouble();
+  public void setLeftPosition(double rotations) {
+    leftMotor.setPosition(rotations);
+  }
 
-    inputs.leftVoltage = left.getMotorVoltage().refresh().getValueAsDouble();
-    inputs.rightVoltage = right.getMotorVoltage().refresh().getValueAsDouble();
+  @Override
+  public void setRightPosition(double rotations) {
+    rightMotor.setPosition(rotations);
   }
 
   @Override
   public void setLeftVoltage(double volts) {
-    left.setVoltage(volts);
+    leftMotor.setVoltage(volts);
   }
 
   @Override
   public void setRightVoltage(double volts) {
-    right.setVoltage(volts);
+    rightMotor.setVoltage(volts);
+  }
+
+  @Override
+  public void setBrakeMode(boolean brake) {
+    NeutralModeValue mode = brake ? NeutralModeValue.Brake : NeutralModeValue.Coast;
+    leftMotor.setNeutralMode(mode);
+    rightMotor.setNeutralMode(mode);
   }
 }
