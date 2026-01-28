@@ -9,7 +9,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 public class ShooterConstants {
     public static final String shooterCanBus = "";
 
-    public static final double goalDeadbandRPS = 15; 
+    public static final double goalDeadbandRPM = 15; 
     public static final double IdleRPM = 1.5;
     public static final double GearRatioToWheel = 1;
 

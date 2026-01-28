@@ -28,7 +28,8 @@ public class ShooterIOTalonFX implements ShooterIO {
 
     @Override
     public void updateInputs(ShooterIOInputs inputs) {
-        inputs.wheelVelocity = leftMotor.getVelocity().getValueAsDouble();
+        // convert wheel velocity from RPS -> RPM
+        inputs.wheelVelocity = leftMotor.getVelocity().getValueAsDouble() * 60;
         inputs.leftMotorTemperatureCelcius = leftMotor.getDeviceTemp().getValueAsDouble();
         inputs.rightMotorTemperatureCelcius = rightMotor.getDeviceTemp().getValueAsDouble();
     }
@@ -44,9 +45,11 @@ public class ShooterIOTalonFX implements ShooterIO {
     @Override
     public boolean isAtSetpoint() {
         double currentSpeed = leftMotor.getVelocity().getValueAsDouble();
-        double error = Math.abs(targetRPS - currentSpeed);
 
-        if (error < ShooterConstants.goalDeadbandRPS) {
+        double errorRPM = Math.abs(targetRPS - currentSpeed);
+
+        // convert deadband to rotations per second
+        if (errorRPM < ShooterConstants.goalDeadbandRPM / 60) {
             return true;
         } else {
             return false;
