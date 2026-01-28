@@ -9,9 +9,24 @@ import edu.wpi.first.math.interpolation.InterpolatingTreeMap;
 import edu.wpi.first.math.interpolation.InverseInterpolator;
 import edu.wpi.first.wpilibj2.command.Command;
 
-/* Shooting on the move is really just a vector problem, where from a strictly XY perspective V_ball = V_shooter + V_robot,
- * where we're trying to solve for V_shooter (the XY velocity imparted onto the ball that we can control indirectly through hood angle / wheel RPM)
-*/
+/* The only real complexity in this command comes from finding out what offset we need to apply to the hub position to "account" for our robot's velocity
+ * If we're moving towards the right side of the field, then our robot's rightwards speed is (from a strictly field-relative perspective) 
+ * causing our ball to drift. If we were to shoot normally, the rightwards velocity imparted onto the ball from the robot 
+ * would cause the ball to miss and land to the right of the hub. This issue applies regardless of what direction we're moving in, 
+ * including if we're moving towards/away from the hub. Besides this iteration we need to do to find the virtual position, the logic is 
+ * mostly all the same.
+ */
+
+/*
+ * - filter our robot's X and Y velocity to hopefully prevent some turret jitter.
+ * - Convert our robot's position and velocity to our turret's velocity and position
+ * - Calculate our turret's position and velocity at the time we shoot. (mostly just latency)
+ * - get the translation2d between our turret and the hub.
+ * - Use loop to converge on the needed virtual position (see furthur comments below).
+ * - get the translation2d between the turret and this new virtual position.
+ * - The angle of this vector can be used to find the angle the turret needs to rotate to.
+ * - the straightline distance (.getNorm()) between the two points can be plugged into our table to get the needed hood angle.
+ */
 public class ShootOnTheFlyCommand extends Command {
     
     public record ShotSettings(Double timeOfFlight, Double hoodAngle) implements Interpolatable<ShotSettings> {
@@ -34,7 +49,6 @@ public class ShootOnTheFlyCommand extends Command {
     );
 
     private double latency = 0.020;
-    private boolean calculateSling = false;
     private Translation2d robotPosition;
     private Translation2d hubPosition;
     private Translation2d robotVelocity;
@@ -58,21 +72,27 @@ public class ShootOnTheFlyCommand extends Command {
         /* pass our robot velocity through a linear filter to smooth out encoder noise and hopefully reduce turret/hoot jitter, inspired by 6328 */
         double smoothedVx = vxFilter.calculate(robotVelocity.getX());
         double smoothedVy = vyFilter.calculate(robotVelocity.getY());
-        filteredVelocity = new Translation2d(smoothedVx, smoothedVy);
+        Translation2d filteredRobotVelocity = new Translation2d(smoothedVx, smoothedVy);
 
-        Translation2d futureRobotPos = robotPosition.plus(filteredVelocity.times(latency));
+        /* We currently have a field relative position and field relative velocity to the *robot*, 
+            but for all our calculations later we're only really concerned with the turret's velocity and position relative to the hub,
+            so we convert from one to the other using our turrets offset to the center.
+        */
 
-        // Our turret isnt centered,
-        Translation2d futureTurretPos = futureRobotPos.plus(turretOffset.rotateBy(robotRotation));
+        Translation2d turretOffsetFieldRelative = turretOffset.rotateBy(robotRotation);
+        Translation2d tangentialVelocity = new Translation2d(
+            -angularRobotVelocity.getRadians() * turretOffsetFieldRelative.getY(),
+            angularRobotVelocity.getRadians() * turretOffsetFieldRelative.getX()
+        );
+
+        Translation2d turretFieldVelocity = filteredRobotVelocity.plus(tangentialVelocity);
+
+        Translation2d futureTurretPos = robotPosition
+            .plus(turretOffsetFieldRelative)
+            .plus(turretFieldVelocity.times(latency));
 
         Translation2d realDisplacementToHub = hubPosition.minus(futureTurretPos);
 
-        Translation2d totalBallVelocity = filteredVelocity;
-
-        if (calculateSling) {
-            totalBallVelocity = filteredVelocity.plus(calculateTangentialTurretVelocity());
-        }
-        
         double realDistance = realDisplacementToHub.getNorm();
         double estimatedFlightTime = shotMap.get(realDistance).timeOfFlight;
 
@@ -80,24 +100,30 @@ public class ShootOnTheFlyCommand extends Command {
          * If we plug our *actual* distance from the hub (realDistance) into our shot map, 
          * we'll miss because our robot's velocity has changed the ball's trajectory.
          * The fundamental problem here is that our [Distance -> Hood Angle] map assumes that our robot is *stationary* when we shoot. 
-         * To fix this, we calculate a virtual distance, a point in space where if the robot were STATIONARY, 
-         * shooting would result in the ball landing in the actual hub. This problem is a circular dependency, 
-         * to find the Virtual Distance, we need the ball's "real" TOF (using our current "real" robot pos & velocity),
+        */
+        
+        /* To fix this, we calculate a virtual target & distance, a coordinate that is offset from the "real" hub based on our robot's velocity
+         * By aiming at this target and setting the hood angle based on our distance to it, we cancel out the velocity inherited 
+         * from the robot's movement, ensuring the ball's field-relative trajectory ends at the actual hub. 
+        */
+
+        /* This problem is a circular dependency however, to find the Virtual Distance 
+         * we need the ball's "real" TOF (using our current "real" robot pos & velocity),
          * But since we're moving, we can't use our [Distance -> ToF] map.
-         * This loop below converges on a virtual distance that when plugged into our shotMap, 
+         * The loop below converges on a virtual distance that when plugged into our shotMap, 
          * gives us an adjusted hood angle that cancels out our robot's field velocity and leaves us with the "correct" shot to the hub.
         */
 
-        /* adapted from 1690's software presentation from 2024, the equation for this virtual distance can't be solved algebraically and has to be approximated.
+        /* adapted from 1690's software presentation from 2024, the equation for this virtual distance is transcendental and has to be approximated.
          * https://www.youtube.com/watch?v=vUtVXz7ebEE&
         */
 
         Translation2d virtualTarget = hubPosition;
         double virtualDistance = realDistance;
-        for (int i = 0; i < 7; i++) { // 7 iterations
-            virtualTarget = hubPosition.minus(totalBallVelocity.times(estimatedFlightTime));
+        for (int i = 0; i < 4; i++) { // 4 iterations
+            virtualTarget = hubPosition.minus(filteredVelocity.times(estimatedFlightTime));
 
-            virtualDistance = futureRobotPos.getDistance(virtualTarget);
+            virtualDistance = futureTurretPos.getDistance(virtualTarget);
 
             double newFlightTime = shotMap.get(virtualDistance).timeOfFlight;
 
@@ -105,7 +131,7 @@ public class ShootOnTheFlyCommand extends Command {
             estimatedFlightTime = newFlightTime;
         }
 
-        Translation2d aimingVector = virtualTarget.minus(futureRobotPos);
+        Translation2d aimingVector = virtualTarget.minus(futureTurretPos);
 
         Rotation2d fieldRelativeTurretAngle = aimingVector.getAngle();
 
@@ -114,17 +140,5 @@ public class ShootOnTheFlyCommand extends Command {
         double neededHoodAngle = shotMap.get(virtualDistance).hoodAngle;
     }
 
-    /* If we shoot while the robot has a rotational velocity, that velocity is imparted onto the ball. 
-     * The function below returns that additional velocity imparted onto the ball compared to if we were not rotating at all.
-    */
-    private Translation2d calculateTangentialTurretVelocity() {
-        double omega = angularRobotVelocity.getRadians();
-        Translation2d tangentialVelocity = turretOffset
-            .rotateBy(Rotation2d.fromDegrees(90)) // Perpendicular to the lever arm
-            .rotateBy(robotRotation)             // Align with robot's field heading
-            .times(omega);
-
-        return tangentialVelocity;
-    }
 
 }
