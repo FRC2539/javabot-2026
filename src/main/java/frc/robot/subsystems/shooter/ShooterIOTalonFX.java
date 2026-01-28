@@ -11,6 +11,7 @@ public class ShooterIOTalonFX implements ShooterIO {
     private TalonFX leftMotor = new TalonFX(ShooterConstants.leftShooterMotorID, ShooterConstants.shooterCanBus);
     private TalonFX rightMotor = new TalonFX(ShooterConstants.rightShooterMotorID, ShooterConstants.shooterCanBus);
     private final MotionMagicVelocityVoltage controlRequest = new MotionMagicVelocityVoltage(0);
+    private final Follower motorFollowerRequest = new Follower(leftMotor.getDeviceID(), MotorAlignmentValue.Opposed); 
 
     private double targetRPS = 0;
 
@@ -21,7 +22,8 @@ public class ShooterIOTalonFX implements ShooterIO {
         leftMotor.getConfigurator().apply(ShooterConstants.leftMotorConfig);
         rightMotor.getConfigurator().apply(ShooterConstants.rightMotorConfig);
 
-        rightMotor.setControl(new Follower(leftMotor.getDeviceID(), MotorAlignmentValue.Opposed));
+        rightMotor.setControl(motorFollowerRequest);
+        
     }
 
     @Override
@@ -34,7 +36,9 @@ public class ShooterIOTalonFX implements ShooterIO {
     @Override
     public void setControlVelocity(double targetVelocity) {
         this.targetRPS = targetVelocity;
+        rightMotor.setControl(motorFollowerRequest);
         leftMotor.setControl(controlRequest.withVelocity(targetVelocity));
+        
     }
 
     @Override
