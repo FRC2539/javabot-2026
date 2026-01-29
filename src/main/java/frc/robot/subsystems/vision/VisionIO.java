@@ -27,7 +27,6 @@ public interface VisionIO {
   public void updateInputs(VisionIOInputs inputs, AprilTagVisionIOInputs aprilTagInputs);
 
   public PoseEstimate getPoseEstimateMT2();
-  public PoseEstimate getPoseEstimateMT();
 
   public void updateHeading(Supplier<Rotation2d> currentHeading);
 }
