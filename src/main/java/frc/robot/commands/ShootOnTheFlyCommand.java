@@ -55,8 +55,7 @@ public class ShootOnTheFlyCommand extends Command {
     private Rotation2d angularRobotVelocity;
     private Rotation2d robotRotation;
     private final Translation2d turretOffset = new Translation2d(-0.127, 0.0);
-    Translation2d filteredVelocity;
-    
+
     public ShootOnTheFlyCommand() {
 
     }
@@ -79,11 +78,13 @@ public class ShootOnTheFlyCommand extends Command {
             so we convert from one to the other using our turrets offset to the center.
         */
 
+        // 1. Convert robot relative turret offset to a field relative translation from the robot.
         Translation2d turretOffsetFieldRelative = turretOffset.rotateBy(robotRotation);
-        Translation2d tangentialVelocity = new Translation2d(
-            -angularRobotVelocity.getRadians() * turretOffsetFieldRelative.getY(),
-            angularRobotVelocity.getRadians() * turretOffsetFieldRelative.getX()
-        );
+        // 2. Get the direction of the "whip" by rotating the offset 90 degrees
+        Translation2d tangentialDirection = turretOffsetFieldRelative.rotateBy(Rotation2d.fromDegrees(90));
+        // 3. Scale that  by the angular velocity (radians per second)
+
+        Translation2d tangentialVelocity = tangentialDirection.times(angularRobotVelocity.getRadians());
 
         Translation2d turretFieldVelocity = filteredRobotVelocity.plus(tangentialVelocity);
 
@@ -121,7 +122,7 @@ public class ShootOnTheFlyCommand extends Command {
         Translation2d virtualTarget = hubPosition;
         double virtualDistance = realDistance;
         for (int i = 0; i < 4; i++) { // 4 iterations
-            virtualTarget = hubPosition.minus(filteredVelocity.times(estimatedFlightTime));
+            virtualTarget = hubPosition.minus(turretFieldVelocity.times(estimatedFlightTime));
 
             virtualDistance = futureTurretPos.getDistance(virtualTarget);
 
