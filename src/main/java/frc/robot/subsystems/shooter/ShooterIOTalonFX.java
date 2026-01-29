@@ -2,6 +2,7 @@ package frc.robot.subsystems.shooter;
 
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
+import com.ctre.phoenix6.controls.VelocityDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -46,10 +47,10 @@ public class ShooterIOTalonFX implements ShooterIO {
     public boolean isAtSetpoint() {
         double currentSpeed = leftMotor.getVelocity().getValueAsDouble();
 
-        double errorRPM = Math.abs(targetRPS - currentSpeed);
+        double errorRPS = Math.abs(targetRPS - currentSpeed);
 
         // convert deadband to rotations per second
-        if (errorRPM < ShooterConstants.goalDeadbandRPM / 60) {
+        if (errorRPS < ShooterConstants.goalDeadbandRPM / 60) {
             return true;
         } else {
             return false;
