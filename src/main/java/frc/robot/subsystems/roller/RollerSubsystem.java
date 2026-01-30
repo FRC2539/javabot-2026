@@ -47,28 +47,28 @@ public class RollerSubsystem extends SubsystemBase {
     switch (state) {
             case DISABLED:
                 setRollerVoltage(0);
-                //setPivotVoltage(0);
                 break;
+
             case INTAKING:
                 setRollerVoltage(0);
-                //setPivotVoltage(0);
                 break;
+
             case EJECTING:
                 setRollerVoltage(0);
-                //setPivotVoltage(0);
                 break;
+
             case EXPANDING:
                 setRollerVoltage(0);
-                //setPivotVoltage(0);
                 break;
+
             case CLOSINGHOP:
                 setRollerVoltage(0);
-                //setPivotVoltage(0);
                 break;
+
             case SHOOTING: //likley uneeded
                 setRollerVoltage(0);
-                //setPivotVoltage(0);
                 break;
+                
         }
   }
 //#region case adjustments

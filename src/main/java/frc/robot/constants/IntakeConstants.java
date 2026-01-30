@@ -13,6 +13,6 @@ public class IntakeConstants {
 
 //#region Constants
 
-  public static final double intakeVoltage = 6;//TODO: Correct #
+  public static final double intakeVoltage = 10;//TODO: Correct #
 
 }
