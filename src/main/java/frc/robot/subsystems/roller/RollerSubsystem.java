@@ -8,16 +8,14 @@ import frc.robot.util.LoggedTunableNumber;
 import org.littletonrobotics.junction.Logger;
 
 public class RollerSubsystem extends SubsystemBase {
-
-  private static final LoggedTunableNumber setRollerVoltage =
-      new LoggedTunableNumber("/roller/RollerVoltage", 12.0);
-
 //#region instantiate
   private RollerIO rollerIO;
   private RollerIOInputsAutoLogged rollerInputs = new RollerIOInputsAutoLogged();
   private IntakeState state = IntakeState.DISABLED;
 
-
+private static final LoggedTunableNumber setRollerVoltage =
+      new LoggedTunableNumber("/roller/RollerVoltage", 12.0);
+      
   public RollerSubsystem(RollerIO rollerIO) {
     this.rollerIO = rollerIO;
 
@@ -53,28 +51,28 @@ public class RollerSubsystem extends SubsystemBase {
     switch (state) {
             case DISABLED:
                 setRollerVoltage(0);
-                //setPivotVoltage(0);
                 break;
+
             case INTAKING:
                 setRollerVoltage(0);
-                //setPivotVoltage(0);
                 break;
+
             case EJECTING:
                 setRollerVoltage(0);
-                //setPivotVoltage(0);
                 break;
+
             case EXPANDING:
                 setRollerVoltage(0);
-                //setPivotVoltage(0);
                 break;
+
             case CLOSINGHOP:
                 setRollerVoltage(0);
-                //setPivotVoltage(0);
                 break;
+
             case SHOOTING: //likley uneeded
                 setRollerVoltage(0);
-                //setPivotVoltage(0);
                 break;
+                
         }
   }
 //#region case adjustments
