@@ -4,21 +4,25 @@ import org.littletonrobotics.junction.AutoLog;
 
 public interface ClimberIO {
 
-  void updateInputs(ClimberIOInputs inputs);
-
   @AutoLog
   class ClimberIOInputs {
-    public double leftPositionRotations = 0.0;
-    public double rightPositionRotations = 0.0;
-    public double leftVoltage = 0.0;
-    public double rightVoltage = 0.0;
+    public boolean motorConnected = false;
+
+    public double positionRot = 0.0;
+    public double velocityRotPerSec = 0.0;
+
+    public double appliedVolts = 0.0;
+    public double supplyCurrentAmps = 0.0;
+    public double tempCelsius = 0.0;
   }
 
-  void setLeftPosition(double rotations);
-  void setRightPosition(double rotations);
+  default void updateInputs(ClimberIOInputs inputs) {}
 
-  void setLeftVoltage(double volts);
-  void setRightVoltage(double volts);
+  default void setPosition(double positionRot) {}
 
-  void setBrakeMode(boolean brake);
+  default void setVoltage(double volts) {}
+
+  default void stop() {}
+
+  default void setBrakeMode(boolean brake) {}
 }

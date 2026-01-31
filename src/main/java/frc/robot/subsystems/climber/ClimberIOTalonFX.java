@@ -1,69 +1,59 @@
 package frc.robot.subsystems.climber;
 
+import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import frc.robot.constants.ClimberConstants;
-import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
-
 
 public class ClimberIOTalonFX implements ClimberIO {
 
-  //#region Motors
-  private final TalonFX leftMotor = new TalonFX(ClimberConstants.leftMotorId, ClimberConstants.canBus);
-  private final TalonFX rightMotor = new TalonFX(ClimberConstants.rightMotorId, ClimberConstants.canBus);
+  private final TalonFX motor =
+      new TalonFX(ClimberConstants.kMotorId, ClimberConstants.kCanBus);
+
+  private final PositionVoltage positionRequest = new PositionVoltage(0.0);
 
   public ClimberIOTalonFX() {
-    CurrentLimitsConfigs currentLimits = new CurrentLimitsConfigs();
-    currentLimits.SupplyCurrentLimit = ClimberConstants.currentLimit;
-    currentLimits.StatorCurrentLimit = ClimberConstants.currentLimit;
-    currentLimits.StatorCurrentLimitEnable = true;
-    currentLimits.StatorCurrentLimitEnable = true;
+    TalonFXConfiguration config = new TalonFXConfiguration();
+    config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+    motor.getConfigurator().apply(config);
 
-    TalonFXConfiguration config = new TalonFXConfiguration()
-        .withCurrentLimits(currentLimits);
-
-    leftMotor.getConfigurator().apply(config);
-    rightMotor.getConfigurator().apply(config);
-
-    leftMotor.setNeutralMode(NeutralModeValue.Brake);
-    rightMotor.setNeutralMode(NeutralModeValue.Brake);
+    Slot0Configs slot0 = new Slot0Configs();
+    slot0.kP = ClimberConstants.kP;
+    slot0.kD = ClimberConstants.kD;
+    motor.getConfigurator().apply(slot0);
   }
 
-  //#region IO
   @Override
   public void updateInputs(ClimberIOInputs inputs) {
-    inputs.leftPositionRotations = leftMotor.getPosition().refresh().getValueAsDouble();
-    inputs.rightPositionRotations = rightMotor.getPosition().refresh().getValueAsDouble();
-    inputs.leftVoltage = leftMotor.getMotorVoltage().refresh().getValueAsDouble();
-    inputs.rightVoltage = rightMotor.getMotorVoltage().refresh().getValueAsDouble();
+    inputs.motorConnected = motor.isConnected();
+    inputs.positionRot = motor.getPosition().getValueAsDouble();
+    inputs.velocityRotPerSec = motor.getVelocity().getValueAsDouble();
+    inputs.appliedVolts = motor.getMotorVoltage().getValueAsDouble();
+    inputs.supplyCurrentAmps = motor.getSupplyCurrent().getValueAsDouble();
+    inputs.tempCelsius = motor.getDeviceTemp().getValueAsDouble();
   }
 
   @Override
-  public void setLeftPosition(double rotations) {
-    leftMotor.setPosition(rotations);
+  public void setPosition(double positionRot) {
+    positionRequest.Position = positionRot;
+    motor.setControl(positionRequest);
   }
 
   @Override
-  public void setRightPosition(double rotations) {
-    rightMotor.setPosition(rotations);
+  public void setVoltage(double volts) {
+    motor.setVoltage(volts);
   }
 
   @Override
-  public void setLeftVoltage(double volts) {
-    leftMotor.setVoltage(volts);
-  }
-
-  @Override
-  public void setRightVoltage(double volts) {
-    rightMotor.setVoltage(volts);
+  public void stop() {
+    motor.stopMotor();
   }
 
   @Override
   public void setBrakeMode(boolean brake) {
-    NeutralModeValue mode = brake ? NeutralModeValue.Brake : NeutralModeValue.Coast;
-    leftMotor.setNeutralMode(mode);
-    rightMotor.setNeutralMode(mode);
+    motor.setNeutralMode(
+        brake ? NeutralModeValue.Brake : NeutralModeValue.Coast);
   }
 }
