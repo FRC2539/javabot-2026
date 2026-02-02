@@ -16,7 +16,7 @@ public class VisionIOLimelight implements VisionIO {
   }
 
   @Override
-  public void updateInputs(VisionIOInputs inputs, AprilTagVisionIOInputs aprilTagInputs) {
+  public void updateInputs(VisionIOInputs inputs) {
     LimelightHelpers
         .Flush();
 
@@ -25,8 +25,8 @@ public class VisionIOLimelight implements VisionIO {
     inputs.hasTarget = LimelightHelpers.getTV(cameraName);
     inputs.targetA = LimelightHelpers.getTA(cameraName);
 
-    inputs.targetXNC = LimelightHelpers.getTXNC(cameraName);
-    inputs.targetYNC = LimelightHelpers.getTYNC(cameraName);
+    // inputs.targetXNC = LimelightHelpers.getTXNC(cameraName);
+    // inputs.targetYNC = LimelightHelpers.getTYNC(cameraName);
 
     updateHeading(currentHeading);
   }

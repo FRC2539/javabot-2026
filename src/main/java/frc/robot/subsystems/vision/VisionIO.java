@@ -19,12 +19,7 @@ public interface VisionIO {
     public boolean ntConnected = false;
   }
 
-   @AutoLog
-  class AprilTagVisionIOInputs {
-    public double[] timestamps = new double[] {};
-  }
-
-  public void updateInputs(VisionIOInputs inputs, AprilTagVisionIOInputs aprilTagInputs);
+  public void updateInputs(VisionIOInputs inputs);
 
   public PoseEstimate getPoseEstimateMT2();
 
