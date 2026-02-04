@@ -15,6 +15,7 @@ public class IndexerSubsystem extends SubsystemBase {
     this.indexerIO = indexerIO;
   }
 
+  @Override
   public void periodic() {
     indexerIO.updateInputs(indexerInputs);
     Logger.processInputs("RealOutputs/Indexer", indexerInputs);
