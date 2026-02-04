@@ -17,11 +17,9 @@ public final class Constants {
   }
 
   public enum Mode {
-
     REAL,
 
     SIM,
-
 
     REPLAY
   }

@@ -17,8 +17,7 @@ public class VisionIOLimelight implements VisionIO {
 
   @Override
   public void updateInputs(VisionIOInputs inputs) {
-    LimelightHelpers
-        .Flush();
+    LimelightHelpers.Flush();
 
     inputs.targetX = LimelightHelpers.getTX(cameraName);
     inputs.targetY = LimelightHelpers.getTY(cameraName);
