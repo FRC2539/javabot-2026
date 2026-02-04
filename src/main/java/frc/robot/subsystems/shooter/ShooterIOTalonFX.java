@@ -2,19 +2,20 @@ package frc.robot.subsystems.shooter;
 
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
-import com.ctre.phoenix6.controls.VelocityDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.units.AngularVelocityUnit;
+
 public class ShooterIOTalonFX implements ShooterIO {
+
+    private double targetRPS = 0;
 
     private TalonFX leftMotor = new TalonFX(ShooterConstants.leftShooterMotorID, ShooterConstants.shooterCanBus);
     private TalonFX rightMotor = new TalonFX(ShooterConstants.rightShooterMotorID, ShooterConstants.shooterCanBus);
-    private final MotionMagicVelocityVoltage controlRequest = new MotionMagicVelocityVoltage(0);
-    private final Follower motorFollowerRequest = new Follower(leftMotor.getDeviceID(), MotorAlignmentValue.Opposed); 
-
-    private double targetRPS = 0;
+    private MotionMagicVelocityVoltage controlRequest = new MotionMagicVelocityVoltage(targetRPS);
+    private Follower motorFollowerRequest = new Follower(leftMotor.getDeviceID(), MotorAlignmentValue.Opposed); 
 
     public ShooterIOTalonFX() {
         leftMotor.setNeutralMode(NeutralModeValue.Coast);
@@ -38,8 +39,9 @@ public class ShooterIOTalonFX implements ShooterIO {
     @Override
     public void setControlVelocity(double targetVelocity) {
         this.targetRPS = targetVelocity;
-        rightMotor.setControl(motorFollowerRequest);
         leftMotor.setControl(controlRequest.withVelocity(targetVelocity));
+        rightMotor.setControl(motorFollowerRequest);
+        
         
     }
 
