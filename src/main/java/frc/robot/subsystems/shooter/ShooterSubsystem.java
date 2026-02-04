@@ -3,7 +3,6 @@ package frc.robot.subsystems.shooter;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ShooterSubsystem extends SubsystemBase {
@@ -13,7 +12,7 @@ public class ShooterSubsystem extends SubsystemBase {
     public ShooterSubsystem(ShooterIO io) {
         shooterIO = io;
 
-        setDefaultCommand(Commands.run(() -> setTargetRPM(ShooterConstants.IdleRPM)));
+        setDefaultCommand(setShooterRPM(ShooterConstants.IdleRPM));
     }
 
     @Override
