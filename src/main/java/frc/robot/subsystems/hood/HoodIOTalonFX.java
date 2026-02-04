@@ -1,5 +1,7 @@
 package frc.robot.subsystems.hood;
 
+import static frc.robot.constants.HoodConstants.kGearRatio;
+
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -8,8 +10,6 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.util.Units;
 import frc.robot.constants.HoodConstants;
-import static frc.robot.constants.HoodConstants.kGearRatio;
-
 
 public class HoodIOTalonFX implements HoodIO {
 
@@ -31,10 +31,8 @@ public class HoodIOTalonFX implements HoodIO {
 
   public void configureMotionMagic(double cruiseRadPerSec, double accelRadPerSecSq) {
     MotionMagicConfigs mm = new MotionMagicConfigs();
-    mm.MotionMagicCruiseVelocity =
-        Units.radiansToRotations(cruiseRadPerSec * kGearRatio);
-    mm.MotionMagicAcceleration =
-        Units.radiansToRotations(accelRadPerSecSq * kGearRatio);
+    mm.MotionMagicCruiseVelocity = Units.radiansToRotations(cruiseRadPerSec * kGearRatio);
+    mm.MotionMagicAcceleration = Units.radiansToRotations(accelRadPerSecSq * kGearRatio);
     motor.getConfigurator().apply(mm);
   }
 
@@ -60,8 +58,7 @@ public class HoodIOTalonFX implements HoodIO {
 
   @Override
   public void setMotionMagic(double positionRad) {
-    mmRequest.Position =
-        Units.radiansToRotations(positionRad * kGearRatio);
+    mmRequest.Position = Units.radiansToRotations(positionRad * kGearRatio);
     motor.setControl(mmRequest);
   }
 
