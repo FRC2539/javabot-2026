@@ -21,10 +21,10 @@ public class VisionConstants {
   public static Transform3d robotToCamera0 =
       new Transform3d(0.331, -0.0381, 0.33, new Rotation3d(0.0, -0.0, 0.0));
   public static Transform3d robotToCamera1 =
-      new Transform3d(0.331, -0.0381, 0.33, new Rotation3d(0.0, -0.0, 0.0));
+      new Transform3d(0.331, 0.0381, 0.33, new Rotation3d(0.0, -0.0, 0.0));
 
   public static Transform3d robotToCamera2 =
-      new Transform3d(0.331, -0.0381, 0.33, new Rotation3d(0.0, -0.0, 0.0));
+      new Transform3d(-0.331, -0.0381, 0.33, new Rotation3d(0.0, -0.0, 0.0));
   public static Transform3d robotToCamera3 =
       new Transform3d(0.331, -0.0381, 0.33, new Rotation3d(0.0, -0.0, 0.0));
 
