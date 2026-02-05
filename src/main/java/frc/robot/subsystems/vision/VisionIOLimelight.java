@@ -21,11 +21,8 @@ public class VisionIOLimelight implements VisionIO {
 
     inputs.targetX = LimelightHelpers.getTX(cameraName);
     inputs.targetY = LimelightHelpers.getTY(cameraName);
-    inputs.hasTarget = LimelightHelpers.getTV(cameraName);
     inputs.targetA = LimelightHelpers.getTA(cameraName);
-
-    // inputs.targetXNC = LimelightHelpers.getTXNC(cameraName);
-    // inputs.targetYNC = LimelightHelpers.getTYNC(cameraName);
+    inputs.hasTarget = LimelightHelpers.getTV(cameraName);
 
     updateHeading(currentHeading);
   }
