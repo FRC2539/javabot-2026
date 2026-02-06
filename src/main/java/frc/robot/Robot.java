@@ -35,7 +35,8 @@ public class Robot extends LoggedRobot {
           new WPILOGWriter(
               LogFileUtil.addPathSuffix(logPath, "_sim"))); // Save outputs to a new log
     }
-    Logger.start(); // Start logging! No more data receivers, replay sources, or metadata values may be added.
+    Logger.start(); // Start logging! No more data receivers, replay sources, or metadata values may
+    // be added.
     m_robotContainer = new RobotContainer();
   }
 
