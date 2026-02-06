@@ -1,8 +1,10 @@
-package frc.robot.subsystems.hood;
+package frc.robot.subsystems.shooter.hood;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.hood.HoodIOInputsAutoLogged;
+
 import org.littletonrobotics.junction.Logger;
 
 public class HoodSubsystem extends SubsystemBase {

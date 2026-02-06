@@ -1,4 +1,4 @@
-package frc.robot.subsystems.hood;
+package frc.robot.subsystems.shooter.hood;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;

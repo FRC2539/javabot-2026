@@ -1,4 +1,4 @@
-package frc.robot.subsystems.hood;
+package frc.robot.subsystems.shooter.hood;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import org.littletonrobotics.junction.AutoLog;
