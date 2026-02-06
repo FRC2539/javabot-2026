@@ -2,11 +2,11 @@ package frc.robot.subsystems.shooter.flywheel;
 
 import org.littletonrobotics.junction.AutoLog;
 
-public interface ShooterIO {
-  public void updateInputs(ShooterIOInputs inputs);
+public interface FlywheelIO {
+  public void updateInputs(FlywheelIOInputs inputs);
 
   @AutoLog
-  public class ShooterIOInputs {
+  public class FlywheelIOInputs {
     public double wheelVelocity = 0; // RPM
     public double leftMotorTemperatureCelcius = 0;
     public double rightMotorTemperatureCelcius = 0;

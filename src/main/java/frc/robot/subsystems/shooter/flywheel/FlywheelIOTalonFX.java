@@ -7,7 +7,7 @@ import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import frc.robot.constants.ShooterConstants;
 
-public class ShooterIOTalonFX implements ShooterIO {
+public class FlywheelIOTalonFX implements FlywheelIO {
 
   private double targetRPS = 0;
 
@@ -19,7 +19,7 @@ public class ShooterIOTalonFX implements ShooterIO {
   private Follower motorFollowerRequest =
       new Follower(leftMotor.getDeviceID(), MotorAlignmentValue.Opposed);
 
-  public ShooterIOTalonFX() {
+  public FlywheelIOTalonFX() {
     leftMotor.setNeutralMode(NeutralModeValue.Coast);
     rightMotor.setNeutralMode(NeutralModeValue.Coast);
 
@@ -30,7 +30,7 @@ public class ShooterIOTalonFX implements ShooterIO {
   }
 
   @Override
-  public void updateInputs(ShooterIOInputs inputs) {
+  public void updateInputs(FlywheelIOInputs inputs) {
     // convert wheel velocity from RPS -> RPM
     inputs.wheelVelocity = leftMotor.getVelocity().getValueAsDouble() * 60;
     inputs.leftMotorTemperatureCelcius = leftMotor.getDeviceTemp().getValueAsDouble();
