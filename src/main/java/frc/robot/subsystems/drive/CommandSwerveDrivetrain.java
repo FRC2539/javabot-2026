@@ -190,10 +190,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     if (Utils.isSimulation()) {
       startSimThread();
     }
-    ALL_APRIL_TAGS =
-    FieldConstants.AprilTagLayoutType.OFFICIAL.getLayout().getTags();
-
-
+    ALL_APRIL_TAGS = FieldConstants.AprilTagLayoutType.OFFICIAL.getLayout().getTags();
   }
 
   /**

@@ -9,7 +9,6 @@ package frc.robot.constants;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
@@ -332,8 +331,6 @@ public class FieldConstants {
     AprilTagLayoutType(String name) {
       this.name = name;
     }
-
-
 
     public AprilTagFieldLayout getLayout() {
       if (layout == null) {
