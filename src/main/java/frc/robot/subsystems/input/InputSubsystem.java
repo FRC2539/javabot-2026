@@ -1,11 +1,13 @@
 package frc.robot.subsystems.input;
 
+import org.littletonrobotics.junction.networktables.LoggedNetworkBoolean;
+import org.littletonrobotics.junction.networktables.LoggedNetworkNumber;
+import org.littletonrobotics.junction.networktables.LoggedNetworkString;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.lib.controller.LogitechController;
-import frc.robot.lib.controller.ThrustmasterJoystick;
 
 public class InputSubsystem extends SubsystemBase {
   public InputSubsystem() {
@@ -20,21 +22,22 @@ public class InputSubsystem extends SubsystemBase {
     Test,
     EStop
   }
-
   public static enum MatchTimeframe {
-    None(0),
-    Auto(20),
-    TransitionShift(10),
-    Shift1(25),
-    Shift2(25),
-    Shift3(25),
-    Shift4(25),
-    EndGame(30);
+    None(0, "Disabled"),
+    Auto(20, "Auto"),
+    TransitionShift(10, "Transition Shift"),
+    Shift1(25, "Shift 1"),
+    Shift2(25, "Shift 2"),
+    Shift3(25, "Shift 3"),
+    Shift4(25, "Shift 4"),
+    EndGame(30, "End Game");
 
-    public double duration;
+    public final double duration;
+    public final String displayName;
 
-    private MatchTimeframe(double duration) {
+    private MatchTimeframe(double duration, String displayName) {
       this.duration = duration;
+      this.displayName = displayName;
     }
   }
 
@@ -49,15 +52,8 @@ public class InputSubsystem extends SubsystemBase {
   public void periodic() {
     UpdateMatchPeriod();
     UpdateMatchTimeframe();
+    UpdateLogged();
   }
-
-  // #region Controllers
-  // Driver
-  public static final ThrustmasterJoystick driverLeftJoystick = new ThrustmasterJoystick(0);
-  public static final ThrustmasterJoystick driverRightJoystick = new ThrustmasterJoystick(1);
-
-  // Operator
-  public static final LogitechController operatorController = new LogitechController(2);
 
   // #region Game Data
 
@@ -88,26 +84,26 @@ public class InputSubsystem extends SubsystemBase {
         return MatchTimeframe.None;
       case TransitionShift:
         if (currentMatchPeriod != MatchPeriod.Teleop) return MatchTimeframe.None;
-        if (MatchPeriodTimer.get() < MatchTimeframe.TransitionShift.duration) break;
+        if (MatchTimeframeTimer.get() < MatchTimeframe.TransitionShift.duration) break;
         return MatchTimeframe.Shift1;
       case Shift1:
         if (currentMatchPeriod != MatchPeriod.Teleop) return MatchTimeframe.None;
-        if (MatchPeriodTimer.get() < MatchTimeframe.Shift1.duration) break;
+        if (MatchTimeframeTimer.get() < MatchTimeframe.Shift1.duration) break;
         return MatchTimeframe.Shift2;
       case Shift2:
         if (currentMatchPeriod != MatchPeriod.Teleop) return MatchTimeframe.None;
-        if (MatchPeriodTimer.get() < MatchTimeframe.Shift2.duration) break;
+        if (MatchTimeframeTimer.get() < MatchTimeframe.Shift2.duration) break;
         return MatchTimeframe.Shift3;
       case Shift3:
         if (currentMatchPeriod != MatchPeriod.Teleop) return MatchTimeframe.None;
-        if (MatchPeriodTimer.get() < MatchTimeframe.Shift3.duration) break;
+        if (MatchTimeframeTimer.get() < MatchTimeframe.Shift3.duration) break;
         return MatchTimeframe.Shift4;
       case Shift4:
         if (currentMatchPeriod != MatchPeriod.Teleop) return MatchTimeframe.None;
-        if (MatchPeriodTimer.get() < MatchTimeframe.Shift4.duration) break;
+        if (MatchTimeframeTimer.get() < MatchTimeframe.Shift4.duration) break;
         return MatchTimeframe.EndGame;
       case EndGame:
-        if (currentMatchPeriod == MatchPeriod.Teleop) break;
+        if (currentMatchPeriod != MatchPeriod.Teleop) return MatchTimeframe.None;
         break;
     }
 
@@ -150,9 +146,9 @@ public class InputSubsystem extends SubsystemBase {
     };
   }
 
-  // #region Match Period/Timeframe Managment
-  public static MatchPeriod currentMatchPeriod = MatchPeriod.Disabled;
+  // #region Period/Timeframe
 
+  public static MatchPeriod currentMatchPeriod = MatchPeriod.Disabled;
   static void UpdateMatchPeriod() {
     MatchPeriod newMatchPeriod = getMatchPeriod();
     if (currentMatchPeriod == newMatchPeriod) return;
@@ -161,6 +157,7 @@ public class InputSubsystem extends SubsystemBase {
     switch (currentMatchPeriod) {
       case Disabled:
         MatchTimer.restart();
+        MatchTimeframeTimer.restart();
         break;
       case Auto:
         break;
@@ -176,6 +173,7 @@ public class InputSubsystem extends SubsystemBase {
     switch (newMatchPeriod) {
       case Disabled:
         MatchTimer.stop();
+        MatchTimeframeTimer.stop();
         break;
       case Auto:
         break;
@@ -192,7 +190,6 @@ public class InputSubsystem extends SubsystemBase {
   }
 
   public static MatchTimeframe currentMatchTimeframe = MatchTimeframe.None;
-
   static void UpdateMatchTimeframe() {
     MatchTimeframe newMatchTimeframe = getMatchTimeframe();
     if (currentMatchTimeframe == newMatchTimeframe) return;
@@ -239,5 +236,23 @@ public class InputSubsystem extends SubsystemBase {
 
     MatchTimeframeTimer.advanceIfElapsed(currentMatchTimeframe.duration);
     currentMatchTimeframe = newMatchTimeframe;
+  }
+  
+  //#region Logged
+  public static LoggedNetworkString LoggedMatchTimeframeName = new LoggedNetworkString("match-timeframe-name", "test");
+  public static LoggedNetworkNumber LoggedMatchTimeframeTimer = new LoggedNetworkNumber("match-timeframe-timer", 0);
+  public static LoggedNetworkNumber LoggedMatchTimeframeTimerRatio = new LoggedNetworkNumber("match-timeframe-timer-ratio", 0);
+  public static LoggedNetworkBoolean LoggedHubActivity = new LoggedNetworkBoolean("hub-activity", true);
+  public static void UpdateLogged() {
+    MatchTimeframe newMatchTimeframe = getMatchTimeframe();
+    LoggedMatchTimeframeName.set(newMatchTimeframe.displayName);
+    LoggedMatchTimeframeTimer.set(Math.ceil(Math.max(0, newMatchTimeframe.duration - MatchTimeframeTimer.get())));
+    LoggedMatchTimeframeTimerRatio.set(Math.max(0, newMatchTimeframe.duration - MatchTimeframeTimer.get()) / newMatchTimeframe.duration);
+    
+    boolean isGoingToSwap = (newMatchTimeframe.duration - MatchTimeframeTimer.get()) < 3 && ((newMatchTimeframe == MatchTimeframe.TransitionShift && AutoLoser() == HubActivity.Opponent) || newMatchTimeframe == MatchTimeframe.Shift1 || newMatchTimeframe == MatchTimeframe.Shift2 || newMatchTimeframe == MatchTimeframe.Shift3 || (newMatchTimeframe == MatchTimeframe.Shift4 && AutoLoser() == HubActivity.Opponent));
+    switch (GetHubActivity()) {
+        case Both, Ally -> LoggedHubActivity.set(isGoingToSwap ? (newMatchTimeframe.duration - MatchTimeframeTimer.get()) % 1 < 0.5 : true);
+        case Opponent -> LoggedHubActivity.set(isGoingToSwap ? (newMatchTimeframe.duration - MatchTimeframeTimer.get()) % 1 > 0.5 : false);
+    }
   }
 }
