@@ -1,27 +1,21 @@
 package frc.robot.subsystems.hood;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface HoodIO {
 
   @AutoLog
   class HoodIOInputs {
-    public boolean motorConnected = false;
-
     public double positionRad = 0.0;
     public double velocityRadPerSec = 0.0;
-
-    public double appliedVolts = 0.0;
-    public double supplyCurrentAmps = 0.0;
-    public double torqueCurrentAmps = 0.0;
+    public double voltage = 0.0;
     public double tempCelsius = 0.0;
   }
 
-  default void updateInputs(HoodIOInputs inputs) {}
+  public void updateInputs(HoodIOInputs inputs);
 
-  default void setBrakeMode(boolean brake) {}
+  public void setTargetAngle(Rotation2d targetAngle);
 
-  default void setMotionMagic(double positionRad) {}
-
-  default void stop() {}
+  public boolean isAtSetpoint();
 }

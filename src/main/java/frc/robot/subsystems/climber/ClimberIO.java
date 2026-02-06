@@ -10,7 +10,7 @@ public interface ClimberIO {
   }
 
   default void updateInputs(ClimberIOInputs inputs) {}
-  
+
   default void setVoltage(double volts) {}
 
   default void stop() {}

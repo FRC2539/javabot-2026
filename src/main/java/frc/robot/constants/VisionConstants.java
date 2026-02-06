@@ -16,5 +16,4 @@ public class VisionConstants {
 
   // Basic filtering thresholds
   public static double maxZError = 2;
-
 }

@@ -26,5 +26,4 @@ public class ClimberSubsystem extends SubsystemBase {
   public void stop() {
     io.stop();
   }
-
 }

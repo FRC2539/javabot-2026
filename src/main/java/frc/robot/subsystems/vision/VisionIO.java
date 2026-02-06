@@ -12,7 +12,6 @@ public interface VisionIO {
     double targetY = 0;
     double targetA = 0;
     boolean hasTarget = false;
-
   }
 
   public void updateInputs(VisionIOInputs inputs);
