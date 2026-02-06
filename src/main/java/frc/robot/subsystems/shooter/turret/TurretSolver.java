@@ -11,9 +11,7 @@ public class TurretSolver {
   public static double latency = 0.020;
 
   public static double solveTurretAngle(
-      Pose2d hubPose,
-      Pose2d robotPose,
-      ChassisSpeeds fieldSpeeds) {
+      Pose2d hubPose, Pose2d robotPose, ChassisSpeeds fieldSpeeds) {
 
     Pose2d predictedRobotPose =
         new Pose2d(
@@ -34,9 +32,7 @@ public class TurretSolver {
 
     double turretAngle =
         MathUtil.inputModulus(
-            fieldAngle.minus(predictedRobotPose.getRotation()).getRadians(),
-            -Math.PI,
-            Math.PI);
+            fieldAngle.minus(predictedRobotPose.getRotation()).getRadians(), -Math.PI, Math.PI);
 
     return turretAngle;
   }

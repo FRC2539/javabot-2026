@@ -8,7 +8,6 @@ public final class TurretConstants {
   public static final int TurretMotorId = 20;
   public static final String CanBus = "rio";
 
-
   public static final double GearRatio = 100.0;
 
   // Limits
@@ -18,7 +17,6 @@ public final class TurretConstants {
   // Motion Magic
   public static final double MaxVelRadPerSec = 8.0;
   public static final double MaxAccelRadPerSec2 = 30.0;
-
 
   public static final double RadTolerance = Units.degreesToRadians(1.5);
 

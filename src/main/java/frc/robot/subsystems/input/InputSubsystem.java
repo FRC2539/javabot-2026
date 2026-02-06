@@ -1,13 +1,12 @@
 package frc.robot.subsystems.input;
 
-import org.littletonrobotics.junction.networktables.LoggedNetworkBoolean;
-import org.littletonrobotics.junction.networktables.LoggedNetworkNumber;
-import org.littletonrobotics.junction.networktables.LoggedNetworkString;
-
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import org.littletonrobotics.junction.networktables.LoggedNetworkBoolean;
+import org.littletonrobotics.junction.networktables.LoggedNetworkNumber;
+import org.littletonrobotics.junction.networktables.LoggedNetworkString;
 
 public class InputSubsystem extends SubsystemBase {
   public InputSubsystem() {
@@ -22,6 +21,7 @@ public class InputSubsystem extends SubsystemBase {
     Test,
     EStop
   }
+
   public static enum MatchTimeframe {
     None(0, "Disabled"),
     Auto(20, "Auto"),
@@ -149,6 +149,7 @@ public class InputSubsystem extends SubsystemBase {
   // #region Period/Timeframe
 
   public static MatchPeriod currentMatchPeriod = MatchPeriod.Disabled;
+
   static void UpdateMatchPeriod() {
     MatchPeriod newMatchPeriod = getMatchPeriod();
     if (currentMatchPeriod == newMatchPeriod) return;
@@ -190,6 +191,7 @@ public class InputSubsystem extends SubsystemBase {
   }
 
   public static MatchTimeframe currentMatchTimeframe = MatchTimeframe.None;
+
   static void UpdateMatchTimeframe() {
     MatchTimeframe newMatchTimeframe = getMatchTimeframe();
     if (currentMatchTimeframe == newMatchTimeframe) return;
@@ -237,22 +239,44 @@ public class InputSubsystem extends SubsystemBase {
     MatchTimeframeTimer.advanceIfElapsed(currentMatchTimeframe.duration);
     currentMatchTimeframe = newMatchTimeframe;
   }
-  
-  //#region Logged
-  public static LoggedNetworkString LoggedMatchTimeframeName = new LoggedNetworkString("match-timeframe-name", "test");
-  public static LoggedNetworkNumber LoggedMatchTimeframeTimer = new LoggedNetworkNumber("match-timeframe-timer", 0);
-  public static LoggedNetworkNumber LoggedMatchTimeframeTimerRatio = new LoggedNetworkNumber("match-timeframe-timer-ratio", 0);
-  public static LoggedNetworkBoolean LoggedHubActivity = new LoggedNetworkBoolean("hub-activity", true);
+
+  // #region Logged
+  public static LoggedNetworkString LoggedMatchTimeframeName =
+      new LoggedNetworkString("match-timeframe-name", "test");
+  public static LoggedNetworkNumber LoggedMatchTimeframeTimer =
+      new LoggedNetworkNumber("match-timeframe-timer", 0);
+  public static LoggedNetworkNumber LoggedMatchTimeframeTimerRatio =
+      new LoggedNetworkNumber("match-timeframe-timer-ratio", 0);
+  public static LoggedNetworkBoolean LoggedHubActivity =
+      new LoggedNetworkBoolean("hub-activity", true);
+
   public static void UpdateLogged() {
     MatchTimeframe newMatchTimeframe = getMatchTimeframe();
     LoggedMatchTimeframeName.set(newMatchTimeframe.displayName);
-    LoggedMatchTimeframeTimer.set(Math.ceil(Math.max(0, newMatchTimeframe.duration - MatchTimeframeTimer.get())));
-    LoggedMatchTimeframeTimerRatio.set(Math.max(0, newMatchTimeframe.duration - MatchTimeframeTimer.get()) / newMatchTimeframe.duration);
-    
-    boolean isGoingToSwap = (newMatchTimeframe.duration - MatchTimeframeTimer.get()) < 3 && ((newMatchTimeframe == MatchTimeframe.TransitionShift && AutoLoser() == HubActivity.Opponent) || newMatchTimeframe == MatchTimeframe.Shift1 || newMatchTimeframe == MatchTimeframe.Shift2 || newMatchTimeframe == MatchTimeframe.Shift3 || (newMatchTimeframe == MatchTimeframe.Shift4 && AutoLoser() == HubActivity.Opponent));
+    LoggedMatchTimeframeTimer.set(
+        Math.ceil(Math.max(0, newMatchTimeframe.duration - MatchTimeframeTimer.get())));
+    LoggedMatchTimeframeTimerRatio.set(
+        Math.max(0, newMatchTimeframe.duration - MatchTimeframeTimer.get())
+            / newMatchTimeframe.duration);
+
+    boolean isGoingToSwap =
+        (newMatchTimeframe.duration - MatchTimeframeTimer.get()) < 3
+            && ((newMatchTimeframe == MatchTimeframe.TransitionShift
+                    && AutoLoser() == HubActivity.Opponent)
+                || newMatchTimeframe == MatchTimeframe.Shift1
+                || newMatchTimeframe == MatchTimeframe.Shift2
+                || newMatchTimeframe == MatchTimeframe.Shift3
+                || (newMatchTimeframe == MatchTimeframe.Shift4
+                    && AutoLoser() == HubActivity.Opponent));
     switch (GetHubActivity()) {
-        case Both, Ally -> LoggedHubActivity.set(isGoingToSwap ? (newMatchTimeframe.duration - MatchTimeframeTimer.get()) % 1 < 0.5 : true);
-        case Opponent -> LoggedHubActivity.set(isGoingToSwap ? (newMatchTimeframe.duration - MatchTimeframeTimer.get()) % 1 > 0.5 : false);
+      case Both, Ally -> LoggedHubActivity.set(
+          isGoingToSwap
+              ? (newMatchTimeframe.duration - MatchTimeframeTimer.get()) % 1 < 0.5
+              : true);
+      case Opponent -> LoggedHubActivity.set(
+          isGoingToSwap
+              ? (newMatchTimeframe.duration - MatchTimeframeTimer.get()) % 1 > 0.5
+              : false);
     }
   }
 }

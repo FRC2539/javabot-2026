@@ -11,8 +11,7 @@ import frc.robot.constants.TurretConstants;
 
 public class TurretIOTalonFX implements TurretIO {
 
-  private final TalonFX motor =
-      new TalonFX(TurretConstants.TurretMotorId, TurretConstants.CanBus);
+  private final TalonFX motor = new TalonFX(TurretConstants.TurretMotorId, TurretConstants.CanBus);
 
   private final MotionMagicVoltage mmRequest = new MotionMagicVoltage(0.0);
 
@@ -28,11 +27,9 @@ public class TurretIOTalonFX implements TurretIO {
 
     MotionMagicConfigs mm = new MotionMagicConfigs();
     mm.MotionMagicCruiseVelocity =
-        Units.radiansToRotations(
-            TurretConstants.MaxVelRadPerSec * TurretConstants.GearRatio);
+        Units.radiansToRotations(TurretConstants.MaxVelRadPerSec * TurretConstants.GearRatio);
     mm.MotionMagicAcceleration =
-        Units.radiansToRotations(
-            TurretConstants.MaxAccelRadPerSec2 * TurretConstants.GearRatio);
+        Units.radiansToRotations(TurretConstants.MaxAccelRadPerSec2 * TurretConstants.GearRatio);
 
     config.MotionMagic = mm;
 
@@ -58,8 +55,7 @@ public class TurretIOTalonFX implements TurretIO {
 
   @Override
   public void setPositionRad(double positionRad) {
-    mmRequest.Position =
-        Units.radiansToRotations(positionRad * TurretConstants.GearRatio);
+    mmRequest.Position = Units.radiansToRotations(positionRad * TurretConstants.GearRatio);
     motor.setControl(mmRequest);
   }
 

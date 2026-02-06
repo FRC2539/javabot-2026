@@ -22,10 +22,7 @@ public class TurretSubsystem extends SubsystemBase {
     io.updateInputs(inputs);
   }
 
-  public void aimAtTarget(
-      Pose2d hubPose,
-      Pose2d robotPose,
-      ChassisSpeeds speeds) {
+  public void aimAtTarget(Pose2d hubPose, Pose2d robotPose, ChassisSpeeds speeds) {
 
     targetRad =
         MathUtil.clamp(
@@ -41,8 +38,7 @@ public class TurretSubsystem extends SubsystemBase {
   }
 
   public boolean atTarget() {
-    return Math.abs(inputs.positionRad - targetRad)
-        <= TurretConstants.RadTolerance;
+    return Math.abs(inputs.positionRad - targetRad) <= TurretConstants.RadTolerance;
   }
 
   public void stop() {
