@@ -1,16 +1,15 @@
-package frc.robot.subsystems.shooter.shooter;
+package frc.robot.subsystems.shooter.flywheel;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.ShooterConstants;
-import frc.robot.subsystems.shooter.ShooterIOInputsAutoLogged;
 import org.littletonrobotics.junction.Logger;
 
-public class ShooterSubsystem extends SubsystemBase {
-  private ShooterIO shooterIO;
-  public ShooterIOInputsAutoLogged shooterInputs = new ShooterIOInputsAutoLogged();
+public class FlywheelSubsystem extends SubsystemBase {
+  private FlywheelIO shooterIO;
+  public FlywheelIOInputsAutoLogged shooterInputs = new FlywheelIOInputsAutoLogged();
 
-  public ShooterSubsystem(ShooterIO io) {
+  public FlywheelSubsystem(FlywheelIO io) {
     shooterIO = io;
 
     setDefaultCommand(setShooterRPM(ShooterConstants.IdleRPM));
@@ -19,7 +18,7 @@ public class ShooterSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     shooterIO.updateInputs(shooterInputs);
-    Logger.processInputs("RealOutputs/ShooterSubsystem", shooterInputs);
+    Logger.processInputs("RealOutputs/Shooter", shooterInputs);
   }
 
   private void setTargetRPM(double targetRPM) {
