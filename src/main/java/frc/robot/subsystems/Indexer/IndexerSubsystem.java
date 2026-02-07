@@ -1,10 +1,10 @@
-package frc.robot.subsystems.Kirkulator;
+package frc.robot.subsystems.Indexer;
 
 import frc.robot.util.LoggedTunableNumber;
 import frc.robot.util.Subsystemutil;
 import org.littletonrobotics.junction.AutoLogOutput;
 
-public class KirkulatorSubsystem extends Subsystemutil {
+public class IndexerSubsystem extends Subsystemutil {
 
   private static final LoggedTunableNumber kirkulatorShootVolts =
       new LoggedTunableNumber("Hopper/ShootVolts", 12.0);
@@ -13,33 +13,33 @@ public class KirkulatorSubsystem extends Subsystemutil {
   private static final LoggedTunableNumber kirkulatorAdjustVolts =
       new LoggedTunableNumber("Hopper/AdjustVolts", 0.0);
 
-  private KirkulatorIO kirkulatorIO;
+  private IndexerIO kirkulatorIO;
 
   @AutoLogOutput private Goal goal = Goal.STOP;
 
-  public KirkulatorSubsystem(KirkulatorIO kirkulatorIO) {
+  public IndexerSubsystem(IndexerIO kirkulatorIO) {
     this.kirkulatorIO = kirkulatorIO;
   }
 
   public void periodic() {
 
-    double kirkulatorVoltage = 0.0;
+    double indexerVoltage = 0.0;
 
     switch (goal) {
       case SHOOT -> {
-        kirkulatorVoltage = kirkulatorShootVolts.get();
+        indexerVoltage = kirkulatorShootVolts.get();
       }
       case REVERSE -> {
-        kirkulatorVoltage = kirkulatorReverseVolts.get();
+        indexerVoltage = kirkulatorReverseVolts.get();
       }
       case STOP -> {
-        kirkulatorVoltage = 0.0;
+        indexerVoltage = 0.0;
       }
       case ADJUST -> {
-        kirkulatorVoltage = kirkulatorAdjustVolts.get();
+        indexerVoltage = kirkulatorAdjustVolts.get();
       }
     }
-    kirkulatorIO.setVoltage(kirkulatorVoltage);
+    kirkulatorIO.setVoltage(indexerVoltage);
   }
 
   @Override
