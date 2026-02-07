@@ -19,5 +19,4 @@ public class TurretSubsystem extends SubsystemBase {
   public boolean atTarget() {
     return io.isAtSetpoint();
   }
-
 }

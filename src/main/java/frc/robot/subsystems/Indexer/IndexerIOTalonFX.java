@@ -1,26 +1,26 @@
-package frc.robot.subsystems.Indexer;
+package frc.robot.subsystems.indexer;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
-import frc.robot.constants.KirkulatorConstants;
+import frc.robot.constants.IndexerConstants;
 
 public class IndexerIOTalonFX implements IndexerIO {
 
-  private TalonFX kirkulatorMotor = new TalonFX(KirkulatorConstants.kirkulatorMotorID);
+  private TalonFX indexerMotor = new TalonFX(IndexerConstants.indexerMotorID);
 
   public IndexerIOTalonFX() {
-    kirkulatorMotor.setVoltage(0);
+    indexerMotor.setVoltage(0);
 
     TalonFXConfiguration talonConfig = new TalonFXConfiguration();
 
-    kirkulatorMotor.getConfigurator().apply(talonConfig);
+    indexerMotor.getConfigurator().apply(talonConfig);
   }
 
   public void updateInputs(IndexerIOInputs inputs) {
-    inputs.voltage = kirkulatorMotor.getMotorVoltage().refresh().getValueAsDouble();
+    inputs.voltage = indexerMotor.getMotorVoltage().refresh().getValueAsDouble();
   }
 
   public void setVoltage(double voltage) {
-    kirkulatorMotor.setVoltage(voltage);
+    indexerMotor.setVoltage(voltage);
   }
 }

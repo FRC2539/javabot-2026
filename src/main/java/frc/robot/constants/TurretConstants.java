@@ -36,6 +36,6 @@ public final class TurretConstants {
           .withMotionMagicCruiseVelocity(0)
           .withMotionMagicJerk(0);
 
-
-  public static final TalonFXConfiguration turretMotorConfig = new TalonFXConfiguration().withFeedback(feedbackConfig).withMotionMagic(motionMagicConfig);
+  public static final TalonFXConfiguration turretMotorConfig =
+      new TalonFXConfiguration().withFeedback(feedbackConfig).withMotionMagic(motionMagicConfig);
 }

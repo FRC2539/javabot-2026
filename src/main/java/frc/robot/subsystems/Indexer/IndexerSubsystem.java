@@ -1,4 +1,4 @@
-package frc.robot.subsystems.Indexer;
+package frc.robot.subsystems.indexer;
 
 import frc.robot.util.LoggedTunableNumber;
 import frc.robot.util.Subsystemutil;
@@ -13,12 +13,12 @@ public class IndexerSubsystem extends Subsystemutil {
   private static final LoggedTunableNumber kirkulatorAdjustVolts =
       new LoggedTunableNumber("Hopper/AdjustVolts", 0.0);
 
-  private IndexerIO kirkulatorIO;
+  private IndexerIO indexerIO;
 
   @AutoLogOutput private Goal goal = Goal.STOP;
 
-  public IndexerSubsystem(IndexerIO kirkulatorIO) {
-    this.kirkulatorIO = kirkulatorIO;
+  public IndexerSubsystem(IndexerIO io) {
+    this.indexerIO = io;
   }
 
   public void periodic() {
@@ -39,7 +39,7 @@ public class IndexerSubsystem extends Subsystemutil {
         indexerVoltage = kirkulatorAdjustVolts.get();
       }
     }
-    kirkulatorIO.setVoltage(indexerVoltage);
+    indexerIO.setVoltage(indexerVoltage);
   }
 
   @Override
