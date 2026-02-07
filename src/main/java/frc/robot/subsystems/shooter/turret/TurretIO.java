@@ -1,23 +1,19 @@
 package frc.robot.subsystems.shooter.turret;
 
+import edu.wpi.first.math.geometry.Rotation2d;
+
 public interface TurretIO {
 
   class TurretIOInputs {
-    public boolean motorConnected = false;
-
-    public double positionRad = 0.0;
-    public double velocityRadPerSec = 0.0;
-
-    public double appliedVolts = 0.0;
-    public double supplyCurrentAmps = 0.0;
+    public double positionDeg = 0.0;
+    public double velocityDegPerSec = 0.0;
+    public double voltage = 0.0;
     public double tempCelsius = 0.0;
   }
 
-  default void updateInputs(TurretIOInputs inputs) {}
+  void updateInputs(TurretIOInputs inputs);
 
-  default void setPositionRad(double positionRad) {}
+  void setTargetHeading(Rotation2d desiredAngle);
 
-  default void setVoltage(double volts) {}
-
-  default void stop() {}
+  boolean isAtSetpoint();
 }
