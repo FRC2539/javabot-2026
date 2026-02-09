@@ -1,5 +1,3 @@
 package frc.robot.constants;
 
-public class AlignConstants {
-    
-}
+public class AlignConstants {}

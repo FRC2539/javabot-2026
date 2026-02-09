@@ -26,9 +26,6 @@
 //           .withSteerRequestType(SteerRequestType.MotionMagicExpo)
 //           .withForwardPerspective(ForwardPerspectiveValue.BlueAlliance);
 
-
-
-
 //   @AutoLogOutput public Pose2d targetPose;
 
 //   private final double xOffset;
@@ -66,10 +63,13 @@
 
 //     if (leftHasTarget || rightHasTarget) {
 //       if (leftHasTarget && (!rightHasTarget
-//           || LimelightHelpers.getTA("limelight-left") >= LimelightHelpers.getTA("limelight-right"))) {
-//         currentPose = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-left").pose;
+//           || LimelightHelpers.getTA("limelight-left") >=
+// LimelightHelpers.getTA("limelight-right"))) {
+//         currentPose =
+// LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-left").pose;
 //       } else {
-//         currentPose = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-right").pose;
+//         currentPose =
+// LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-right").pose;
 //       }
 //     }
 
@@ -91,7 +91,8 @@
 
 //     Rotation2d targetRotation = targetPose.getRotation();
 //     ChassisSpeeds tagRelative = new ChassisSpeeds(xVel, yVel, thetaVel);
-//     ChassisSpeeds fieldRelative = ChassisSpeeds.fromRobotRelativeSpeeds(tagRelative, targetRotation);
+//     ChassisSpeeds fieldRelative = ChassisSpeeds.fromRobotRelativeSpeeds(tagRelative,
+// targetRotation);
 
 //     drive.setControl(applyFieldSpeeds.withSpeeds(fieldRelative));
 //   }
