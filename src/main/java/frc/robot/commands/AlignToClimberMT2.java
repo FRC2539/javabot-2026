@@ -12,11 +12,12 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 import frc.robot.subsystems.vision.LimelightHelpers;
 import org.littletonrobotics.junction.AutoLogOutput;
 
-public class AlignToClimberMT2 extends CommandBase {
+public class AlignToClimberMT2 extends Command {
 
   private final CommandSwerveDrivetrain drive;
 
@@ -45,7 +46,6 @@ public class AlignToClimberMT2 extends CommandBase {
     this.yOffset = yOffset;
     this.rotationOffset = rotationOffset;
 
-    // addRequirements(drivetrain);
   }
 
 //   @Override
