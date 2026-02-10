@@ -1,4 +1,4 @@
-package frc.robot.constants;
+package frc.robot.subsystems.Indexer;
 
 public class IndexerConstants {
   public static final int indexerMotorID = 10;

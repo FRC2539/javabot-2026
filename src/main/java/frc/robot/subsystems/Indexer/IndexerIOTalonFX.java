@@ -2,7 +2,6 @@ package frc.robot.subsystems.Indexer;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
-import frc.robot.constants.IndexerConstants;
 
 public class IndexerIOTalonFX implements IndexerIO {
 

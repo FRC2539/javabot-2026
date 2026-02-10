@@ -3,7 +3,6 @@ package frc.robot.subsystems.raspberry;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import frc.robot.constants.PneumaticsConstants;
 
 public class PneumaticsIORevPH implements PneumaticsIO {
 
