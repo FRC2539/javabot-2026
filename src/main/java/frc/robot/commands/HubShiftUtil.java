@@ -96,7 +96,8 @@
 //       active = currentSchedule[currentShiftIndex];
 //       currentShift = shiftsEnums[currentShiftIndex];
 //     }
-//     ShiftInfo shiftInfo = new ShiftInfo(currentShift, stateTimeElapsed, stateTimeRemaining, active);
+//     ShiftInfo shiftInfo = new ShiftInfo(currentShift, stateTimeElapsed, stateTimeRemaining,
+// active);
 //     return shiftInfo;
 //   }
 // }

@@ -8,7 +8,7 @@ public final class AlignConstants {
 
   private AlignConstants() {}
 
-  // PID 
+  // PID
   public static final double Kp = 1.0;
   public static final double Ki = 0.0;
   public static final double Kd = 0.0;

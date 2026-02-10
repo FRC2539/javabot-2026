@@ -38,9 +38,7 @@ public class AlignToClimberMT2 extends Command {
           AlignConstants.Kp,
           AlignConstants.Ki,
           AlignConstants.Kd,
-          new TrapezoidProfile.Constraints(
-              Math.toRadians(360), Math.toRadians(180)));
-
+          new TrapezoidProfile.Constraints(Math.toRadians(360), Math.toRadians(180)));
 
   @AutoLogOutput public Pose2d targetPose;
   private final double xOffset;
@@ -86,17 +84,15 @@ public class AlignToClimberMT2 extends Command {
     boolean rightHasTarget = LimelightHelpers.getTV("limelight-right");
 
     if (leftHasTarget || rightHasTarget) {
-      if (leftHasTarget && (!rightHasTarget
-          || LimelightHelpers.getTA("limelight-left")
-              >= LimelightHelpers.getTA("limelight-right"))) {
-        currentPose =
-            LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-left").pose;
+      if (leftHasTarget
+          && (!rightHasTarget
+              || LimelightHelpers.getTA("limelight-left")
+                  >= LimelightHelpers.getTA("limelight-right"))) {
+        currentPose = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-left").pose;
       } else {
-        currentPose =
-            LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-right").pose;
+        currentPose = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-right").pose;
       }
     }
-
 
     Transform2d offsetTransform =
         new Transform2d(
@@ -105,8 +101,7 @@ public class AlignToClimberMT2 extends Command {
 
     double xVel = xController.calculate(offsetTransform.getX());
     double yVel = yController.calculate(offsetTransform.getY());
-    double thetaVel =
-        thetaController.calculate(offsetTransform.getRotation().getRadians());
+    double thetaVel = thetaController.calculate(offsetTransform.getRotation().getRadians());
 
     if (!leftHasTarget && !rightHasTarget) {
       xVel = 0;
@@ -115,8 +110,7 @@ public class AlignToClimberMT2 extends Command {
     }
 
     Rotation2d tagRotation = targetPose.getRotation();
-    ChassisSpeeds tagRelativeSpeeds =
-        new ChassisSpeeds(xVel, yVel, thetaVel);
+    ChassisSpeeds tagRelativeSpeeds = new ChassisSpeeds(xVel, yVel, thetaVel);
 
     ChassisSpeeds fieldRelativeSpeeds =
         ChassisSpeeds.fromRobotRelativeSpeeds(tagRelativeSpeeds, tagRotation);
@@ -126,8 +120,6 @@ public class AlignToClimberMT2 extends Command {
 
   @Override
   public boolean isFinished() {
-    return xController.atSetpoint()
-        && yController.atSetpoint()
-        && thetaController.atSetpoint();
+    return xController.atSetpoint() && yController.atSetpoint() && thetaController.atSetpoint();
   }
 }
