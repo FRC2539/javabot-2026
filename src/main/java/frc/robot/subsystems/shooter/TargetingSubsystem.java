@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.robot.subsystems.shooter;
 
 import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.math.geometry.Pose2d;
