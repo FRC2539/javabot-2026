@@ -1,4 +1,4 @@
-package frc.robot.constants;
+package frc.robot.subsystems.shooter.flywheel;
 
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.FeedbackConfigs;

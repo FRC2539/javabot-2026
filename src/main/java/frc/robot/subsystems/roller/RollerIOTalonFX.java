@@ -3,7 +3,6 @@ package frc.robot.subsystems.roller;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import frc.robot.constants.IntakeConstants;
 
 public class RollerIOTalonFX implements RollerIO {
   // #region Motor
