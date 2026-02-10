@@ -1,4 +1,4 @@
-package frc.robot.subsystems.indexer;
+package frc.robot.subsystems.Indexer;
 
 import frc.robot.util.LoggedTunableNumber;
 import frc.robot.util.Subsystemutil;
