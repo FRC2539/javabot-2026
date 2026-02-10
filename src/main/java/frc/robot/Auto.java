@@ -10,10 +10,8 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.constants.AlignConstants;
 import frc.robot.constants.GlobalConstants;
 import java.util.Optional;
-import java.util.Set;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 public class Auto {
@@ -64,11 +62,7 @@ public class Auto {
 
   public void setUpNamedCommands() {
 
-    NamedCommands.registerCommand(
-      "No",
-      Commands.none()
-  );
-
+    NamedCommands.registerCommand("No", Commands.none());
   }
 
   public Command getAutoCommand() {

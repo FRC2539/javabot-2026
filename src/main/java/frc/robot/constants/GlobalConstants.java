@@ -35,6 +35,12 @@ public class GlobalConstants {
       DCMotor.getKrakenX60(1).withReduction(EXAMPLE_MODULE.SteerMotorGearRatio);
   private static RobotConfig robotConfigPathplanner;
 
+  public static class ControllerConstants {
+    public static final int LEFT_DRIVE_CONTROLLER = 0;
+    public static final int RIGHT_DRIVE_CONTROLLER = 1;
+    public static final int OPERATOR_CONTROLLER = 2;
+  }
+
   public static RobotConfig getRobotConfigPathplanner() {
     if (robotConfigPathplanner == null) {
       try {
@@ -60,8 +66,7 @@ public class GlobalConstants {
                     COEFFICIENT_OF_FRICTION,
                     DRIVE_MOTOR,
                     EXAMPLE_MODULE.DriveMotorGearRatio,
-                    Current.ofBaseUnits(
-                        40.0, Amps),
+                    Current.ofBaseUnits(40.0, Amps),
                     1),
                 moduleOffsets);
       } catch (Exception e) {
@@ -72,5 +77,4 @@ public class GlobalConstants {
     }
     return robotConfigPathplanner;
   }
-
 }
