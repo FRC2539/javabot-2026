@@ -2,7 +2,6 @@ package frc.robot.subsystems.climber;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import frc.robot.constants.ClimberConstants;
 
 public class ClimberIOTalonFX implements ClimberIO {
   private final TalonFX motor = new TalonFX(ClimberConstants.kMotorId, ClimberConstants.kCanBus);

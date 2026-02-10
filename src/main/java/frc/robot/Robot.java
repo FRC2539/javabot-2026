@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import com.ctre.phoenix6.HootAutoReplay;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import org.littletonrobotics.junction.LogFileUtil;
@@ -18,9 +19,13 @@ public class Robot extends LoggedRobot {
 
   private final RobotContainer m_robotContainer;
 
+  /* log and replay timestamp and joystick data */
+  private final HootAutoReplay m_timeAndJoystickReplay =
+      new HootAutoReplay().withTimestampReplay().withJoystickReplay();
+
   public Robot() {
 
-    Logger.recordMetadata("ProjectName", "Javabot-2026"); // Set a metadata value
+    Logger.recordMetadata("ProjectName", "Testbot-2026"); // Set a metadata value
 
     if (isReal()) {
       // Logger.addDataReceiver(new WPILOGWriter()); // Log to a USB stick ("/U/logs")
@@ -35,13 +40,14 @@ public class Robot extends LoggedRobot {
           new WPILOGWriter(
               LogFileUtil.addPathSuffix(logPath, "_sim"))); // Save outputs to a new log
     }
-    Logger.start(); // Start logging! No more data receivers, replay sources, or metadata values may
-    // be added.
+
+    Logger.start();
     m_robotContainer = new RobotContainer();
   }
 
   @Override
   public void robotPeriodic() {
+    m_timeAndJoystickReplay.update();
     CommandScheduler.getInstance().run();
   }
 
@@ -72,7 +78,7 @@ public class Robot extends LoggedRobot {
   @Override
   public void teleopInit() {
     if (m_autonomousCommand != null) {
-      m_autonomousCommand.cancel();
+      CommandScheduler.getInstance().cancel(m_autonomousCommand);
     }
   }
 
@@ -92,4 +98,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void testExit() {}
+
+  @Override
+  public void simulationPeriodic() {}
 }

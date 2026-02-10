@@ -1,4 +1,4 @@
-package frc.robot.constants;
+package frc.robot.subsystems.climber;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 

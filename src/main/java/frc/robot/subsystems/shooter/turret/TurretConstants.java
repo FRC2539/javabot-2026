@@ -1,4 +1,4 @@
-package frc.robot.constants;
+package frc.robot.subsystems.shooter.turret;
 
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
