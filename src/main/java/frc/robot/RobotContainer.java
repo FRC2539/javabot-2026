@@ -9,6 +9,8 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.TunerConstants;
+import frc.robot.subsystems.climber.ClimberIOTalonFX;
+import frc.robot.subsystems.climber.ClimberSubsystem;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 import frc.robot.subsystems.input.ControlSubsystem;
 
@@ -24,9 +26,12 @@ public class RobotContainer {
           .withRotationalDeadband(maxAngularRate * 0.1)
           .withDriveRequestType(DriveRequestType.Velocity);
 
+  // Subsystems
   public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
-  public final ControlSubsystem controls = new ControlSubsystem();
+  public final ClimberSubsystem climber = new ClimberSubsystem(new ClimberIOTalonFX());
+
+  public final ControlSubsystem controls = new ControlSubsystem(climber);
 
   public final Auto auto;
 

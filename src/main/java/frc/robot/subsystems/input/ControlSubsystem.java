@@ -7,7 +7,9 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.GlobalConstants;
 import frc.robot.constants.GlobalConstants.ControllerConstants;
+import frc.robot.lib.controller.LogitechController;
 import frc.robot.lib.controller.ThrustmasterJoystick;
+import frc.robot.subsystems.climber.ClimberSubsystem;
 import java.util.function.Supplier;
 
 public class ControlSubsystem extends SubsystemBase {
@@ -18,8 +20,13 @@ public class ControlSubsystem extends SubsystemBase {
   private final ThrustmasterJoystick rightDriveController =
       new ThrustmasterJoystick(ControllerConstants.RIGHT_DRIVE_CONTROLLER);
 
-  public ControlSubsystem() {
-    // No bindings yet
+  private final LogitechController operatorController =
+      new LogitechController(ControllerConstants.OPERATOR_CONTROLLER);
+
+  public ControlSubsystem(ClimberSubsystem climberSubsystem) {
+    operatorController.getLeftTrigger().whileTrue(climberSubsystem.runPositiveVoltage(10));
+
+    operatorController.getRightTrigger().whileTrue(climberSubsystem.runNegativeVoltage(10));
   }
 
   public Supplier<ChassisSpeeds> getDriverChassisSpeeds() {
@@ -40,8 +47,6 @@ public class ControlSubsystem extends SubsystemBase {
     return GlobalConstants.MAX_ROTATIONAL_SPEED.in(RadiansPerSecond)
         * -squareWithSign(deadband(rightDriveController.getXAxis().get(), 0.1));
   }
-
-  // helpers
 
   private static double deadband(double value, double deadband) {
     if (Math.abs(value) < deadband) {
