@@ -11,8 +11,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.constants.AlignConstants;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 import frc.robot.subsystems.vision.LimelightHelpers;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -27,31 +27,55 @@ public class AlignToClimberMT2 extends Command {
           .withSteerRequestType(SteerRequestType.MotionMagicExpo)
           .withForwardPerspective(ForwardPerspectiveValue.BlueAlliance);
 
-  @AutoLogOutput public Pose2d targetPose;
+  private final PIDController xController =
+      new PIDController(AlignConstants.Kp, AlignConstants.Ki, AlignConstants.Kd);
 
+  private final PIDController yController =
+      new PIDController(AlignConstants.Kp, AlignConstants.Ki, AlignConstants.Kd);
+
+  private final ProfiledPIDController thetaController =
+      new ProfiledPIDController(
+          AlignConstants.Kp,
+          AlignConstants.Ki,
+          AlignConstants.Kd,
+          new TrapezoidProfile.Constraints(
+              Math.toRadians(360), Math.toRadians(180)));
+
+
+  @AutoLogOutput public Pose2d targetPose;
   private final double xOffset;
   private final double yOffset;
   private final Rotation2d rotationOffset;
 
   public AlignToClimberMT2(
       CommandSwerveDrivetrain drivetrain,
-      Pose2d climberPose,
+      Pose2d tagPose,
       double xOffset,
       double yOffset,
       Rotation2d rotationOffset) {
 
     this.drive = drivetrain;
-    this.targetPose = climberPose;
+    this.targetPose = tagPose;
     this.xOffset = xOffset;
     this.yOffset = yOffset;
     this.rotationOffset = rotationOffset;
 
+    addRequirements(drivetrain);
   }
 
-//   @Override
-//   public void initialize() {
+  @Override
+  public void initialize() {
+    xController.reset();
+    yController.reset();
+    thetaController.reset(0);
+    xController.setSetpoint(xOffset);
+    yController.setSetpoint(yOffset);
+    thetaController.setGoal(rotationOffset.getRadians());
 
-//   }
+    xController.setTolerance(AlignConstants.aligningXTolerance);
+    yController.setTolerance(AlignConstants.aligningYTolerance);
+    thetaController.setTolerance(AlignConstants.aligningAngleTolerance);
+  }
 
   @Override
   public void execute() {
@@ -63,17 +87,17 @@ public class AlignToClimberMT2 extends Command {
 
     if (leftHasTarget || rightHasTarget) {
       if (leftHasTarget && (!rightHasTarget
-          || LimelightHelpers.getTA("limelight-left") >=
-LimelightHelpers.getTA("limelight-right"))) {
+          || LimelightHelpers.getTA("limelight-left")
+              >= LimelightHelpers.getTA("limelight-right"))) {
         currentPose =
-LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-left").pose;
+            LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-left").pose;
       } else {
         currentPose =
-LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-right").pose;
+            LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-right").pose;
       }
     }
 
-    // compute transform from target (climber + offsets) to current pose
+
     Transform2d offsetTransform =
         new Transform2d(
             currentPose.getTranslation().minus(targetPose.getTranslation()),
@@ -81,7 +105,8 @@ LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-right").pose;
 
     double xVel = xController.calculate(offsetTransform.getX());
     double yVel = yController.calculate(offsetTransform.getY());
-    double thetaVel = thetaController.calculate(offsetTransform.getRotation().getRadians());
+    double thetaVel =
+        thetaController.calculate(offsetTransform.getRotation().getRadians());
 
     if (!leftHasTarget && !rightHasTarget) {
       xVel = 0;
@@ -89,19 +114,20 @@ LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-right").pose;
       thetaVel = 0;
     }
 
-    Rotation2d targetRotation = targetPose.getRotation();
-    ChassisSpeeds tagRelative = new ChassisSpeeds(xVel, yVel, thetaVel);
-    ChassisSpeeds fieldRelative = ChassisSpeeds.fromRobotRelativeSpeeds(tagRelative,
-targetRotation);
+    Rotation2d tagRotation = targetPose.getRotation();
+    ChassisSpeeds tagRelativeSpeeds =
+        new ChassisSpeeds(xVel, yVel, thetaVel);
 
-    drive.setControl(applyFieldSpeeds.withSpeeds(fieldRelative));
+    ChassisSpeeds fieldRelativeSpeeds =
+        ChassisSpeeds.fromRobotRelativeSpeeds(tagRelativeSpeeds, tagRotation);
+
+    drive.setControl(applyFieldSpeeds.withSpeeds(fieldRelativeSpeeds));
   }
 
   @Override
   public boolean isFinished() {
-    boolean finished =
-        xController.atSetpoint() && yController.atSetpoint() && thetaController.atSetpoint();
-
-    return finished;
+    return xController.atSetpoint()
+        && yController.atSetpoint()
+        && thetaController.atSetpoint();
   }
 }
