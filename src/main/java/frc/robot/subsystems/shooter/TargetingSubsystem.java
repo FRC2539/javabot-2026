@@ -12,8 +12,8 @@ import frc.robot.constants.FieldConstants;
 import frc.robot.constants.TargetingConstants;
 import frc.robot.constants.TargetingConstants.ShootingParameters;
 import frc.robot.constants.TargetingConstants.ShotSettings;
-import frc.robot.constants.TurretConstants;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
+import frc.robot.subsystems.shooter.turret.TurretConstants;
 import frc.robot.util.AllianceFlipUtil;
 
 public class TargetingSubsystem extends SubsystemBase {
