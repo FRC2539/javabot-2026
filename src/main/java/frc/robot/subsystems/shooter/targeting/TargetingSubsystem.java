@@ -1,4 +1,4 @@
-package frc.robot.subsystems.shooter;
+package frc.robot.subsystems.shooter.targeting;
 
 import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -9,10 +9,9 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.FieldConstants;
-import frc.robot.constants.TargetingConstants;
-import frc.robot.constants.TargetingConstants.ShootingParameters;
-import frc.robot.constants.TargetingConstants.ShotSettings;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
+import frc.robot.subsystems.shooter.targeting.TargetingConstants.ShootingParameters;
+import frc.robot.subsystems.shooter.targeting.TargetingConstants.ShotSettings;
 import frc.robot.subsystems.shooter.turret.TurretConstants;
 import frc.robot.util.AllianceFlipUtil;
 

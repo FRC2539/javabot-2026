@@ -1,4 +1,4 @@
-package frc.robot.constants;
+package frc.robot.subsystems.shooter.targeting;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
