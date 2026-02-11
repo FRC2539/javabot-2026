@@ -30,5 +30,4 @@ public class ClimberSubsystem extends SubsystemBase {
   public Command setVoltage(double voltage) {
     return Commands.run(() -> io.setVoltage(voltage), this);
   }
-
 }

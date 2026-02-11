@@ -11,8 +11,8 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.constants.GlobalConstants;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
+import frc.robot.subsystems.drive.DriveConstants;
 import java.util.Optional;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -33,7 +33,7 @@ public class Auto {
 
   public void setUpPathPlanner() {
     CommandSwerveDrivetrain drivetrain = robotContainer.drivetrain;
-    config = GlobalConstants.getRobotConfigPathplanner();
+    config = DriveConstants.getRobotConfigPathplanner();
 
     AutoBuilder.configure(
         drivetrain::getRobotPose,

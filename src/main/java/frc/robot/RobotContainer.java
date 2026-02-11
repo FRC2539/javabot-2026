@@ -8,9 +8,6 @@ import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.constants.GlobalConstants;
-import frc.robot.constants.GlobalConstants.ControllerConstants;
-import frc.robot.constants.TunerConstants;
 import frc.robot.lib.controller.LogitechController;
 import frc.robot.lib.controller.ThrustmasterJoystick;
 import frc.robot.subsystems.Indexer.IndexerIOTalonFX;
@@ -19,6 +16,8 @@ import frc.robot.subsystems.climber.ClimberConstants;
 import frc.robot.subsystems.climber.ClimberIOTalonFX;
 import frc.robot.subsystems.climber.ClimberSubsystem;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
+import frc.robot.subsystems.drive.DriveConstants;
+import frc.robot.subsystems.drive.TunerConstants;
 import frc.robot.subsystems.raspberry.PneumaticsIORevPH;
 import frc.robot.subsystems.raspberry.PneumaticsSubsystem;
 import frc.robot.subsystems.roller.RollerIOTalonFX;
@@ -34,14 +33,11 @@ public class RobotContainer {
 
   private final double maxAngularRate = RotationsPerSecond.of(1.5).in(RadiansPerSecond);
 
-  private final ThrustmasterJoystick leftDriveController =
-      new ThrustmasterJoystick(ControllerConstants.LEFT_DRIVE_CONTROLLER);
+  private final ThrustmasterJoystick leftDriveController = new ThrustmasterJoystick(0);
 
-  private final ThrustmasterJoystick rightDriveController =
-      new ThrustmasterJoystick(ControllerConstants.RIGHT_DRIVE_CONTROLLER);
+  private final ThrustmasterJoystick rightDriveController = new ThrustmasterJoystick(1);
 
-  private final LogitechController operatorController =
-      new LogitechController(ControllerConstants.OPERATOR_CONTROLLER);
+  private final LogitechController operatorController = new LogitechController(2);
 
   private final SwerveRequest.FieldCentric driveRequest =
       new SwerveRequest.FieldCentric()
@@ -93,8 +89,12 @@ public class RobotContainer {
 
   private void configureBindings() {
 
-    operatorController.getLeftTrigger().whileTrue(climber.setVoltage(ClimberConstants.climberUpVoltage));
-    operatorController.getRightTrigger().whileTrue(climber.setVoltage(ClimberConstants.climberDownVoltage));
+    operatorController
+        .getLeftTrigger()
+        .whileTrue(climber.setVoltage(ClimberConstants.climberUpVoltage));
+    operatorController
+        .getRightTrigger()
+        .whileTrue(climber.setVoltage(ClimberConstants.climberDownVoltage));
 
     rightDriveController.getLeftThumb().onTrue(pneumatics.toggleIntake());
     operatorController.getDPadUp().onTrue(pneumatics.toggleRaspberry()); // v (its a secret)
@@ -109,17 +109,17 @@ public class RobotContainer {
   }
 
   private double getXVelocity() {
-    return GlobalConstants.MAX_TRANSLATIONAL_SPEED.in(MetersPerSecond)
+    return DriveConstants.MAX_TRANSLATIONAL_SPEED.in(MetersPerSecond)
         * -Math.pow(leftDriveController.getYAxis().get(), 3);
   }
 
   private double getYVelocity() {
-    return GlobalConstants.MAX_TRANSLATIONAL_SPEED.in(MetersPerSecond)
+    return DriveConstants.MAX_TRANSLATIONAL_SPEED.in(MetersPerSecond)
         * -Math.pow(leftDriveController.getXAxis().get(), 3);
   }
 
   private double getThetaVelocity() {
-    return GlobalConstants.MAX_ROTATIONAL_SPEED.in(RadiansPerSecond)
+    return DriveConstants.MAX_ROTATIONAL_SPEED.in(RadiansPerSecond)
         * -Math.pow(rightDriveController.getXAxis().get(), 3);
   }
 
