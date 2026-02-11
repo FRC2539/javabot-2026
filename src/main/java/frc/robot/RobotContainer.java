@@ -13,11 +13,19 @@ import frc.robot.constants.GlobalConstants.ControllerConstants;
 import frc.robot.constants.TunerConstants;
 import frc.robot.lib.controller.LogitechController;
 import frc.robot.lib.controller.ThrustmasterJoystick;
+import frc.robot.subsystems.Indexer.IndexerIOTalonFX;
+import frc.robot.subsystems.Indexer.IndexerSubsystem;
 import frc.robot.subsystems.climber.ClimberIOTalonFX;
 import frc.robot.subsystems.climber.ClimberSubsystem;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 import frc.robot.subsystems.raspberry.PneumaticsIORevPH;
 import frc.robot.subsystems.raspberry.PneumaticsSubsystem;
+import frc.robot.subsystems.roller.RollerIOTalonFX;
+import frc.robot.subsystems.roller.RollerSubsystem;
+import frc.robot.subsystems.transporter.TransportIOTalonFX;
+import frc.robot.subsystems.transporter.TransportSubsystem;
+import frc.robot.subsystems.vision.VisionIOLimelight;
+import frc.robot.subsystems.vision.VisionSubsystem;
 
 public class RobotContainer {
 
@@ -46,9 +54,23 @@ public class RobotContainer {
 
   public final ClimberSubsystem climber = new ClimberSubsystem(new ClimberIOTalonFX());
 
+  public final RollerSubsystem roller = new RollerSubsystem(new RollerIOTalonFX());
+
+  public final IndexerSubsystem indexer = new IndexerSubsystem(new IndexerIOTalonFX());
+
+  public final TransportSubsystem transporter = new TransportSubsystem(new TransportIOTalonFX());
+
   public final PneumaticsSubsystem pneumatics = new PneumaticsSubsystem(new PneumaticsIORevPH());
 
   public final Auto auto;
+
+  public final VisionSubsystem vision =
+      new VisionSubsystem(
+          drivetrain::filterAndAddMeasurements,
+          new VisionIOLimelight("limelight-left", drivetrain::getRotation),
+          new VisionIOLimelight("limelight-left", drivetrain::getRotation),
+          new VisionIOLimelight("limelight-left", drivetrain::getRotation),
+          new VisionIOLimelight("limelight-left", drivetrain::getRotation));
 
   public RobotContainer() {
 
@@ -76,9 +98,13 @@ public class RobotContainer {
 
     rightDriveController.getLeftThumb().onTrue(pneumatics.toggleIntake());
 
-    operatorController.getDPadUp().onTrue(pneumatics.toggleRaspberry());//v
+    operatorController.getDPadUp().onTrue(pneumatics.toggleRaspberry()); // v
 
     operatorController.getDPadLeft().onTrue(pneumatics.toggleRaspberry2());
+
+    rightDriveController.getTrigger().whileTrue(roller.runPositiveVoltage(10.0));
+
+    operatorController.getA().whileTrue(roller.runNegativeVoltage(10.0));
   }
 
   private ChassisSpeeds getDriverChassisSpeeds() {
