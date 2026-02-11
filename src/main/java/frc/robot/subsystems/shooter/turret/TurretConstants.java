@@ -4,6 +4,7 @@ import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 
 public final class TurretConstants {
@@ -22,6 +23,8 @@ public final class TurretConstants {
   public static final double maxAccelRadPerSec2 = 30.0;
 
   public static final double setpointToleranceRot = Units.degreesToRotations(1.5);
+
+  public static final Translation2d turretOffset = new Translation2d(-0.127, 0.0);
 
   // Motor Configs
 

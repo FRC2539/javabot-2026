@@ -27,5 +27,5 @@ public final class AlignConstants {
 
   // Field layout
   public static final AprilTagFieldLayout fieldLayout =
-      AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltAndymark);
+      AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded);
 }
