@@ -6,118 +6,35 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
 public class RollerSubsystem extends SubsystemBase {
-  // #region instantiate
-  private RollerIO rollerIO;
-  private RollerIOInputsAutoLogged rollerInputs = new RollerIOInputsAutoLogged();
-  private IntakeState state = IntakeState.DISABLED;
+
+  private final RollerIO rollerIO;
+  private final RollerIOInputsAutoLogged inputs = new RollerIOInputsAutoLogged();
 
   public RollerSubsystem(RollerIO rollerIO) {
     this.rollerIO = rollerIO;
 
-    setDefaultCommand(Commands.parallel(setRollerVoltage(0)));
-  }
-
-  // #region State kinds
-  public enum IntakeState {
-    DISABLED,
-    INTAKING,
-    EJECTING,
-    EXPANDING,
-    CLOSINGHOP,
-    SHOOTING // likley uneeded
-  }
-
-  public Command setRollerVoltage(double voltage) {
-    return Commands.run(
-        () -> {
-          rollerIO.setRollerVoltage(voltage);
-        },
-        this);
+    setDefaultCommand(stopRoller());
   }
 
   @Override
   public void periodic() {
-    rollerIO.updateInputs(rollerInputs);
-
-    Logger.processInputs("RealOutputs/Roller", rollerInputs);
-    // #region state cases
-    switch (state) {
-      case DISABLED:
-        setRollerVoltage(0);
-        break;
-
-      case INTAKING:
-        setRollerVoltage(0);
-        break;
-
-      case EJECTING:
-        setRollerVoltage(0);
-        break;
-
-      case EXPANDING:
-        setRollerVoltage(0);
-        break;
-
-      case CLOSINGHOP:
-        setRollerVoltage(0);
-        break;
-
-      case SHOOTING: // likley uneeded
-        setRollerVoltage(0);
-        break;
-    }
+    rollerIO.updateInputs(inputs);
+    Logger.processInputs("RealOutputs/Roller", inputs);
   }
 
-  // #region case adjustments
-  public Command disabledCommand() {
-    return runEnd(
-        () -> {
-          setIntakeState(IntakeState.DISABLED);
-        },
-        () -> {});
+  public Command stopRoller() {
+    return Commands.run(() -> rollerIO.setRollerVoltage(0.0), this);
   }
 
-  public Command intakingCommand() {
-    return runEnd(
-        () -> {
-          setIntakeState(IntakeState.INTAKING);
-        },
-        () -> {});
+  public Command runPositiveVoltage(double volts) {
+    return Commands.run(() -> rollerIO.setRollerVoltage(volts), this);
   }
 
-  public Command ejectingCommand() {
-    return runEnd(
-        () -> {
-          setIntakeState(IntakeState.EJECTING);
-        },
-        () -> {});
+  public Command runNegativeVoltage(double volts) {
+    return Commands.run(() -> rollerIO.setRollerVoltage(-volts), this);
   }
 
-  public Command expandingCommand() {
-    return runEnd(
-        () -> {
-          setIntakeState(IntakeState.EXPANDING);
-        },
-        () -> {});
-  }
-
-  public Command intakeShootAdjustmentsCommand() { // likley uneeded
-    return runEnd(
-        () -> {
-          setIntakeState(IntakeState.SHOOTING);
-        },
-        () -> {});
-  }
-
-  public Command closingHopperCommand() {
-    return runEnd(
-        () -> {
-          setIntakeState(IntakeState.CLOSINGHOP);
-        },
-        () -> {});
-  }
-
-  public void setIntakeState(IntakeState state) {
-    this.state = state;
+  public Command setVoltage(double volts) {
+    return Commands.run(() -> rollerIO.setRollerVoltage(volts), this);
   }
 }

@@ -62,6 +62,41 @@ public class PneumaticsSubsystem extends SubsystemBase {
     return runOnce(() -> io.setRaspberry2Solenoid(position.value));
   }
 
+  // toggles
+
+  public Command toggleIntake() {
+    return runOnce(
+        () -> {
+          if (inputs.intakeState == IntakePosition.DEPLOYED.value) {
+            setIntakePosition(IntakePosition.RETRACTED).schedule();
+          } else {
+            setIntakePosition(IntakePosition.DEPLOYED).schedule();
+          }
+        });
+  }
+
+  public Command toggleRaspberry() {
+    return runOnce(
+        () -> {
+          if (inputs.raspberry == raspberryPosition.EXPANDED.value) {
+            setRaspberryPosition(raspberryPosition.RETRACTED).schedule();
+          } else {
+            setRaspberryPosition(raspberryPosition.EXPANDED).schedule();
+          }
+        });
+  }
+
+  public Command toggleRaspberry2() {
+    return runOnce(
+        () -> {
+          if (inputs.raspberry2 == raspberry2Position.EXPANDED.value) {
+            setRaspberry2Position(raspberry2Position.RETRACTED).schedule();
+          } else {
+            setRaspberry2Position(raspberry2Position.EXPANDED).schedule();
+          }
+        });
+  }
+
   @Override
   public void periodic() {
     io.updateInputs(inputs);

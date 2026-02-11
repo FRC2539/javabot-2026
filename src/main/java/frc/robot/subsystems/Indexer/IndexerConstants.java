@@ -1,12 +1,20 @@
 package frc.robot.subsystems.Indexer;
 
-public class IndexerConstants {
-  public static final int indexerMotorID = 10;
-  public static final int indexerAddress = 0;
+import frc.robot.util.LoggedTunableNumber;
 
-  public static final double indexerSpin = 8;
-  public static final double indexerReverse = -8;
+public final class IndexerConstants {
 
-  public static final double indexerAdjust = 4;
-  public static final double indexerAdjustReverse = -4;
+  public static final int kMotorId = 40;
+  public static final String kCanBus = "";
+
+  public static final LoggedTunableNumber shootVolts =
+      new LoggedTunableNumber("Indexer/ShootVolts", 8.0);
+
+  public static final LoggedTunableNumber reverseVolts =
+      new LoggedTunableNumber("Indexer/ReverseVolts", -8.0);
+
+  public static final LoggedTunableNumber stopVolts =
+      new LoggedTunableNumber("Indexer/StopVolts", 0.0);
+
+  private IndexerConstants() {}
 }
