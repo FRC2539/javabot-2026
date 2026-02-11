@@ -67,4 +67,15 @@ public class PneumaticsSubsystem extends SubsystemBase {
     io.updateInputs(inputs);
     Logger.processInputs("RealOutputs/Pneumatics", inputs);
   }
+
+  public Command toggleIntake() {
+    return runOnce(
+        () -> {
+          if (inputs.intakeState == IntakePosition.DEPLOYED.value) {
+            setIntakePosition(IntakePosition.RETRACTED).schedule();
+          } else {
+            setIntakePosition(IntakePosition.DEPLOYED).schedule();
+          }
+        });
+  }
 }

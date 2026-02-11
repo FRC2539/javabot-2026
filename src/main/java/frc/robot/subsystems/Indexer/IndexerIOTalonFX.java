@@ -5,8 +5,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 public class IndexerIOTalonFX implements IndexerIO {
 
-  private final TalonFX motor =
-      new TalonFX(IndexerConstants.kMotorId, IndexerConstants.kCanBus); 
+  private final TalonFX motor = new TalonFX(IndexerConstants.kMotorId, IndexerConstants.kCanBus);
 
   public IndexerIOTalonFX() {
     motor.getConfigurator().apply(new TalonFXConfiguration());

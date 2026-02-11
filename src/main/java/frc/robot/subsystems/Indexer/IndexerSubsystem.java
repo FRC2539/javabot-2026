@@ -9,11 +9,9 @@ import org.littletonrobotics.junction.Logger;
 public class IndexerSubsystem extends SubsystemBase {
 
   private final IndexerIO io;
-  private final IndexerIOInputsAutoLogged inputs =
-      new IndexerIOInputsAutoLogged();
+  private final IndexerIOInputsAutoLogged inputs = new IndexerIOInputsAutoLogged();
 
-  @AutoLogOutput
-  private Goal goal = Goal.STOP;
+  @AutoLogOutput private Goal goal = Goal.STOP;
 
   public IndexerSubsystem(IndexerIO io) {
     this.io = io;
@@ -33,21 +31,15 @@ public class IndexerSubsystem extends SubsystemBase {
   }
 
   public Command stop() {
-    return Commands.run(
-        () -> goal = Goal.STOP,
-        this);
+    return Commands.run(() -> goal = Goal.STOP, this);
   }
 
   public Command runPositive() {
-    return Commands.run(
-        () -> goal = Goal.SHOOT,
-        this);
+    return Commands.run(() -> goal = Goal.SHOOT, this);
   }
 
   public Command runNegative() {
-    return Commands.run(
-        () -> goal = Goal.REVERSE,
-        this);
+    return Commands.run(() -> goal = Goal.REVERSE, this);
   }
 
   public enum Goal {
