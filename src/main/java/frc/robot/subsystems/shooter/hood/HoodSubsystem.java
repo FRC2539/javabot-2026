@@ -20,9 +20,9 @@ public class HoodSubsystem extends SubsystemBase {
     Logger.processInputs("RealOutputs/Hood", inputs);
   }
 
-  public Command setHoodAngle(double angleDeg) {
+  public Command setHoodAngle(Rotation2d desiredAngle) {
 
-    return run(() -> io.setTargetAngle(Rotation2d.fromDegrees(angleDeg)));
+    return run(() -> io.setTargetAngle(desiredAngle));
   }
 
   public boolean isAtSetpoint() {

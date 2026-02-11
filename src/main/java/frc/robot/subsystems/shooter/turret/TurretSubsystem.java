@@ -1,5 +1,7 @@
 package frc.robot.subsystems.shooter.turret;
 
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class TurretSubsystem extends SubsystemBase {
@@ -18,5 +20,9 @@ public class TurretSubsystem extends SubsystemBase {
 
   public boolean atTarget() {
     return io.isAtSetpoint();
+  }
+
+  public Command setTargetHeading(Rotation2d desiredAngle) {
+    return run(() -> io.setTargetHeading(desiredAngle));
   }
 }
