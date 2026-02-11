@@ -15,6 +15,7 @@ import frc.robot.lib.controller.LogitechController;
 import frc.robot.lib.controller.ThrustmasterJoystick;
 import frc.robot.subsystems.Indexer.IndexerIOTalonFX;
 import frc.robot.subsystems.Indexer.IndexerSubsystem;
+import frc.robot.subsystems.climber.ClimberConstants;
 import frc.robot.subsystems.climber.ClimberIOTalonFX;
 import frc.robot.subsystems.climber.ClimberSubsystem;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
@@ -92,18 +93,14 @@ public class RobotContainer {
 
   private void configureBindings() {
 
-    operatorController.getLeftTrigger().whileTrue(climber.runPositiveVoltage(10.0));
-
-    operatorController.getRightTrigger().whileTrue(climber.runNegativeVoltage(10.0));
+    operatorController.getLeftTrigger().whileTrue(climber.setVoltage(ClimberConstants.climberUpVoltage));
+    operatorController.getRightTrigger().whileTrue(climber.setVoltage(ClimberConstants.climberDownVoltage));
 
     rightDriveController.getLeftThumb().onTrue(pneumatics.toggleIntake());
-
-    operatorController.getDPadUp().onTrue(pneumatics.toggleRaspberry()); // v
-
+    operatorController.getDPadUp().onTrue(pneumatics.toggleRaspberry()); // v (its a secret)
     operatorController.getDPadLeft().onTrue(pneumatics.toggleRaspberry2());
 
     rightDriveController.getTrigger().whileTrue(roller.runPositiveVoltage(10.0));
-
     operatorController.getA().whileTrue(roller.runNegativeVoltage(10.0));
   }
 
@@ -113,28 +110,17 @@ public class RobotContainer {
 
   private double getXVelocity() {
     return GlobalConstants.MAX_TRANSLATIONAL_SPEED.in(MetersPerSecond)
-        * -squareWithSign(deadband(leftDriveController.getYAxis().get(), 0.1));
+        * -Math.pow(leftDriveController.getYAxis().get(), 3);
   }
 
   private double getYVelocity() {
     return GlobalConstants.MAX_TRANSLATIONAL_SPEED.in(MetersPerSecond)
-        * -squareWithSign(deadband(leftDriveController.getXAxis().get(), 0.1));
+        * -Math.pow(leftDriveController.getXAxis().get(), 3);
   }
 
   private double getThetaVelocity() {
     return GlobalConstants.MAX_ROTATIONAL_SPEED.in(RadiansPerSecond)
-        * -squareWithSign(deadband(rightDriveController.getXAxis().get(), 0.1));
-  }
-
-  private static double deadband(double value, double deadband) {
-    if (Math.abs(value) < deadband) {
-      return 0.0;
-    }
-    return value;
-  }
-
-  private static double squareWithSign(double value) {
-    return value * Math.abs(value);
+        * -Math.pow(rightDriveController.getXAxis().get(), 3);
   }
 
   public Command getAutonomousCommand() {
