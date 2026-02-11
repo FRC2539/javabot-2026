@@ -107,6 +107,7 @@ public class TargetingSubsystem extends SubsystemBase {
   }
 
   public static Translation2d getFerryingTarget(Pose2d robotPose) {
-    return AllianceFlipUtil.apply(robotPose.getTranslation().nearest(TargetingConstants.ferryingTargets));
+    return AllianceFlipUtil.apply(
+        robotPose.getTranslation().nearest(TargetingConstants.ferryingTargets));
   }
 }

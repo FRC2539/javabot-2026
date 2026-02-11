@@ -7,16 +7,13 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.lib.controller.ThrustmasterJoystick;
 import frc.robot.subsystems.drive.DriveConstants;
-
 import java.util.function.Supplier;
 
 public class ControlSubsystem extends SubsystemBase {
 
-  private final ThrustmasterJoystick leftDriveController =
-      new ThrustmasterJoystick(0);
+  private final ThrustmasterJoystick leftDriveController = new ThrustmasterJoystick(0);
 
-  private final ThrustmasterJoystick rightDriveController =
-      new ThrustmasterJoystick(1);
+  private final ThrustmasterJoystick rightDriveController = new ThrustmasterJoystick(1);
 
   public ControlSubsystem() {
     // No bindings yet
