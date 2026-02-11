@@ -76,20 +76,9 @@ public class RobotContainer {
 
     rightDriveController.getLeftThumb().onTrue(pneumatics.toggleIntake());
 
-    operatorController
-        .getDPadUp()
-        .onTrue(pneumatics.setRaspberryPosition(PneumaticsSubsystem.raspberryPosition.EXPANDED));
-    operatorController
-        .getDPadDown()
-        .onTrue(
-            pneumatics.setRaspberryPosition(PneumaticsSubsystem.raspberryPosition.RETRACTED)); // v
+    operatorController.getDPadUp().onTrue(pneumatics.toggleRaspberry());//v
 
-    operatorController
-        .getDPadDownLeft()
-        .onTrue(pneumatics.setRaspberry2Position(PneumaticsSubsystem.raspberry2Position.EXPANDED));
-    operatorController
-        .getDPadDownRight()
-        .onTrue(pneumatics.setRaspberry2Position(PneumaticsSubsystem.raspberry2Position.RETRACTED));
+    operatorController.getDPadLeft().onTrue(pneumatics.toggleRaspberry2());
   }
 
   private ChassisSpeeds getDriverChassisSpeeds() {

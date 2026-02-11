@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
-
 public class PneumaticsSubsystem extends SubsystemBase {
 
   private final PneumaticsIO io;
@@ -20,10 +19,7 @@ public class PneumaticsSubsystem extends SubsystemBase {
     OFF(Value.kOff);
 
     public final Value value;
-
-    IntakePosition(Value value) {
-      this.value = value;
-    }
+    IntakePosition(Value value) { this.value = value; }
   }
 
   public enum raspberryPosition {
@@ -32,10 +28,7 @@ public class PneumaticsSubsystem extends SubsystemBase {
     OFF(Value.kOff);
 
     public final Value value;
-
-    raspberryPosition(Value value) {
-      this.value = value;
-    }
+    raspberryPosition(Value value) { this.value = value; }
   }
 
   public enum raspberry2Position {
@@ -44,10 +37,7 @@ public class PneumaticsSubsystem extends SubsystemBase {
     OFF(Value.kOff);
 
     public final Value value;
-
-    raspberry2Position(Value value) {
-      this.value = value;
-    }
+    raspberry2Position(Value value) { this.value = value; }
   }
 
   public Command setIntakePosition(IntakePosition position) {
@@ -62,20 +52,41 @@ public class PneumaticsSubsystem extends SubsystemBase {
     return runOnce(() -> io.setRaspberry2Solenoid(position.value));
   }
 
+  //toggles
+
+  public Command toggleIntake() {
+    return runOnce(() -> {
+      if (inputs.intakeState == IntakePosition.DEPLOYED.value) {
+        setIntakePosition(IntakePosition.RETRACTED).schedule();
+      } else {
+        setIntakePosition(IntakePosition.DEPLOYED).schedule();
+      }
+    });
+  }
+
+  public Command toggleRaspberry() {
+    return runOnce(() -> {
+      if (inputs.raspberry == raspberryPosition.EXPANDED.value) {
+        setRaspberryPosition(raspberryPosition.RETRACTED).schedule();
+      } else {
+        setRaspberryPosition(raspberryPosition.EXPANDED).schedule();
+      }
+    });
+  }
+
+  public Command toggleRaspberry2() {
+    return runOnce(() -> {
+      if (inputs.raspberry2 == raspberry2Position.EXPANDED.value) {
+        setRaspberry2Position(raspberry2Position.RETRACTED).schedule();
+      } else {
+        setRaspberry2Position(raspberry2Position.EXPANDED).schedule();
+      }
+    });
+  }
+
   @Override
   public void periodic() {
     io.updateInputs(inputs);
     Logger.processInputs("RealOutputs/Pneumatics", inputs);
-  }
-
-  public Command toggleIntake() {
-    return runOnce(
-        () -> {
-          if (inputs.intakeState == IntakePosition.DEPLOYED.value) {
-            setIntakePosition(IntakePosition.RETRACTED).schedule();
-          } else {
-            setIntakePosition(IntakePosition.DEPLOYED).schedule();
-          }
-        });
   }
 }
