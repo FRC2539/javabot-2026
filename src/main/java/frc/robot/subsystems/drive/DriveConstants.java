@@ -1,4 +1,4 @@
-package frc.robot.constants;
+package frc.robot.subsystems.drive;
 
 import static edu.wpi.first.units.Units.*;
 
@@ -14,7 +14,7 @@ import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.units.measure.Mass;
 import edu.wpi.first.units.measure.MomentOfInertia;
 
-public class GlobalConstants {
+public class DriveConstants {
 
   private static final SwerveModuleConstants EXAMPLE_MODULE = TunerConstants.FrontLeft;
 
@@ -34,12 +34,6 @@ public class GlobalConstants {
   public static final DCMotor STEER_MOTOR =
       DCMotor.getKrakenX60(1).withReduction(EXAMPLE_MODULE.SteerMotorGearRatio);
   private static RobotConfig robotConfigPathplanner;
-
-  public static class ControllerConstants {
-    public static final int LEFT_DRIVE_CONTROLLER = 0;
-    public static final int RIGHT_DRIVE_CONTROLLER = 1;
-    public static final int OPERATOR_CONTROLLER = 2;
-  }
 
   public static RobotConfig getRobotConfigPathplanner() {
     if (robotConfigPathplanner == null) {

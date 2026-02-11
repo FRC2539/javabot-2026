@@ -5,9 +5,10 @@ import static edu.wpi.first.units.Units.RadiansPerSecond;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.constants.GlobalConstants;
-import frc.robot.constants.GlobalConstants.ControllerConstants;
 import frc.robot.lib.controller.ThrustmasterJoystick;
+import frc.robot.subsystems.drive.DriveConstants;
+import frc.robot.subsystems.drive.DriveConstants.ControllerConstants;
+
 import java.util.function.Supplier;
 
 public class ControlSubsystem extends SubsystemBase {
@@ -27,17 +28,17 @@ public class ControlSubsystem extends SubsystemBase {
   }
 
   private double getXVelocity() {
-    return GlobalConstants.MAX_TRANSLATIONAL_SPEED.in(MetersPerSecond)
+    return DriveConstants.MAX_TRANSLATIONAL_SPEED.in(MetersPerSecond)
         * -squareWithSign(deadband(leftDriveController.getYAxis().get(), 0.1));
   }
 
   private double getYVelocity() {
-    return GlobalConstants.MAX_TRANSLATIONAL_SPEED.in(MetersPerSecond)
+    return DriveConstants.MAX_TRANSLATIONAL_SPEED.in(MetersPerSecond)
         * -squareWithSign(deadband(leftDriveController.getXAxis().get(), 0.1));
   }
 
   private double getThetaVelocity() {
-    return GlobalConstants.MAX_ROTATIONAL_SPEED.in(RadiansPerSecond)
+    return DriveConstants.MAX_ROTATIONAL_SPEED.in(RadiansPerSecond)
         * -squareWithSign(deadband(rightDriveController.getXAxis().get(), 0.1));
   }
 
