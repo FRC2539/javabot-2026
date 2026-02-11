@@ -4,13 +4,14 @@ import org.littletonrobotics.junction.AutoLog;
 
 public interface IndexerIO {
 
-  public void updateInputs(IndexerIOInputs inputs);
-
   @AutoLog
-  public class IndexerIOInputs {
-
+  class IndexerIOInputs {
     public double voltage = 0.0;
   }
 
-  public void setVoltage(double voltage);
+  default void updateInputs(IndexerIOInputs inputs) {}
+
+  default void setVoltage(double voltage) {}
+
+  default void stop() {}
 }

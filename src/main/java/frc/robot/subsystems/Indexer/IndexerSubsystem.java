@@ -1,51 +1,50 @@
 package frc.robot.subsystems.Indexer;
 
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.util.LoggedTunableNumber;
 import org.littletonrobotics.junction.AutoLogOutput;
+import org.littletonrobotics.junction.Logger;
 
 public class IndexerSubsystem extends SubsystemBase {
 
-  private static final LoggedTunableNumber kirkulatorShootVolts =
-      new LoggedTunableNumber("Hopper/ShootVolts", 12.0);
-  private static final LoggedTunableNumber kirkulatorReverseVolts =
-      new LoggedTunableNumber("Hopper/ReverseVolts", -12.0);
-  private static final LoggedTunableNumber kirkulatorAdjustVolts =
-      new LoggedTunableNumber("Hopper/AdjustVolts", 0.0);
-
-  private IndexerIO indexerIO;
+  private final IndexerIO io;
+  private final IndexerIOInputsAutoLogged inputs = new IndexerIOInputsAutoLogged();
 
   @AutoLogOutput private Goal goal = Goal.STOP;
 
   public IndexerSubsystem(IndexerIO io) {
-    this.indexerIO = io;
+    this.io = io;
+    setDefaultCommand(stop());
   }
 
+  @Override
   public void periodic() {
-
-    double indexerVoltage = 0.0;
+    io.updateInputs(inputs);
+    Logger.processInputs("Indexer", inputs);
 
     switch (goal) {
-      case SHOOT -> {
-        indexerVoltage = kirkulatorShootVolts.get();
-      }
-      case REVERSE -> {
-        indexerVoltage = kirkulatorReverseVolts.get();
-      }
-      case STOP -> {
-        indexerVoltage = 0.0;
-      }
-      case ADJUST -> {
-        indexerVoltage = kirkulatorAdjustVolts.get();
-      }
+      case SHOOT -> io.setVoltage(IndexerConstants.shootVolts.get());
+      case REVERSE -> io.setVoltage(IndexerConstants.reverseVolts.get());
+      case STOP -> io.setVoltage(IndexerConstants.stopVolts.get());
     }
-    indexerIO.setVoltage(indexerVoltage);
+  }
+
+  public Command stop() {
+    return Commands.run(() -> goal = Goal.STOP, this);
+  }
+
+  public Command runPositive() {
+    return Commands.run(() -> goal = Goal.SHOOT, this);
+  }
+
+  public Command runNegative() {
+    return Commands.run(() -> goal = Goal.REVERSE, this);
   }
 
   public enum Goal {
     SHOOT,
     REVERSE,
-    STOP,
-    ADJUST
+    STOP
   }
 }
