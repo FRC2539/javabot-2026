@@ -326,6 +326,10 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     return getState().Speeds;
   }
 
+  public ChassisSpeeds getFieldRelativeChassisSpeeds() {
+    return ChassisSpeeds.fromFieldRelativeSpeeds(getFieldRelativeChassisSpeeds(), getRotation());
+  }
+
   public void filterAndAddMeasurements(PoseEstimate estimate) {
     // System.out.println(estimate);
     if (estimate == null) {

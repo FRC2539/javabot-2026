@@ -1,10 +1,11 @@
 package frc.robot.subsystems.Indexer;
 
 import frc.robot.util.LoggedTunableNumber;
-import frc.robot.util.Subsystemutil;
 import org.littletonrobotics.junction.AutoLogOutput;
 
-public class IndexerSubsystem extends Subsystemutil {
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+public class IndexerSubsystem extends SubsystemBase {
 
   private static final LoggedTunableNumber kirkulatorShootVolts =
       new LoggedTunableNumber("Hopper/ShootVolts", 12.0);
@@ -41,9 +42,6 @@ public class IndexerSubsystem extends Subsystemutil {
     }
     indexerIO.setVoltage(indexerVoltage);
   }
-
-  @Override
-  public void periodicAfterScheduler() {}
 
   public enum Goal {
     SHOOT,
