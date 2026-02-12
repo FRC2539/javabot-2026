@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 0.5440017746207582,
+        "y": 0.6428039041714646
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.5440017746207582,
+        "y": 0.6428039041714646
+      },
+      "isLocked": false,
+      "linkedName": "Chute"
+    },
+    {
+      "anchor": {
+        "x": 2.62036379769299,
+        "y": 2.968651286601597
+      },
+      "prevControl": {
+        "x": 2.5668898809523806,
+        "y": 1.3335267857142854
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "RScore"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 4.8,
+    "maxAcceleration": 11.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -108.9542316995112
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "useDefaultConstraints": true
+}
