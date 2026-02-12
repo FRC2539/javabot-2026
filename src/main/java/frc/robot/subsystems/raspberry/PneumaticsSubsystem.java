@@ -1,6 +1,8 @@
 package frc.robot.subsystems.raspberry;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.PneumaticHub;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
@@ -9,6 +11,8 @@ public class PneumaticsSubsystem extends SubsystemBase {
 
   private final PneumaticsIO io;
   private final PneumaticsIOInputsAutoLogged inputs = new PneumaticsIOInputsAutoLogged();
+
+  private final PneumaticHub pneumaticHub = new PneumaticHub(PneumaticsConstants.pneumaticHubId);
 
   public PneumaticsSubsystem(PneumaticsIO io) {
     this.io = io;
@@ -62,15 +66,13 @@ public class PneumaticsSubsystem extends SubsystemBase {
     return runOnce(() -> io.setRaspberry2Solenoid(position.value));
   }
 
-  // toggles
-
   public Command toggleIntake() {
     return runOnce(
         () -> {
           if (inputs.intakeState == IntakePosition.DEPLOYED.value) {
-            setIntakePosition(IntakePosition.RETRACTED).schedule();
+            io.setIntakeSolenoid(IntakePosition.RETRACTED.value);
           } else {
-            setIntakePosition(IntakePosition.DEPLOYED).schedule();
+            io.setIntakeSolenoid(IntakePosition.DEPLOYED.value);
           }
         });
   }
@@ -79,9 +81,9 @@ public class PneumaticsSubsystem extends SubsystemBase {
     return runOnce(
         () -> {
           if (inputs.raspberry == raspberryPosition.EXPANDED.value) {
-            setRaspberryPosition(raspberryPosition.RETRACTED).schedule();
+            io.setRaspberrySolenoid(raspberryPosition.RETRACTED.value);
           } else {
-            setRaspberryPosition(raspberryPosition.EXPANDED).schedule();
+            io.setRaspberrySolenoid(raspberryPosition.EXPANDED.value);
           }
         });
   }
@@ -90,9 +92,9 @@ public class PneumaticsSubsystem extends SubsystemBase {
     return runOnce(
         () -> {
           if (inputs.raspberry2 == raspberry2Position.EXPANDED.value) {
-            setRaspberry2Position(raspberry2Position.RETRACTED).schedule();
+            io.setRaspberry2Solenoid(raspberry2Position.RETRACTED.value);
           } else {
-            setRaspberry2Position(raspberry2Position.EXPANDED).schedule();
+            io.setRaspberry2Solenoid(raspberry2Position.EXPANDED.value);
           }
         });
   }
@@ -101,5 +103,9 @@ public class PneumaticsSubsystem extends SubsystemBase {
   public void periodic() {
     io.updateInputs(inputs);
     Logger.processInputs("RealOutputs/Pneumatics", inputs);
+    // gets pressure in psi
+    double pressure = pneumaticHub.getPressure(0);
+
+    SmartDashboard.putNumber("Pneumatics Pressure (PSI)", pressure);
   }
 }
