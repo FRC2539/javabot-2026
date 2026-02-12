@@ -22,12 +22,12 @@ public class DriveConstants {
   public static final AngularVelocity MAX_ROTATIONAL_SPEED = RotationsPerSecond.of(1);
 
   public static final Mass ROBOT_MASS = Pounds.of(150);
-  public static final MomentOfInertia ROBOT_MOI = KilogramSquareMeters.of(11.61);
+  public static final MomentOfInertia ROBOT_MOI = KilogramSquareMeters.of(4.8);
 
   public static final double bumperLength = Units.inchesToMeters(38);
   public static final double bumperWidth = Units.inchesToMeters(34);
 
-  public static final double COEFFICIENT_OF_FRICTION = 0.89;
+  public static final double COEFFICIENT_OF_FRICTION = 1.45;
 
   public static final DCMotor DRIVE_MOTOR =
       DCMotor.getKrakenX60(1).withReduction(EXAMPLE_MODULE.DriveMotorGearRatio);
@@ -60,7 +60,7 @@ public class DriveConstants {
                     COEFFICIENT_OF_FRICTION,
                     DRIVE_MOTOR,
                     EXAMPLE_MODULE.DriveMotorGearRatio,
-                    Current.ofBaseUnits(40.0, Amps),
+                    Current.ofBaseUnits(181, Amps),
                     1),
                 moduleOffsets);
       } catch (Exception e) {

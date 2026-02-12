@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.5440017746207582,
-        "y": 0.6428039041714646
+        "x": 0.41523513753327346,
+        "y": 0.6669476486246664
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.5440017746207582,
-        "y": 0.6428039041714646
+        "x": 1.4152351375332732,
+        "y": 0.6669476486246664
       },
       "isLocked": false,
       "linkedName": "Chute"
@@ -21,7 +21,7 @@
       },
       "prevControl": {
         "x": 2.5668898809523806,
-        "y": 1.3335267857142854
+        "y": 1.3335267857142852
       },
       "nextControl": null,
       "isLocked": false,
@@ -34,7 +34,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.8,
-    "maxAcceleration": 11.0,
+    "maxAcceleration": 12.8,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
