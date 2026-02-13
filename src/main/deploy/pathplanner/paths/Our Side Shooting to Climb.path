@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.5373205128205143,
-        "y": 7.069961538461539
+        "x": 2.7582307692307704,
+        "y": 3.988487179487179
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.162618779743509,
-        "y": 6.599484904859961
+        "x": 2.1437577654757574,
+        "y": 3.5157347714463434
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "ShootingMiddle"
     },
     {
       "anchor": {
-        "x": 1.1884230769230784,
-        "y": 6.3490128205128205
+        "x": 1.5721538461538476,
+        "y": 3.0698589743589753
       },
       "prevControl": {
-        "x": 2.387112083026744,
-        "y": 6.742883680100649
+        "x": 2.3256356425022573,
+        "y": 3.645033120983088
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "OurSideBallSweep"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -166.61651958510612
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": "Our Zone",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -141.78897457443878
+    "rotation": 1.005086005254175
   },
   "useDefaultConstraints": true
 }

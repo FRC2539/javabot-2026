@@ -5,9 +5,84 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Our Side first path"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Our Side first path"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intake-deploy"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "raspberry-expand"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Our Side intake path"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "roller-intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "roller-stop"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 5.0
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Our Side Shooting to Climb"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "climber-up"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "climber-down"
           }
         }
       ]
