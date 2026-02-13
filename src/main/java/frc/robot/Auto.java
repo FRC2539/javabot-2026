@@ -111,6 +111,22 @@ public void setUpNamedCommands() {
       robotContainer.pneumatics
           .setRaspberry2Position(
               frc.robot.subsystems.raspberry.PneumaticsSubsystem.raspberry2Position.RETRACTED));
+
+  NamedCommands.registerCommand(
+    "climber-cycle",
+    Commands.sequence(
+        robotContainer.climber
+            .setVoltage(
+                frc.robot.subsystems.climber.ClimberConstants.climberUpVoltage)
+            .withTimeout(2.0),
+
+        robotContainer.climber
+            .setVoltage(
+                frc.robot.subsystems.climber.ClimberConstants.climberDownVoltage)
+            .withTimeout(2.0)
+    ));
+
+
 }
 
   public Command getAutoCommand() {
