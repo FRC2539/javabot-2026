@@ -66,9 +66,25 @@ public class PneumaticsSubsystem extends SubsystemBase {
     return runOnce(() -> io.setRaspberry2Solenoid(position.value));
   }
 
+  // public Command toggleIntake() {
+  //   return runOnce(
+  //       () -> {
+  //         if (inputs.intakeState == IntakePosition.DEPLOYED.value) {
+  //           io.setIntakeSolenoid(IntakePosition.RETRACTED.value);
+  //         } else {
+  //           io.setIntakeSolenoid(IntakePosition.DEPLOYED.value);
+  //         }
+  //       });
+  // }
+
   public Command toggleIntake() {
     return runOnce(
         () -> {
+          if (inputs.raspberry2 != raspberry2Position.EXPANDED.value) {
+            io.setIntakeSolenoid(IntakePosition.RETRACTED.value);
+            return;
+          }
+
           if (inputs.intakeState == IntakePosition.DEPLOYED.value) {
             io.setIntakeSolenoid(IntakePosition.RETRACTED.value);
           } else {
@@ -88,11 +104,26 @@ public class PneumaticsSubsystem extends SubsystemBase {
         });
   }
 
+  // public Command toggleRaspberry2() {
+  //   return runOnce(
+  //       () -> {
+  //         if (inputs.raspberry2 == raspberry2Position.EXPANDED.value) {
+  //           io.setRaspberry2Solenoid(raspberry2Position.RETRACTED.value);
+  //         } else {
+  //           io.setRaspberry2Solenoid(raspberry2Position.EXPANDED.value);
+  //         }
+  //       });
+  // }
+
   public Command toggleRaspberry2() {
     return runOnce(
         () -> {
           if (inputs.raspberry2 == raspberry2Position.EXPANDED.value) {
+
             io.setRaspberry2Solenoid(raspberry2Position.RETRACTED.value);
+
+            io.setIntakeSolenoid(IntakePosition.RETRACTED.value);
+
           } else {
             io.setRaspberry2Solenoid(raspberry2Position.EXPANDED.value);
           }
