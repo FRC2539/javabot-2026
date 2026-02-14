@@ -29,7 +29,7 @@ public class FlywheelSubsystem extends SubsystemBase {
     return run(() -> setTargetRPM(desiredRPM));
   }
 
-    public Command setVoltage(double volts) {
+  public Command setVoltage(double volts) {
     return Commands.run(() -> shooterIO.setVoltage(volts), this);
   }
 }

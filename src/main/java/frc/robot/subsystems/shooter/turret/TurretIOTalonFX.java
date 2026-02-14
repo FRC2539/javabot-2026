@@ -2,6 +2,7 @@ package frc.robot.subsystems.shooter.turret;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -14,6 +15,8 @@ public class TurretIOTalonFX implements TurretIO {
   private final TalonFX motor = new TalonFX(TurretConstants.turretMotorId, TurretConstants.canBus);
 
   private final MotionMagicVoltage controlRequest = new MotionMagicVoltage(0.0);
+
+  private final VoltageOut voltageRequest = new VoltageOut(0.0);
 
   public TurretIOTalonFX() {
     CANcoderConfiguration encoderConfig = new CANcoderConfiguration();
@@ -44,5 +47,9 @@ public class TurretIOTalonFX implements TurretIO {
   public boolean isAtSetpoint() {
     double motorError = motor.getClosedLoopError().getValueAsDouble();
     return Math.abs(motorError) < TurretConstants.setpointToleranceRot;
+  }
+
+  public void setVoltage(double volts) {
+    motor.setControl(voltageRequest.withOutput(volts));
   }
 }

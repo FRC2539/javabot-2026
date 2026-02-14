@@ -25,4 +25,8 @@ public class TurretSubsystem extends SubsystemBase {
   public Command setTargetHeading(Rotation2d desiredAngle) {
     return run(() -> io.setTargetHeading(desiredAngle));
   }
+
+  public Command runVoltage(double volts) {
+    return run(() -> io.setVoltage(volts));
+  }
 }

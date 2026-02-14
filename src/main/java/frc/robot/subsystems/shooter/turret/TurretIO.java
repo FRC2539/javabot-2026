@@ -16,4 +16,6 @@ public interface TurretIO {
   void setTargetHeading(Rotation2d desiredAngle);
 
   boolean isAtSetpoint();
+
+  void setVoltage(double volts);
 }

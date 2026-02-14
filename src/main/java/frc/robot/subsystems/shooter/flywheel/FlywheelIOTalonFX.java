@@ -58,9 +58,8 @@ public class FlywheelIOTalonFX implements FlywheelIO {
     }
   }
 
-public void setVoltage(double volts) {
-  leftMotor.setVoltage(volts);
-  rightMotor.setControl(motorFollowerRequest);
-}
-
+  public void setVoltage(double volts) {
+    leftMotor.setVoltage(volts);
+    rightMotor.setControl(motorFollowerRequest);
+  }
 }
