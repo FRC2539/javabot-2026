@@ -22,6 +22,12 @@ import frc.robot.subsystems.raspberry.PneumaticsIORevPH;
 import frc.robot.subsystems.raspberry.PneumaticsSubsystem;
 import frc.robot.subsystems.roller.RollerIOTalonFX;
 import frc.robot.subsystems.roller.RollerSubsystem;
+import frc.robot.subsystems.shooter.flywheel.FlywheelIOTalonFX;
+import frc.robot.subsystems.shooter.flywheel.FlywheelSubsystem;
+import frc.robot.subsystems.shooter.hood.HoodIOTalonFX;
+import frc.robot.subsystems.shooter.hood.HoodSubsystem;
+import frc.robot.subsystems.shooter.turret.TurretIOTalonFX;
+import frc.robot.subsystems.shooter.turret.TurretSubsystem;
 import frc.robot.subsystems.transporter.TransportIOTalonFX;
 import frc.robot.subsystems.transporter.TransportSubsystem;
 import frc.robot.subsystems.vision.VisionIOLimelight;
@@ -56,6 +62,12 @@ public class RobotContainer {
   public final IndexerSubsystem indexer = new IndexerSubsystem(new IndexerIOTalonFX());
 
   public final TransportSubsystem transporter = new TransportSubsystem(new TransportIOTalonFX());
+
+  public final HoodSubsystem hood = new HoodSubsystem(new HoodIOTalonFX());
+
+  public final FlywheelSubsystem shooter = new FlywheelSubsystem(new FlywheelIOTalonFX());
+
+  public final TurretSubsystem turret = new TurretSubsystem(new TurretIOTalonFX());
 
   public final PneumaticsSubsystem pneumatics = new PneumaticsSubsystem(new PneumaticsIORevPH());
 
@@ -127,10 +139,9 @@ public class RobotContainer {
     operatorController.getX().whileTrue(transporter.setTransportVoltageCommand(3.0));
     operatorController.getB().whileTrue(transporter.setTransportVoltageCommand(-3.0));
 
-    // operatorController.getStart().whileTrue(shooter.runVoltage(4.0));
-    // operatorController.getBack().whileTrue(turret.runVoltage(4.0));
-    // operatorController.getDPadDown().whileTrue(hood.runVoltage(4.0));
-
+    operatorController.getStart().whileTrue(shooter.setVoltage(4.0));
+    operatorController.getBack().whileTrue(turret.runVoltage(4.0));
+    operatorController.getDPadDown().whileTrue(hood.setVoltage(4.0));
   }
 
   private ChassisSpeeds getDriverChassisSpeeds() {
