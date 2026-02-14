@@ -11,30 +11,38 @@ import frc.robot.subsystems.shooter.targeting.TargetingSubsystem;
 
 public class ShooterCommands {
 
-  public static Command shoot(
+  public static Command holdToShoot(
       FlywheelSubsystem flywheel,
       HoodSubsystem hood,
       IndexerSubsystem indexer,
       TargetingSubsystem targeting) {
 
-    return Commands.sequence(
+    return Commands.startEnd(
 
-            Commands.runOnce(() -> {
-              flywheel.setShooterRPM(targeting.getIdealFlywheelRPM()).schedule();
-              hood.setHoodAngle(
-                      Rotation2d.fromRadians(HoodConstants.kMinAngleRad))
-                  .schedule();
-            }),
+        () -> {
+          // Spin flywheel
+          flywheel.setShooterRPM(targeting.getIdealFlywheelRPM()).schedule();
 
-            Commands.waitUntil(flywheel::atSetpoint),
+          // Move hood
+          hood.setHoodAngle(targeting.getIdealHoodAngle()).schedule();
+        },
 
-            Commands.parallel(
-                hood.setHoodAngle(targeting.getIdealHoodAngle()),
-                indexer.index()
-            )
-        )
-        .finallyDo(interrupted -> {
+        () -> {
           indexer.stop().schedule();
-        });
+
+          // Return shooter 
+          flywheel.setShooterRPM(0).schedule();
+
+          // Return hood 
+          hood.setHoodAngle(
+              Rotation2d.fromRadians(HoodConstants.kMinAngleRad)).schedule();
+        }
+    )
+//held
+    .alongWith(
+        Commands.waitUntil(() ->
+                flywheel.atSetpoint() && hood.isAtSetpoint())
+            .andThen(indexer.index())
+    );
   }
 }

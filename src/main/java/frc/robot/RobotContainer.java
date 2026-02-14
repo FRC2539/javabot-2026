@@ -8,6 +8,7 @@ import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.commands.ShooterCommands;
 import frc.robot.lib.controller.LogitechController;
 import frc.robot.lib.controller.ThrustmasterJoystick;
 import frc.robot.subsystems.climber.ClimberConstants;
@@ -115,6 +116,14 @@ public class RobotContainer {
 
     rightDriveController.getTrigger().whileTrue(roller.runPositiveVoltage(10.0));
     operatorController.getA().whileTrue(roller.runNegativeVoltage(10.0));
+
+    operatorController.getA().whileTrue(
+    ShooterCommands.holdToShoot(
+        flywheel,
+        hood,
+        indexer,
+        targeting));
+
   }
 
   private ChassisSpeeds getDriverChassisSpeeds() {
