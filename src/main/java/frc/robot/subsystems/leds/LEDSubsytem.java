@@ -13,11 +13,18 @@ import com.ctre.phoenix6.controls.TwinkleAnimation;
 import com.ctre.phoenix6.hardware.CANdle;
 import com.ctre.phoenix6.signals.RGBWColor;
 
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LEDSubsytem extends SubsystemBase{
 
     public CANdle leds = new CANdle(LEDConstants.CandleID);
+
+    public LEDSubsytem(){
+
+        setDefaultCommand(setSolidColor(new RGBWColor(240, 79, 37)));
+    }
 
 
     public enum AnimationTypes{
@@ -28,79 +35,75 @@ public class LEDSubsytem extends SubsystemBase{
         VICTORY
     }
 
-    public void runAnimation(AnimationTypes type, RGBWColor color){
+    public Command runAnimation(AnimationTypes type, RGBWColor color){
         switch (type) {
             case INTAKING:
-                runStrobeAnimation(color);
-                break;
+                return runStrobeAnimation(color);
             case SHOOTING:
-                runStrobeAnimation(color);
-                break;
+                return runStrobeAnimation(color);
             case CLIMBING:  
-                runColorFlowAnimation(color);
-                break;
+                return runColorFlowAnimation(color);
             case ALIGNED:
-                runSingleFadeAnimation(color);
-                break;
+                return runSingleFadeAnimation(color);
             case VICTORY:
-                runRainbowAnimation();
-                break;
+                return runRainbowAnimation();
             default:
-                setSolidColor(color);
-                break;
+                return setSolidColor(color);
         }
     }
 
 
-    public void setSolidColor(RGBWColor color){
+    public Command setSolidColor(RGBWColor color){
         SolidColor solidColor = new SolidColor(0, LEDConstants.LedCount - 1).withColor(color);
 
-        leds.setControl(solidColor);
+        return Commands.run( () -> leds.setControl(solidColor));
     }
 
-    public void runStrobeAnimation(RGBWColor color){
+    public Command runStrobeAnimation(RGBWColor color){
         StrobeAnimation strobeAnimation = new StrobeAnimation(0, LEDConstants.LedCount - 1).withColor(color);
 
-        leds.setControl(strobeAnimation);
+        return Commands.run( () -> leds.setControl(strobeAnimation));
     }
 
-    public void runFireAnimation(){
+    public Command runFireAnimation(){
         FireAnimation fireAnimation = new FireAnimation(0, LEDConstants.LedCount - 1);
 
-        leds.setControl(fireAnimation);
+        return Commands.run( () -> leds.setControl(fireAnimation));
     }
 
-    public void runColorFlowAnimation(RGBWColor color){
+    public Command runColorFlowAnimation(RGBWColor color){
         ColorFlowAnimation colorFlowAnimation = new ColorFlowAnimation(0, LEDConstants.LedCount - 1).withColor(color);
 
-        leds.setControl(colorFlowAnimation);
+        return Commands.run( () -> leds.setControl(colorFlowAnimation));
     }
 
-    public void runLarsonAnimation(RGBWColor color){
+    public Command runLarsonAnimation(RGBWColor color){
         LarsonAnimation larsonAnimation = new LarsonAnimation(0, LEDConstants.LedCount - 1).withColor(color);
 
-        leds.setControl(larsonAnimation);
+        return Commands.run( () -> leds.setControl(larsonAnimation));
     }
 
-    public void runRainbowAnimation(){
+    public Command runRainbowAnimation(){
         RainbowAnimation rainbowAnimation = new RainbowAnimation(0, LEDConstants.LedCount - 1);
 
-        leds.setControl(rainbowAnimation);
+        return Commands.run( () -> leds.setControl(rainbowAnimation));
     }
 
-    public void runRGBFadeAnimation(){
+    public Command runRGBFadeAnimation(){
         RgbFadeAnimation rgbFadeAnimation = new RgbFadeAnimation(0, LEDConstants.LedCount - 1);
 
-        leds.setControl(rgbFadeAnimation);
+        return Commands.run( () -> leds.setControl(rgbFadeAnimation));
     }
 
-    public void runSingleFadeAnimation(RGBWColor color){
+    public Command runSingleFadeAnimation(RGBWColor color){
         SingleFadeAnimation singleFadeAnimation = new SingleFadeAnimation(0, LEDConstants.LedCount - 1).withColor(color);
 
-        leds.setControl(singleFadeAnimation);
+        return Commands.run( () -> leds.setControl(singleFadeAnimation));
     }
 
-    public void runTwinkleAnimation(RGBWColor color){
+    public Command runTwinkleAnimation(RGBWColor color){
         TwinkleAnimation twinkleAnimation = new TwinkleAnimation(0, LEDConstants.LedCount - 1).withColor(color);
+
+        return Commands.run( () -> leds.setControl(twinkleAnimation));
     }
 }
