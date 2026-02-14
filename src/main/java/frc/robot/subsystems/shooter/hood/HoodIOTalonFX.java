@@ -1,23 +1,27 @@
 package frc.robot.subsystems.shooter.hood;
 
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.hardware.CANcoder;
+
 public class HoodIOTalonFX implements HoodIO {
 
+  private final CANcoder hoodEncoder = new CANcoder(HoodConstants.hoodEncoderID);
   private final TalonFX motor = new TalonFX(HoodConstants.kMotorId, HoodConstants.kCanBus);
 
   public double targetAngle = 0; // radians
 
-  private final MotionMagicVoltage motorRequest = new MotionMagicVoltage(targetAngle);
+  public final MotionMagicVoltage motorRequest = new MotionMagicVoltage(targetAngle);
 
   public HoodIOTalonFX() {
-    TalonFXConfiguration config = new TalonFXConfiguration();
-    motor.getConfigurator().apply(config);
+    CANcoderConfiguration encoderConfig = new CANcoderConfiguration();
+    hoodEncoder.getConfigurator().apply(encoderConfig);
+    motor.getConfigurator().apply(HoodConstants.hoodMotorConfig);
 
     motor.setNeutralMode(NeutralModeValue.Brake);
   }
