@@ -1,5 +1,6 @@
 package frc.robot.subsystems.leds;
 
+import com.ctre.phoenix6.configs.CANdleConfiguration;
 import com.ctre.phoenix6.controls.ColorFlowAnimation;
 import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.controls.FireAnimation;
@@ -12,6 +13,8 @@ import com.ctre.phoenix6.controls.StrobeAnimation;
 import com.ctre.phoenix6.controls.TwinkleAnimation;
 import com.ctre.phoenix6.hardware.CANdle;
 import com.ctre.phoenix6.signals.RGBWColor;
+import com.ctre.phoenix6.signals.StatusLedWhenActiveValue;
+import com.ctre.phoenix6.signals.StripTypeValue;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -22,6 +25,11 @@ public class LEDSubsytem extends SubsystemBase{
     public CANdle leds = new CANdle(LEDConstants.CandleID);
 
     public LEDSubsytem(){
+        CANdleConfiguration cfg = new CANdleConfiguration();
+        cfg.CANdleFeatures.StatusLedWhenActive = StatusLedWhenActiveValue.Disabled;
+        cfg.LED.StripType = StripTypeValue.GRB;
+        cfg.LED.BrightnessScalar = 1.0;
+        leds.getConfigurator().apply(cfg);
 
         setDefaultCommand(setSolidColor(new RGBWColor(240, 79, 37)));
     }
