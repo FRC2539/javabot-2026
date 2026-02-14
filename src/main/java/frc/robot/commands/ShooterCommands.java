@@ -26,16 +26,15 @@ public class ShooterCommands {
                   .schedule();
             }),
 
-
-            Commands.waitSeconds(0.3),
-
+            Commands.waitUntil(flywheel::atSetpoint),
 
             Commands.parallel(
                 hood.setHoodAngle(targeting.getIdealHoodAngle()),
                 indexer.index()
             )
         )
-
-        .finallyDo(interrupted -> indexer.stop().schedule());
+        .finallyDo(interrupted -> {
+          indexer.stop().schedule();
+        });
   }
 }
