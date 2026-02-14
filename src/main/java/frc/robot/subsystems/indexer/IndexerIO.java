@@ -6,12 +6,11 @@ public interface IndexerIO {
 
   @AutoLog
   class IndexerIOInputs {
-    public double voltage = 0.0;
+    public double indexerMotorVoltage = 0.0;
+    public double transportMotorVoltage = 0.0;
   }
 
-  default void updateInputs(IndexerIOInputs inputs) {}
+  void updateInputs(IndexerIOInputs inputs);
 
-  default void setVoltage(double voltage) {}
-
-  default void stop() {}
+  void setVoltages(double indexerVoltage, double transportVoltage);
 }

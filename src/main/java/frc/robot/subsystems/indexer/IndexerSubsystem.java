@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
+import frc.robot.util.LoggedTunableNumber;
 
 public class IndexerSubsystem extends SubsystemBase {
 
@@ -21,12 +22,13 @@ public class IndexerSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     io.updateInputs(inputs);
-    Logger.processInputs("Indexer", inputs);
+    Logger.processInputs("Indexer", inputs.indexerMotorVoltage);
+    Logger.processInputs("Transport", inputs.transportMotorVoltage);
 
     switch (goal) {
-      case SHOOT -> io.setVoltage(IndexerConstants.shootVolts.get());
-      case REVERSE -> io.setVoltage(IndexerConstants.reverseVolts.get());
-      case STOP -> io.setVoltage(IndexerConstants.stopVolts.get());
+      case SHOOT -> io.setVoltages(IndexerConstants.indexerMotorShootVoltage, IndexerConstants.transportMotorStartVoltage);
+      case REVERSE -> io.setVoltages(IndexerConstants.indexerMotorReverseVoltage, IndexerConstants.transportMotorReverseVoltage);
+      case STOP -> io.setVoltages(0, 0);
     }
   }
 
