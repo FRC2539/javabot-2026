@@ -76,9 +76,9 @@ public class RobotContainer {
   public final VisionSubsystem vision =
       new VisionSubsystem(
           drivetrain::filterAndAddMeasurements,
-          new VisionIOLimelight("limelight-left", drivetrain::getRotation),
-          new VisionIOLimelight("limelight-left", drivetrain::getRotation),
-          new VisionIOLimelight("limelight-left", drivetrain::getRotation),
+          new VisionIOLimelight("limelight-turretright", drivetrain::getRotation),
+          new VisionIOLimelight("limelight-turretcenter", drivetrain::getRotation),
+          new VisionIOLimelight("limelight-turretback", drivetrain::getRotation),
           new VisionIOLimelight("limelight-left", drivetrain::getRotation));
 
   public RobotContainer() {
