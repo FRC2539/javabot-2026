@@ -102,6 +102,35 @@ public class RobotContainer {
 
     rightDriveController.getTrigger().whileTrue(roller.runPositiveVoltage(10.0));
     operatorController.getA().whileTrue(roller.runNegativeVoltage(10.0));
+
+    // simple commands for the first deploy
+
+    operatorController
+        .getLeftTrigger()
+        .whileTrue(climber.setVoltage(ClimberConstants.climberUpTestVoltage));
+
+    operatorController
+        .getRightTrigger()
+        .whileTrue(climber.setVoltage(ClimberConstants.climberDownTestVoltage));
+
+    operatorController.getDPadUp().onTrue(pneumatics.toggleIntake());
+
+    operatorController.getDPadDownRight().onTrue(pneumatics.toggleRaspberry());
+    operatorController.getDPadLeft().onTrue(pneumatics.toggleRaspberry2());
+
+    operatorController.getLeftBumper().whileTrue(roller.runPositiveVoltage(3.0));
+    operatorController.getRightBumper().whileTrue(roller.runNegativeVoltage(3.0));
+
+    operatorController.getY().whileTrue(indexer.setVoltage(3.0));
+    operatorController.getA().whileTrue(indexer.setVoltage(-3.0));
+
+    operatorController.getX().whileTrue(transporter.setTransportVoltageCommand(3.0));
+    operatorController.getB().whileTrue(transporter.setTransportVoltageCommand(-3.0));
+
+    // operatorController.getStart().whileTrue(shooter.runVoltage(4.0));
+    // operatorController.getBack().whileTrue(turret.runVoltage(4.0));
+    // operatorController.getDPadDown().whileTrue(hood.runVoltage(4.0));
+
   }
 
   private ChassisSpeeds getDriverChassisSpeeds() {

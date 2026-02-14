@@ -10,4 +10,7 @@ public class ClimberConstants {
 
   public static final double climberUpVoltage = -10;
   public static final double climberDownVoltage = 10;
+
+  public static final double climberUpTestVoltage = -3;
+  public static final double climberDownTestVoltage = 3;
 }
