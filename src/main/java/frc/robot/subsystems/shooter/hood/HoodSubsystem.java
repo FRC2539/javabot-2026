@@ -2,6 +2,7 @@ package frc.robot.subsystems.shooter.hood;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
@@ -27,5 +28,9 @@ public class HoodSubsystem extends SubsystemBase {
 
   public boolean isAtSetpoint() {
     return io.isAtSetpoint();
+  }
+
+  public Command setVoltage(double volts) {
+    return Commands.run(() -> io.setHoodVoltage(volts), this);
   }
 }

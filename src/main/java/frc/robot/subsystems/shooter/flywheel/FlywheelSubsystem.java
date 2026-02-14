@@ -1,6 +1,7 @@
 package frc.robot.subsystems.shooter.flywheel;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
@@ -26,5 +27,9 @@ public class FlywheelSubsystem extends SubsystemBase {
 
   public Command setShooterRPM(double desiredRPM) {
     return run(() -> setTargetRPM(desiredRPM));
+  }
+
+    public Command setVoltage(double volts) {
+    return Commands.run(() -> shooterIO.setVoltage(volts), this);
   }
 }

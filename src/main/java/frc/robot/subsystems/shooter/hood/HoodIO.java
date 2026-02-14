@@ -18,4 +18,6 @@ public interface HoodIO {
   public void setTargetAngle(Rotation2d targetAngle);
 
   public boolean isAtSetpoint();
+
+  public void setHoodVoltage(double voltage);
 }

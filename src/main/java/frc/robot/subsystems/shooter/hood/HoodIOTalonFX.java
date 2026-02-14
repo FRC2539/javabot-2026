@@ -44,4 +44,9 @@ public class HoodIOTalonFX implements HoodIO {
 
     return error < HoodConstants.angleDeadband;
   }
+
+  @Override
+  public void setHoodVoltage(double voltage) {
+    motor.setVoltage(voltage);
+  }
 }

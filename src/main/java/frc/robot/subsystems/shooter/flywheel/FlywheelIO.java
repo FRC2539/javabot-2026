@@ -10,9 +10,12 @@ public interface FlywheelIO {
     public double wheelVelocity = 0; // RPM
     public double leftMotorTemperatureCelcius = 0;
     public double rightMotorTemperatureCelcius = 0;
+    public double wheelVoltage = 0;
   }
 
   public boolean isAtSetpoint();
+
+  public void setVoltage(double volts);
 
   public void setControlVelocity(double targetVelocity);
 }
