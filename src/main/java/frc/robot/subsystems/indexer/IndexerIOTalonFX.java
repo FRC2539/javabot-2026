@@ -2,30 +2,22 @@ package frc.robot.subsystems.indexer;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 public class IndexerIOTalonFX implements IndexerIO {
 
   private final TalonFX transportMotor =
-    new TalonFX(IndexerConstants.transportMotorId, IndexerConstants.canBus);
+    new TalonFX(IndexerConstants.indexerMotorID);
 
-  private final TalonFX indexerMotor = new TalonFX(IndexerConstants.kMotorId, IndexerConstants.kCanBus);
+  private final TalonFX indexerMotor = new TalonFX(IndexerConstants.transportMotorID);
 
   public IndexerIOTalonFX() {
-    CurrentLimitsConfigs currentLimits = new CurrentLimitsConfigs();
-    currentLimits.SupplyCurrentLimit = IndexerConstants.currentLimit;
-    currentLimits.StatorCurrentLimit = IndexerConstants.currentLimit;
-    currentLimits.SupplyCurrentLimitEnable = true;
-    currentLimits.StatorCurrentLimitEnable = true;
-    
-    TalonFXConfiguration transportConfig = new TalonFXConfiguration().withCurrentLimits(currentLimits);
+    TalonFXConfiguration transportConfig = new TalonFXConfiguration().withCurrentLimits(IndexerConstants.currentLimits);
 
     transportMotor.getConfigurator().apply(transportConfig);
     transportMotor.setNeutralMode(NeutralModeValue.Brake);
 
-    indexerMotor.getConfigurator().apply(new TalonFXConfiguration());
-    indexerMotor.setVoltage(0.0);
+    indexerMotor.getConfigurator().apply(transportConfig);
   }
 
   @Override
