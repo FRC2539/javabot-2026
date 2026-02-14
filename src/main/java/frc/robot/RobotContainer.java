@@ -22,8 +22,6 @@ import frc.robot.subsystems.raspberry.PneumaticsIORevPH;
 import frc.robot.subsystems.raspberry.PneumaticsSubsystem;
 import frc.robot.subsystems.roller.RollerIOTalonFX;
 import frc.robot.subsystems.roller.RollerSubsystem;
-import frc.robot.subsystems.transporter.TransportIOTalonFX;
-import frc.robot.subsystems.transporter.TransportSubsystem;
 import frc.robot.subsystems.vision.VisionIOLimelight;
 import frc.robot.subsystems.vision.VisionSubsystem;
 
@@ -54,8 +52,6 @@ public class RobotContainer {
   public final RollerSubsystem roller = new RollerSubsystem(new RollerIOTalonFX());
 
   public final IndexerSubsystem indexer = new IndexerSubsystem(new IndexerIOTalonFX());
-
-  public final TransportSubsystem transporter = new TransportSubsystem(new TransportIOTalonFX());
 
   public final PneumaticsSubsystem pneumatics = new PneumaticsSubsystem(new PneumaticsIORevPH());
 

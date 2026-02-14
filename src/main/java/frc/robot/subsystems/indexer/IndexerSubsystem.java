@@ -24,22 +24,24 @@ public class IndexerSubsystem extends SubsystemBase {
     Logger.processInputs("Indexer", inputs);
 
     switch (goal) {
-      case SHOOT -> io.setVoltage(IndexerConstants.shootVolts.get());
-      case REVERSE -> io.setVoltage(IndexerConstants.reverseVolts.get());
-      case STOP -> io.setVoltage(IndexerConstants.stopVolts.get());
+      case SHOOT -> io.setVoltages(
+          IndexerConstants.indexerMotorShootVoltage, IndexerConstants.transportMotorStartVoltage);
+      case REVERSE -> io.setVoltages(
+          -IndexerConstants.indexerMotorShootVoltage, -IndexerConstants.transportMotorStartVoltage);
+      case STOP -> io.setVoltages(0, 0);
     }
   }
 
   public Command stop() {
-    return Commands.run(() -> goal = Goal.STOP, this);
+    return Commands.runOnce(() -> goal = Goal.STOP, this);
   }
 
-  public Command runPositive() {
-    return Commands.run(() -> goal = Goal.SHOOT, this);
+  public Command index() {
+    return Commands.runOnce(() -> goal = Goal.SHOOT, this);
   }
 
-  public Command runNegative() {
-    return Commands.run(() -> goal = Goal.REVERSE, this);
+  public Command indexReverse() {
+    return Commands.runOnce(() -> goal = Goal.REVERSE, this);
   }
 
   public enum Goal {
