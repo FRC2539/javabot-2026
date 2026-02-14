@@ -26,8 +26,9 @@ public class TargetingSubsystem extends SubsystemBase {
   boolean isFerrying = false;
   CommandSwerveDrivetrain drivetrain;
 
-  public TargetingSubsystem() {
+  public TargetingSubsystem(CommandSwerveDrivetrain dt) {
     hubPosition = AllianceFlipUtil.apply(FieldConstants.Hub.innerCenterPoint.toTranslation2d());
+    drivetrain = dt;
   }
 
   @Override
