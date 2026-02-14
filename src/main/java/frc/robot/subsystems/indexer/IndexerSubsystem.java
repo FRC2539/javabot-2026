@@ -42,6 +42,10 @@ public class IndexerSubsystem extends SubsystemBase {
     return Commands.run(() -> goal = Goal.REVERSE, this);
   }
 
+  public Command setVoltage(double voltage) {
+    return Commands.run(() -> io.setVoltage(voltage), this);
+  }
+
   public enum Goal {
     SHOOT,
     REVERSE,
