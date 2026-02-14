@@ -22,6 +22,8 @@ import frc.robot.subsystems.raspberry.PneumaticsIORevPH;
 import frc.robot.subsystems.raspberry.PneumaticsSubsystem;
 import frc.robot.subsystems.roller.RollerIOTalonFX;
 import frc.robot.subsystems.roller.RollerSubsystem;
+import frc.robot.subsystems.shooter.flywheel.FlywheelIOTalonFX;
+import frc.robot.subsystems.shooter.flywheel.FlywheelSubsystem;
 import frc.robot.subsystems.shooter.hood.HoodIOTalonFX;
 import frc.robot.subsystems.shooter.hood.HoodSubsystem;
 import frc.robot.subsystems.shooter.targeting.TargetingSubsystem;
@@ -63,6 +65,8 @@ public class RobotContainer {
   public final TurretSubsystem turret = new TurretSubsystem(new TurretIOTalonFX());
 
   public final HoodSubsystem hood = new HoodSubsystem(new HoodIOTalonFX());
+
+  public final FlywheelSubsystem flywheel = new FlywheelSubsystem(new FlywheelIOTalonFX());
 
   public final TargetingSubsystem targeting = new TargetingSubsystem(drivetrain);
 
