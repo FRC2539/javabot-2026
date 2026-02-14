@@ -60,8 +60,6 @@ public class RobotContainer {
 
   public final IndexerSubsystem indexer = new IndexerSubsystem(new IndexerIOTalonFX());
 
-  public final TransportSubsystem transporter = new TransportSubsystem(new TransportIOTalonFX());
-
   public final PneumaticsSubsystem pneumatics = new PneumaticsSubsystem(new PneumaticsIORevPH());
 
   public final TurretSubsystem turret = new TurretSubsystem(new TurretIOTalonFX());

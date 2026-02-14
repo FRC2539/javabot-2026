@@ -2,28 +2,33 @@ package frc.robot.subsystems.indexer;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 public class IndexerIOTalonFX implements IndexerIO {
 
-  private final TalonFX motor = new TalonFX(IndexerConstants.kMotorId, IndexerConstants.kCanBus);
+  private final TalonFX transportMotor = new TalonFX(IndexerConstants.indexerMotorID);
+
+  private final TalonFX indexerMotor = new TalonFX(IndexerConstants.transportMotorID);
 
   public IndexerIOTalonFX() {
-    motor.getConfigurator().apply(new TalonFXConfiguration());
-    motor.setVoltage(0.0);
+    TalonFXConfiguration transportConfig =
+        new TalonFXConfiguration().withCurrentLimits(IndexerConstants.currentLimits);
+
+    transportMotor.getConfigurator().apply(transportConfig);
+    transportMotor.setNeutralMode(NeutralModeValue.Brake);
+
+    indexerMotor.getConfigurator().apply(transportConfig);
   }
 
   @Override
   public void updateInputs(IndexerIOInputs inputs) {
-    inputs.voltage = motor.getMotorVoltage().getValueAsDouble();
+    inputs.indexerMotorVoltage = indexerMotor.getMotorVoltage().getValueAsDouble();
+    inputs.transportMotorVoltage = transportMotor.getMotorVoltage().refresh().getValueAsDouble();
   }
 
   @Override
-  public void setVoltage(double voltage) {
-    motor.setVoltage(voltage);
-  }
-
-  @Override
-  public void stop() {
-    motor.stopMotor();
+  public void setVoltages(double indexerVoltage, double transportVoltage) {
+    indexerMotor.setVoltage(indexerVoltage);
+    transportMotor.setVoltage(transportVoltage);
   }
 }
