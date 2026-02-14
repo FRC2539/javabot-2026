@@ -6,13 +6,13 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 public class IndexerIOTalonFX implements IndexerIO {
 
-  private final TalonFX transportMotor =
-    new TalonFX(IndexerConstants.indexerMotorID);
+  private final TalonFX transportMotor = new TalonFX(IndexerConstants.indexerMotorID);
 
   private final TalonFX indexerMotor = new TalonFX(IndexerConstants.transportMotorID);
 
   public IndexerIOTalonFX() {
-    TalonFXConfiguration transportConfig = new TalonFXConfiguration().withCurrentLimits(IndexerConstants.currentLimits);
+    TalonFXConfiguration transportConfig =
+        new TalonFXConfiguration().withCurrentLimits(IndexerConstants.currentLimits);
 
     transportMotor.getConfigurator().apply(transportConfig);
     transportMotor.setNeutralMode(NeutralModeValue.Brake);

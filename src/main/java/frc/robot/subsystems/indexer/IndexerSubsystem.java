@@ -6,7 +6,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
-
 public class IndexerSubsystem extends SubsystemBase {
 
   private final IndexerIO io;
@@ -25,8 +24,10 @@ public class IndexerSubsystem extends SubsystemBase {
     Logger.processInputs("Indexer", inputs);
 
     switch (goal) {
-      case SHOOT -> io.setVoltages(IndexerConstants.indexerMotorShootVoltage, IndexerConstants.transportMotorStartVoltage);
-      case REVERSE -> io.setVoltages(-IndexerConstants.indexerMotorShootVoltage, -IndexerConstants.transportMotorStartVoltage);
+      case SHOOT -> io.setVoltages(
+          IndexerConstants.indexerMotorShootVoltage, IndexerConstants.transportMotorStartVoltage);
+      case REVERSE -> io.setVoltages(
+          -IndexerConstants.indexerMotorShootVoltage, -IndexerConstants.transportMotorStartVoltage);
       case STOP -> io.setVoltages(0, 0);
     }
   }
@@ -42,8 +43,6 @@ public class IndexerSubsystem extends SubsystemBase {
   public Command indexReverse() {
     return Commands.runOnce(() -> goal = Goal.REVERSE, this);
   }
-
-
 
   public enum Goal {
     SHOOT,

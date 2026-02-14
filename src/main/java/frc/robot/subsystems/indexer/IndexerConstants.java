@@ -13,6 +13,6 @@ public final class IndexerConstants {
 
   public static final double transportMotorStartVoltage = 1.0;
 
-  public static final CurrentLimitsConfigs currentLimits = new CurrentLimitsConfigs().withSupplyCurrentLimit(currentLimit);
-
+  public static final CurrentLimitsConfigs currentLimits =
+      new CurrentLimitsConfigs().withSupplyCurrentLimit(currentLimit);
 }
