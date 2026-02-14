@@ -18,31 +18,25 @@ public class ShooterCommands {
       TargetingSubsystem targeting) {
 
     return Commands.startEnd(
+            () -> {
+              // Spin flywheel
+              flywheel.setShooterRPM(targeting.getIdealFlywheelRPM()).schedule();
 
-        () -> {
-          // Spin flywheel
-          flywheel.setShooterRPM(targeting.getIdealFlywheelRPM()).schedule();
+              // Move hood
+              hood.setHoodAngle(targeting.getIdealHoodAngle()).schedule();
+            },
+            () -> {
+              indexer.stop().schedule();
 
-          // Move hood
-          hood.setHoodAngle(targeting.getIdealHoodAngle()).schedule();
-        },
+              // Return shooter
+              flywheel.setShooterRPM(0).schedule();
 
-        () -> {
-          indexer.stop().schedule();
-
-          // Return shooter 
-          flywheel.setShooterRPM(0).schedule();
-
-          // Return hood 
-          hood.setHoodAngle(
-              Rotation2d.fromRadians(HoodConstants.kMinAngleRad)).schedule();
-        }
-    )
-//held
-    .alongWith(
-        Commands.waitUntil(() ->
-                flywheel.atSetpoint() && hood.isAtSetpoint())
-            .andThen(indexer.index())
-    );
+              // Return hood
+              hood.setHoodAngle(Rotation2d.fromRadians(HoodConstants.kMinAngleRad)).schedule();
+            })
+        // held
+        .alongWith(
+            Commands.waitUntil(() -> flywheel.atSetpoint() && hood.isAtSetpoint())
+                .andThen(indexer.index()));
   }
 }

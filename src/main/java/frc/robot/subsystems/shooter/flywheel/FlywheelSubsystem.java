@@ -28,8 +28,7 @@ public class FlywheelSubsystem extends SubsystemBase {
     return run(() -> setTargetRPM(desiredRPM));
   }
 
-public boolean atSetpoint() {
-  return shooterIO.isAtSetpoint();
-}
-
+  public boolean atSetpoint() {
+    return shooterIO.isAtSetpoint();
+  }
 }

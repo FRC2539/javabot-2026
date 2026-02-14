@@ -117,13 +117,9 @@ public class RobotContainer {
     rightDriveController.getTrigger().whileTrue(roller.runPositiveVoltage(10.0));
     operatorController.getA().whileTrue(roller.runNegativeVoltage(10.0));
 
-    operatorController.getA().whileTrue(
-    ShooterCommands.holdToShoot(
-        flywheel,
-        hood,
-        indexer,
-        targeting));
-
+    operatorController
+        .getA()
+        .whileTrue(ShooterCommands.holdToShoot(flywheel, hood, indexer, targeting));
   }
 
   private ChassisSpeeds getDriverChassisSpeeds() {
