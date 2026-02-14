@@ -1,10 +1,9 @@
 package frc.robot.subsystems.shooter.hood;
 
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import edu.wpi.first.math.util.Units;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
-import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 
 public final class HoodConstants {
 
@@ -26,6 +25,6 @@ public final class HoodConstants {
           .withFeedbackSensorSource(FeedbackSensorSourceValue.RemoteCANcoder)
           .withFeedbackRemoteSensorID(hoodEncoderID);
 
-    public static final TalonFXConfiguration hoodMotorConfig =
+  public static final TalonFXConfiguration hoodMotorConfig =
       new TalonFXConfiguration().withFeedback(feedbackConfig);
 }
