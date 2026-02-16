@@ -17,26 +17,17 @@ public class ShooterCommands {
       IndexerSubsystem indexer,
       TargetingSubsystem targeting) {
 
-    return Commands.startEnd(
-            () -> {
-              // Spin flywheel
-              flywheel.setShooterRPM(targeting.getIdealFlywheelRPM()).schedule();
-
-              // Move hood
-              hood.setHoodAngle(targeting.getIdealHoodAngle()).schedule();
-            },
-            () -> {
+    return Commands.sequence(
+            Commands.parallel(
+                flywheel.setShooterRPM(targeting.getIdealFlywheelRPM()),
+                hood.setHoodAngle(targeting.getIdealHoodAngle())),
+            Commands.waitUntil(() -> flywheel.atSetpoint() && hood.isAtSetpoint()),
+            indexer.index())
+        .finallyDo(
+            interrupted -> {
               indexer.stop().schedule();
-
-              // Return shooter
               flywheel.setShooterRPM(0).schedule();
-
-              // Return hood
               hood.setHoodAngle(Rotation2d.fromRadians(HoodConstants.kMinAngleRad)).schedule();
-            })
-        // held
-        .alongWith(
-            Commands.waitUntil(() -> flywheel.atSetpoint() && hood.isAtSetpoint())
-                .andThen(indexer.index()));
+            });
   }
 }
