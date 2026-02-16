@@ -12,11 +12,11 @@ public class PneumaticsIORevPH implements PneumaticsIO {
           PneumaticsConstants.intakeForward,
           PneumaticsConstants.intakeReverse);
 
-  private final DoubleSolenoid raspberrySolenoid =
-      new DoubleSolenoid(
-          PneumaticsModuleType.REVPH,
-          PneumaticsConstants.raspberryForward,
-          PneumaticsConstants.raspberryReverse);
+  // private final DoubleSolenoid raspberrySolenoid =
+  //     new DoubleSolenoid(
+  //         PneumaticsModuleType.REVPH,
+  //         PneumaticsConstants.raspberryForward,
+  //         PneumaticsConstants.raspberryReverse);
 
   private final DoubleSolenoid raspberry2Solenoid =
       new DoubleSolenoid(
@@ -27,7 +27,7 @@ public class PneumaticsIORevPH implements PneumaticsIO {
   @Override
   public void updateInputs(PneumaticsIOInputs inputs) {
     inputs.intakeState = intakeSolenoid.get();
-    inputs.raspberry = raspberrySolenoid.get();
+    // inputs.raspberry = raspberrySolenoid.get();
     inputs.raspberry2 = raspberry2Solenoid.get();
   }
 
@@ -36,10 +36,10 @@ public class PneumaticsIORevPH implements PneumaticsIO {
     intakeSolenoid.set(value);
   }
 
-  @Override
-  public void setRaspberrySolenoid(Value value) {
-    raspberrySolenoid.set(value);
-  }
+  // @Override
+  // public void setRaspberrySolenoid(Value value) {
+  //   raspberrySolenoid.set(value);
+  // }
 
   @Override
   public void setRaspberry2Solenoid(Value value) {
