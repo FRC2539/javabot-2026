@@ -8,13 +8,13 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 public class FlywheelIOTalonFX implements FlywheelIO {
 
-  private double targetRPS = 0;
+  private double targetRPM = 0;
 
   private TalonFX leftMotor =
       new TalonFX(ShooterConstants.leftShooterMotorID, ShooterConstants.shooterCanBus);
   private TalonFX rightMotor =
       new TalonFX(ShooterConstants.rightShooterMotorID, ShooterConstants.shooterCanBus);
-  private MotionMagicVelocityVoltage controlRequest = new MotionMagicVelocityVoltage(targetRPS);
+  private MotionMagicVelocityVoltage controlRequest = new MotionMagicVelocityVoltage(targetRPM / 60);
   private Follower motorFollowerRequest =
       new Follower(leftMotor.getDeviceID(), MotorAlignmentValue.Opposed);
 
@@ -38,22 +38,14 @@ public class FlywheelIOTalonFX implements FlywheelIO {
 
   @Override
   public void setControlVelocity(double targetVelocity) {
-    this.targetRPS = targetVelocity;
+    this.targetRPM = targetVelocity;
     leftMotor.setControl(controlRequest.withVelocity(targetVelocity));
     rightMotor.setControl(motorFollowerRequest);
   }
 
   @Override
   public boolean isAtSetpoint() {
-    double currentSpeed = leftMotor.getVelocity().getValueAsDouble();
-
-    double errorRPS = Math.abs(targetRPS - currentSpeed);
-
-    // convert deadband to rotations per second
-    if (errorRPS < ShooterConstants.goalDeadbandRPM / 60) {
-      return true;
-    } else {
-      return false;
-    }
+    return Math.abs(leftMotor.getVelocity().getValueAsDouble() - targetRPM)
+        < ShooterConstants.goalDeadbandRPM;
   }
 }

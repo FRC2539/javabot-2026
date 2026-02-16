@@ -93,7 +93,7 @@ public class RobotContainer {
                   .withRotationalRate(speeds.omegaRadiansPerSecond);
             }));
 
-    turret.setDefaultCommand(turret.setTargetHeading(targeting.getIdealTurretAngle()));
+    turret.setDefaultCommand(turret.goToAngleCommand(targeting.getIdealTurretAngle()));
   }
 
   private void configureBindings() {
