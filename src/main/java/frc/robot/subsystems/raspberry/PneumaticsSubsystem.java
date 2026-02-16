@@ -30,17 +30,17 @@ public class PneumaticsSubsystem extends SubsystemBase {
     }
   }
 
-  public enum raspberryPosition {
-    EXPANDED(Value.kForward),
-    RETRACTED(Value.kReverse),
-    OFF(Value.kOff);
+  // public enum raspberryPosition {
+  //   EXPANDED(Value.kForward),
+  //   RETRACTED(Value.kReverse),
+  //   OFF(Value.kOff);
 
-    public final Value value;
+  //   public final Value value;
 
-    raspberryPosition(Value value) {
-      this.value = value;
-    }
-  }
+  //   raspberryPosition(Value value) {
+  //     this.value = value;
+  //   }
+  // }
 
   public enum raspberry2Position {
     EXPANDED(Value.kForward),
@@ -58,9 +58,9 @@ public class PneumaticsSubsystem extends SubsystemBase {
     return runOnce(() -> io.setIntakeSolenoid(position.value));
   }
 
-  public Command setRaspberryPosition(raspberryPosition position) {
-    return runOnce(() -> io.setRaspberrySolenoid(position.value));
-  }
+  // public Command setRaspberryPosition(raspberryPosition position) {
+  //   return runOnce(() -> io.setRaspberrySolenoid(position.value));
+  // }
 
   public Command setRaspberry2Position(raspberry2Position position) {
     return runOnce(() -> io.setRaspberry2Solenoid(position.value));
@@ -77,16 +77,16 @@ public class PneumaticsSubsystem extends SubsystemBase {
         });
   }
 
-  public Command toggleRaspberry() {
-    return runOnce(
-        () -> {
-          if (inputs.raspberry == raspberryPosition.EXPANDED.value) {
-            io.setRaspberrySolenoid(raspberryPosition.RETRACTED.value);
-          } else {
-            io.setRaspberrySolenoid(raspberryPosition.EXPANDED.value);
-          }
-        });
-  }
+  // public Command toggleRaspberry() {
+  //   return runOnce(
+  //       () -> {
+  //         if (inputs.raspberry == raspberryPosition.EXPANDED.value) {
+  //           io.setRaspberrySolenoid(raspberryPosition.RETRACTED.value);
+  //         } else {
+  //           io.setRaspberrySolenoid(raspberryPosition.EXPANDED.value);
+  //         }
+  //       });
+  // }
 
   public Command toggleRaspberry2() {
     return runOnce(
