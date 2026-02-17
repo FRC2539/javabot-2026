@@ -21,13 +21,12 @@ public class ShooterCommands {
             Commands.parallel(
                 flywheel.setShooterRPM(targeting.getIdealFlywheelRPM()),
                 hood.setHoodAngle(targeting.getIdealHoodAngle())),
-            Commands.waitUntil(() -> flywheel.atSetpoint() && hood.isAtSetpoint()),
             indexer.index())
         .finallyDo(
             interrupted -> {
-              indexer.stop().schedule();
-              flywheel.setShooterRPM(0).schedule();
-              hood.setHoodAngle(Rotation2d.fromRadians(HoodConstants.kMinAngleRad)).schedule();
+              indexer.stop();
+              flywheel.setShooterRPM(0);
+              hood.setHoodAngle(Rotation2d.fromRadians(HoodConstants.kMinAngleRad));
             });
   }
 }
