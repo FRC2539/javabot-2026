@@ -14,8 +14,8 @@ public final class HoodConstants {
   public static final double kGearRatio = 120.0;
 
   // Hard mechanical limits
-  public static final double kMinAngleRad = Units.degreesToRadians(19.0);
-  public static final double kMaxAngleRad = Units.degreesToRadians(51.0);
+  public static final double kMinAngleRad = Units.degreesToRadians(45.0);
+  public static final double kMaxAngleRad = Units.degreesToRadians(85.0);
 
   public static final double angleDeadband = Units.degreesToRadians(1);
   public static final TalonFXConfiguration motorConfig = new TalonFXConfiguration();
