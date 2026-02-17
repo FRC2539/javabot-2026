@@ -13,7 +13,7 @@ public class HoodIOTalonFX implements HoodIO {
   private final CANcoder hoodEncoder = new CANcoder(HoodConstants.hoodEncoderID);
   private final TalonFX motor = new TalonFX(HoodConstants.kMotorId, HoodConstants.kCanBus);
 
-  public double targetAngle = 0; // radians
+  public double targetAngle = 0; // rotations
 
   public final MotionMagicVoltage motorRequest = new MotionMagicVoltage(targetAngle);
 

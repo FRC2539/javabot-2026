@@ -1,6 +1,8 @@
 package frc.robot.subsystems.shooter.flywheel;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
@@ -11,7 +13,7 @@ public class FlywheelSubsystem extends SubsystemBase {
   public FlywheelSubsystem(FlywheelIO io) {
     shooterIO = io;
 
-    setDefaultCommand(setShooterRPM(ShooterConstants.IdleRPM));
+    setDefaultCommand(setShooterRPMCommand(ShooterConstants.IdleRPM));
   }
 
   @Override
@@ -21,11 +23,17 @@ public class FlywheelSubsystem extends SubsystemBase {
   }
 
   private void setTargetRPM(double targetRPM) {
-    shooterIO.setControlVelocity(targetRPM / 60);
+    shooterIO.setControlVelocity(targetRPM);
   }
 
-  public Command setShooterRPM(double desiredRPM) {
-    return run(() -> setTargetRPM(desiredRPM));
+
+  public Command setShooterRPMCommand(double desiredRPM) {
+    return Commands.runOnce(() -> this.setTargetRPM(desiredRPM), this)
+      .andThen(Commands.run(() -> {}, this).until(this::isAtSetpoint));
+  }
+
+  public boolean isAtSetpoint() {
+    return shooterIO.isAtSetpoint();
   }
 
   public boolean atSetpoint() {

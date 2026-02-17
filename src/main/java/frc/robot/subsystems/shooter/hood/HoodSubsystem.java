@@ -2,6 +2,7 @@ package frc.robot.subsystems.shooter.hood;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
@@ -21,11 +22,18 @@ public class HoodSubsystem extends SubsystemBase {
   }
 
   public Command setHoodAngle(Rotation2d desiredAngle) {
-
-    return run(() -> io.setTargetAngle(desiredAngle));
+    return Commands.runOnce(() -> this.setTargetAngle(desiredAngle), this)
+      .andThen(Commands.run(() -> {}, this).until(this::isAtSetpoint));
   }
 
   public boolean isAtSetpoint() {
     return io.isAtSetpoint();
   }
+
+  
+
+  public void setTargetAngle(Rotation2d angle) {
+    io.setTargetAngle(angle);
+  }
+
 }

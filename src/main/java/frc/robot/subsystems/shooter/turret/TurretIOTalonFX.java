@@ -13,7 +13,8 @@ public class TurretIOTalonFX implements TurretIO {
   private final CANcoder turretEncoder = new CANcoder(TurretConstants.turretEncoderID);
   private final TalonFX motor = new TalonFX(TurretConstants.turretMotorId, TurretConstants.canBus);
 
-  private final MotionMagicVoltage controlRequest = new MotionMagicVoltage(0.0);
+  private double targetAngle = 0.0;
+  private final MotionMagicVoltage controlRequest = new MotionMagicVoltage(targetAngle);
 
   public TurretIOTalonFX() {
     CANcoderConfiguration encoderConfig = new CANcoderConfiguration();
@@ -36,13 +37,13 @@ public class TurretIOTalonFX implements TurretIO {
 
   @Override
   public void setTargetHeading(Rotation2d desiredAngle) {
-    double positionRot = desiredAngle.getRotations();
-    motor.setControl(controlRequest.withPosition(positionRot));
+    targetAngle = desiredAngle.getRotations();
+    motor.setControl(controlRequest.withPosition(targetAngle));
   }
 
   @Override
   public boolean isAtSetpoint() {
-    double motorError = motor.getClosedLoopError().getValueAsDouble();
-    return Math.abs(motorError) < TurretConstants.setpointToleranceRot;
+    return Math.abs(motor.getPosition().getValueAsDouble() - targetAngle)
+        < TurretConstants.setpointToleranceRot;
   }
 }

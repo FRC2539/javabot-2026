@@ -98,7 +98,7 @@ public class RobotContainer {
                   .withRotationalRate(speeds.omegaRadiansPerSecond);
             }));
 
-    turret.setDefaultCommand(turret.setTargetHeading(targeting.getIdealTurretAngle()));
+    turret.setDefaultCommand(turret.goToAngleCommand(targeting.getIdealTurretAngle()));
   }
 
   private void configureBindings() {
@@ -111,8 +111,7 @@ public class RobotContainer {
         .whileTrue(climber.setVoltage(ClimberConstants.climberDownVoltage));
 
     rightDriveController.getLeftThumb().onTrue(pneumatics.toggleIntake());
-
-    operatorController.getDPadUp().onTrue(pneumatics.toggleRaspberry()); // v (its a secret)
+    // operatorController.getDPadUp().onTrue(pneumatics.toggleRaspberry()); // v (its a secret)
     operatorController.getDPadLeft().onTrue(pneumatics.toggleRaspberry2());
 
     rightDriveController.getTrigger().whileTrue(roller.runPositiveVoltage(10.0));

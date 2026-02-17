@@ -1,9 +1,9 @@
 package frc.robot.subsystems.raspberry;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
@@ -12,49 +12,23 @@ public class PneumaticsSubsystem extends SubsystemBase {
   private final PneumaticsIO io;
   private final PneumaticsIOInputsAutoLogged inputs = new PneumaticsIOInputsAutoLogged();
 
-  private final PneumaticHub pneumaticHub = new PneumaticHub(PneumaticsConstants.pneumaticHubId);
-
   public PneumaticsSubsystem(PneumaticsIO io) {
     this.io = io;
   }
 
-  public enum IntakePosition {
-    DEPLOYED(Value.kForward),
-    RETRACTED(Value.kReverse),
+  public enum PneumaticPosition {
+    FORWARD(Value.kForward),
+    REVERSE(Value.kReverse),
     OFF(Value.kOff);
 
     public final Value value;
 
-    IntakePosition(Value value) {
+    PneumaticPosition(Value value) {
       this.value = value;
     }
   }
 
-  public enum raspberryPosition {
-    EXPANDED(Value.kForward),
-    RETRACTED(Value.kReverse),
-    OFF(Value.kOff);
-
-    public final Value value;
-
-    raspberryPosition(Value value) {
-      this.value = value;
-    }
-  }
-
-  public enum raspberry2Position {
-    EXPANDED(Value.kForward),
-    RETRACTED(Value.kReverse),
-    OFF(Value.kOff);
-
-    public final Value value;
-
-    raspberry2Position(Value value) {
-      this.value = value;
-    }
-  }
-
-  public Command setIntakePosition(IntakePosition position) {
+  public Command setIntakePosition(PneumaticPosition position) {
     return runOnce(() -> io.setIntakeSolenoid(position.value));
   }
 
@@ -93,15 +67,8 @@ public class PneumaticsSubsystem extends SubsystemBase {
         });
   }
 
-  public Command toggleRaspberry() {
-    return runOnce(
-        () -> {
-          if (inputs.raspberry == raspberryPosition.EXPANDED.value) {
-            io.setRaspberrySolenoid(raspberryPosition.RETRACTED.value);
-          } else {
-            io.setRaspberrySolenoid(raspberryPosition.EXPANDED.value);
-          }
-        });
+  public Command setRaspberry2Position(PneumaticPosition position) {
+    return runOnce(() -> io.setRaspberry2Solenoid(position.value));
   }
 
   // public Command toggleRaspberry2() {
@@ -134,9 +101,7 @@ public class PneumaticsSubsystem extends SubsystemBase {
   public void periodic() {
     io.updateInputs(inputs);
     Logger.processInputs("RealOutputs/Pneumatics", inputs);
-    // gets pressure in psi
-    double pressure = pneumaticHub.getPressure(0);
 
-    SmartDashboard.putNumber("Pneumatics Pressure (PSI)", pressure);
+    SmartDashboard.putNumber("Pneumatics Pressure (PSI)", inputs.pressurePsi);
   }
 }
