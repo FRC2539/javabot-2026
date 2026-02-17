@@ -19,13 +19,13 @@ public class ShooterCommands {
 
     return Commands.sequence(
             Commands.parallel(
-                flywheel.setShooterRPM(targeting.getIdealFlywheelRPM()),
+                flywheel.setShooterRPMCommand(targeting.getIdealFlywheelRPM()),
                 hood.setHoodAngle(targeting.getIdealHoodAngle())),
             indexer.index())
         .finallyDo(
             interrupted -> {
               indexer.stop();
-              flywheel.setShooterRPM(0);
+              flywheel.setShooterRPMCommand(0);
               hood.setHoodAngle(Rotation2d.fromRadians(HoodConstants.kMinAngleRad));
             });
   }

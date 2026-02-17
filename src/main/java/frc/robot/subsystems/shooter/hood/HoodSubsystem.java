@@ -23,17 +23,14 @@ public class HoodSubsystem extends SubsystemBase {
 
   public Command setHoodAngle(Rotation2d desiredAngle) {
     return Commands.runOnce(() -> this.setTargetAngle(desiredAngle), this)
-      .andThen(Commands.run(() -> {}, this).until(this::isAtSetpoint));
+        .andThen(Commands.run(() -> {}, this).until(this::isAtSetpoint));
   }
 
   public boolean isAtSetpoint() {
     return io.isAtSetpoint();
   }
 
-  
-
   public void setTargetAngle(Rotation2d angle) {
     io.setTargetAngle(angle);
   }
-
 }
