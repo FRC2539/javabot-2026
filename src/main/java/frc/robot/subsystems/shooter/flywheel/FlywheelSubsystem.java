@@ -35,4 +35,8 @@ public class FlywheelSubsystem extends SubsystemBase {
   public boolean isAtSetpoint() {
     return shooterIO.isAtSetpoint();
   }
+
+  public boolean atSetpoint() {
+    return shooterIO.isAtSetpoint();
+  }
 }

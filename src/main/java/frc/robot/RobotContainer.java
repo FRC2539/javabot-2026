@@ -8,6 +8,7 @@ import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.commands.ShooterCommands;
 import frc.robot.lib.controller.LogitechController;
 import frc.robot.lib.controller.ThrustmasterJoystick;
 import frc.robot.subsystems.climber.ClimberConstants;
@@ -22,6 +23,8 @@ import frc.robot.subsystems.raspberry.PneumaticsIORevPH;
 import frc.robot.subsystems.raspberry.PneumaticsSubsystem;
 import frc.robot.subsystems.roller.RollerIOTalonFX;
 import frc.robot.subsystems.roller.RollerSubsystem;
+import frc.robot.subsystems.shooter.flywheel.FlywheelIOTalonFX;
+import frc.robot.subsystems.shooter.flywheel.FlywheelSubsystem;
 import frc.robot.subsystems.shooter.hood.HoodIOTalonFX;
 import frc.robot.subsystems.shooter.hood.HoodSubsystem;
 import frc.robot.subsystems.shooter.targeting.TargetingSubsystem;
@@ -64,6 +67,8 @@ public class RobotContainer {
 
   public final HoodSubsystem hood = new HoodSubsystem(new HoodIOTalonFX());
 
+  public final FlywheelSubsystem flywheel = new FlywheelSubsystem(new FlywheelIOTalonFX());
+
   public final TargetingSubsystem targeting = new TargetingSubsystem(drivetrain);
 
   public final Auto auto;
@@ -71,9 +76,9 @@ public class RobotContainer {
   public final VisionSubsystem vision =
       new VisionSubsystem(
           drivetrain::filterAndAddMeasurements,
-          new VisionIOLimelight("limelight-left", drivetrain::getRotation),
-          new VisionIOLimelight("limelight-left", drivetrain::getRotation),
-          new VisionIOLimelight("limelight-left", drivetrain::getRotation),
+          new VisionIOLimelight("limelight-turretleft", drivetrain::getRotation),
+          new VisionIOLimelight("limelight-turretcenter", drivetrain::getRotation),
+          new VisionIOLimelight("limelight-turretright", drivetrain::getRotation),
           new VisionIOLimelight("limelight-left", drivetrain::getRotation));
 
   public RobotContainer() {
@@ -110,7 +115,16 @@ public class RobotContainer {
     operatorController.getDPadLeft().onTrue(pneumatics.toggleRaspberry2());
 
     rightDriveController.getTrigger().whileTrue(roller.runPositiveVoltage(10.0));
-    operatorController.getA().whileTrue(roller.runNegativeVoltage(10.0));
+
+    operatorController.getRightBumper().whileTrue(roller.runNegativeVoltage(10.0));
+
+    operatorController.getStart().whileTrue(indexer.indexReverse());
+
+    operatorController.getBack().whileTrue(indexer.index());
+
+    operatorController
+        .getA()
+        .whileTrue(ShooterCommands.holdToShoot(flywheel, hood, indexer, targeting));
   }
 
   private ChassisSpeeds getDriverChassisSpeeds() {
