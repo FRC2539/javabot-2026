@@ -13,6 +13,12 @@ public class HoodSubsystem extends SubsystemBase {
 
   public HoodSubsystem(HoodIO io) {
     this.io = io;
+
+    setTargetAngle(Rotation2d.fromRadians(HoodConstants.kMinAngleRad));
+
+    setDefaultCommand(
+        Commands.run(
+            () -> setTargetAngle(Rotation2d.fromRadians(HoodConstants.kMinAngleRad)), this));
   }
 
   @Override
@@ -22,8 +28,7 @@ public class HoodSubsystem extends SubsystemBase {
   }
 
   public Command setHoodAngle(Rotation2d desiredAngle) {
-    return Commands.runOnce(() -> this.setTargetAngle(desiredAngle), this)
-        .andThen(Commands.run(() -> {}, this).until(this::isAtSetpoint));
+    return Commands.runOnce(() -> setTargetAngle(desiredAngle), this);
   }
 
   public boolean isAtSetpoint() {

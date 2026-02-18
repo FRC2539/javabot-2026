@@ -11,39 +11,48 @@ import edu.wpi.first.math.util.Units;
 public class HoodIOTalonFX implements HoodIO {
 
   private final CANcoder hoodEncoder = new CANcoder(HoodConstants.hoodEncoderID);
+
   private final TalonFX motor = new TalonFX(HoodConstants.kMotorId, HoodConstants.kCanBus);
 
-  public double targetAngle = 0; // rotations
+  private double targetAngleRad = HoodConstants.kMinAngleRad;
 
-  public final MotionMagicVoltage motorRequest = new MotionMagicVoltage(targetAngle);
+  private final MotionMagicVoltage motorRequest = new MotionMagicVoltage(0);
 
   public HoodIOTalonFX() {
+
     CANcoderConfiguration encoderConfig = new CANcoderConfiguration();
     hoodEncoder.getConfigurator().apply(encoderConfig);
-    motor.getConfigurator().apply(HoodConstants.hoodMotorConfig);
 
+    motor.getConfigurator().apply(HoodConstants.hoodMotorConfig);
     motor.setNeutralMode(NeutralModeValue.Brake);
   }
 
   @Override
   public void updateInputs(HoodIOInputs inputs) {
+
     inputs.positionRad = Units.rotationsToRadians(motor.getPosition().getValueAsDouble());
+
     inputs.velocityRadPerSec = Units.rotationsToRadians(motor.getVelocity().getValueAsDouble());
 
     inputs.voltage = motor.getMotorVoltage().getValueAsDouble();
+
     inputs.tempCelsius = motor.getDeviceTemp().getValueAsDouble();
   }
 
   @Override
   public void setTargetAngle(Rotation2d targetAngle) {
+
+    targetAngleRad = targetAngle.getRadians();
+
     motor.setControl(motorRequest.withPosition(targetAngle.getRadians()));
   }
 
   @Override
   public boolean isAtSetpoint() {
-    double currentAngle = Units.rotationsToRadians(motor.getPosition().getValueAsDouble());
 
-    double error = Math.abs(currentAngle - targetAngle);
+    double currentAngleRad = Units.rotationsToRadians(motor.getPosition().getValueAsDouble());
+
+    double error = Math.abs(currentAngleRad - targetAngleRad);
 
     return error < HoodConstants.angleDeadband;
   }
