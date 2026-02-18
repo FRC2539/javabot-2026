@@ -11,8 +11,10 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.commands.ShooterCommands;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 import frc.robot.subsystems.drive.DriveConstants;
+import frc.robot.subsystems.raspberry.PneumaticsSubsystem.PneumaticPosition;
 import java.util.Optional;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -63,8 +65,60 @@ public class Auto {
   }
 
   public void setUpNamedCommands() {
+    NamedCommands.registerCommand(
+        "roller-spinIN", robotContainer.roller.runPositiveVoltage(10.0)); // .withTimeout(1.5)
 
-    NamedCommands.registerCommand("No", Commands.none());
+    NamedCommands.registerCommand(
+        "roller-spinOUT", robotContainer.roller.runNegativeVoltage(10.0)); // .withTimeout(1.5)
+
+    NamedCommands.registerCommand("roller-stop", robotContainer.roller.runPositiveVoltage(0));
+
+    NamedCommands.registerCommand(
+        "intake-deploy", robotContainer.pneumatics.setIntakePosition(PneumaticPosition.FORWARD));
+
+    NamedCommands.registerCommand(
+        "intake-retract", robotContainer.pneumatics.setIntakePosition(PneumaticPosition.REVERSE));
+
+    NamedCommands.registerCommand(
+        "raspberry2-expand",
+        robotContainer.pneumatics.setRaspberry2Position(PneumaticPosition.FORWARD));
+
+    NamedCommands.registerCommand(
+        "raspberry2-retract",
+        robotContainer.pneumatics.setRaspberry2Position(PneumaticPosition.REVERSE));
+
+    NamedCommands.registerCommand(
+        "climber-up",
+        Commands.sequence(
+            robotContainer
+                .climber
+                .setVoltage(frc.robot.subsystems.climber.ClimberConstants.climberUpVoltage)
+                .withTimeout(2.0)));
+
+    NamedCommands.registerCommand(
+        "climber-down",
+        Commands.sequence(
+            robotContainer
+                .climber
+                .setVoltage(frc.robot.subsystems.climber.ClimberConstants.climberDownVoltage)
+                .withTimeout(2.0)));
+
+    NamedCommands.registerCommand(
+        "intake",
+        Commands.sequence(
+            robotContainer.pneumatics.setRaspberry2Position(PneumaticPosition.FORWARD),
+            Commands.waitSeconds(0.1),
+            robotContainer.pneumatics.setIntakePosition(PneumaticPosition.FORWARD),
+            robotContainer.roller.runPositiveVoltage(10.0)));
+
+    NamedCommands.registerCommand(
+        "hold-to-shoot",
+        ShooterCommands.holdToShoot(
+                robotContainer.flywheel,
+                robotContainer.hood,
+                robotContainer.indexer,
+                robotContainer.targeting)
+            .withTimeout(5.0));
   }
 
   public Command getAutoCommand() {
