@@ -11,8 +11,8 @@ public final class TurretConstants {
 
   private TurretConstants() {}
 
-  public static final int turretMotorId = 20;
-  public static final int turretEncoderID = 21;
+  public static final int turretMotorId = 17;
+  public static final int turretEncoderID = 40;
   public static final String canBus = "rio";
 
   public static final double rotorToSensorRatio = 335.63;
