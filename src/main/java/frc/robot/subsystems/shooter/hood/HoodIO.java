@@ -8,9 +8,7 @@ public interface HoodIO {
   @AutoLog
   class HoodIOInputs {
     public double positionRad = 0.0;
-    public double velocityRadPerSec = 0.0;
     public double voltage = 0.0;
-    public double tempCelsius = 0.0;
   }
 
   public void updateInputs(HoodIOInputs inputs);

@@ -2,8 +2,6 @@ package frc.robot.subsystems.raspberry;
 
 public final class PneumaticsConstants {
 
-  private PneumaticsConstants() {}
-
   public static final int pneumaticHubId = 9;
 
   public static final int intakeForward = 0;

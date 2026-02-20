@@ -7,7 +7,7 @@ public final class IndexerConstants {
   public static final int indexerMotorID = 16;
   public static final String canBus = "";
 
-  public static final int transportMotorID = 18; // replace with motor CAN ID
+  public static final int transportMotorID = 18;
   public static final double currentLimit = 40.0;
   public static final double indexerMotorShootVoltage = 8.0;
 

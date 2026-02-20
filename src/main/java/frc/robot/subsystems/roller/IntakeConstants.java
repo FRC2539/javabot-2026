@@ -4,13 +4,9 @@ import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 
 public class IntakeConstants {
 
-  // #region Motors
-
-  public static final int rollerMotorId = 15; // TODO: Correct id
-  public static final String rollerMotorCanBus = "rio"; // TODO: Correct CANbus
+  public static final int rollerMotorId = 15;
+  public static final String rollerMotorCanBus = "CANivore";
   public static final CurrentLimitsConfigs rollerCurrentLimit = new CurrentLimitsConfigs();
 
-  // #region Constants
-
-  public static final double intakeVoltage = 10; // TODO: Correct #
+  public static final double intakeVoltage = 6;
 }

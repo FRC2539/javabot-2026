@@ -14,12 +14,12 @@ public class HoodIOTalonFX implements HoodIO {
 
   private final TalonFX motor = new TalonFX(HoodConstants.kMotorId, HoodConstants.kCanBus);
 
-  private double targetAngleRad = HoodConstants.kMinAngleRad;
+  private Rotation2d targetAngle = HoodConstants.minHoodAngle;
 
-  private final MotionMagicVoltage motorRequest = new MotionMagicVoltage(0);
+  private final MotionMagicVoltage motorRequest =
+      new MotionMagicVoltage(targetAngle.getRotations());
 
   public HoodIOTalonFX() {
-
     CANcoderConfiguration encoderConfig = new CANcoderConfiguration();
     hoodEncoder.getConfigurator().apply(encoderConfig);
 
@@ -29,31 +29,23 @@ public class HoodIOTalonFX implements HoodIO {
 
   @Override
   public void updateInputs(HoodIOInputs inputs) {
-
     inputs.positionRad = Units.rotationsToRadians(motor.getPosition().getValueAsDouble());
-
-    inputs.velocityRadPerSec = Units.rotationsToRadians(motor.getVelocity().getValueAsDouble());
-
     inputs.voltage = motor.getMotorVoltage().getValueAsDouble();
-
-    inputs.tempCelsius = motor.getDeviceTemp().getValueAsDouble();
   }
 
   @Override
-  public void setTargetAngle(Rotation2d targetAngle) {
+  public void setTargetAngle(Rotation2d desiredTargetAngle) {
+    targetAngle = desiredTargetAngle;
 
-    targetAngleRad = targetAngle.getRadians();
-
-    motor.setControl(motorRequest.withPosition(targetAngle.getRadians()));
+    motor.setControl(motorRequest.withPosition(targetAngle.getRotations()));
   }
 
   @Override
   public boolean isAtSetpoint() {
+    double currentAngleRot = motor.getPosition().getValueAsDouble(); // rotations
 
-    double currentAngleRad = Units.rotationsToRadians(motor.getPosition().getValueAsDouble());
+    double error = Math.abs(currentAngleRot - targetAngle.getRotations());
 
-    double error = Math.abs(currentAngleRad - targetAngleRad);
-
-    return error < HoodConstants.angleDeadband;
+    return error < HoodConstants.angleDeadband.getRotations();
   }
 }

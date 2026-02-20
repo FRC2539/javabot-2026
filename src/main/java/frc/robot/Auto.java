@@ -15,6 +15,7 @@ import frc.robot.commands.ShooterCommands;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 import frc.robot.subsystems.drive.DriveConstants;
 import frc.robot.subsystems.raspberry.PneumaticsSubsystem.PneumaticPosition;
+import frc.robot.subsystems.roller.IntakeConstants;
 import java.util.Optional;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -66,10 +67,10 @@ public class Auto {
 
   public void setUpNamedCommands() {
     NamedCommands.registerCommand(
-        "roller-spinIN", robotContainer.roller.runPositiveVoltage(10.0)); // .withTimeout(1.5)
+        "roller-intake", robotContainer.roller.runPositiveVoltage(IntakeConstants.intakeVoltage));
 
     NamedCommands.registerCommand(
-        "roller-spinOUT", robotContainer.roller.runNegativeVoltage(10.0)); // .withTimeout(1.5)
+        "roller-extake", robotContainer.roller.runNegativeVoltage(IntakeConstants.intakeVoltage));
 
     NamedCommands.registerCommand("roller-stop", robotContainer.roller.runPositiveVoltage(0));
 
@@ -109,16 +110,15 @@ public class Auto {
             robotContainer.pneumatics.setRaspberry2Position(PneumaticPosition.FORWARD),
             Commands.waitSeconds(0.1),
             robotContainer.pneumatics.setIntakePosition(PneumaticPosition.FORWARD),
-            robotContainer.roller.runPositiveVoltage(10.0)));
+            robotContainer.roller.runPositiveVoltage(IntakeConstants.intakeVoltage)));
 
     NamedCommands.registerCommand(
         "hold-to-shoot",
         ShooterCommands.holdToShoot(
-                robotContainer.flywheel,
-                robotContainer.hood,
-                robotContainer.indexer,
-                robotContainer.targeting)
-            .withTimeout(5.0));
+            robotContainer.flywheel,
+            robotContainer.hood,
+            robotContainer.indexer,
+            robotContainer.targeting));
   }
 
   public Command getAutoCommand() {
