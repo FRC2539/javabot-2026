@@ -18,13 +18,13 @@ public final class TurretConstants {
   // Limits
   public static final Rotation2d minAngle = Rotation2d.fromDegrees(-180);
   public static final Rotation2d maxAngle = Rotation2d.fromDegrees(180);
-  public static final Rotation2d realZeroOffset = Rotation2d.fromDegrees(5); // The angle offset from "ideal" 0 (facing the intake) to the actual middle value of the turret's range.
+  public static final Rotation2d realZeroOffset = Rotation2d.fromDegrees(30); // The angle offset from "ideal" 0 (facing the intake) to the actual middle value of the turret's range.
 
   // Motion Magic
   public static final double maxVelRadPerSec = 8.0;
   public static final double maxAccelRadPerSec2 = 30.0;
 
-  public static final double setpointToleranceRot = Units.degreesToRotations(1.5);
+  public static final Rotation2d setpointTolerance = Rotation2d.fromDegrees(1.5);
 
   public static final Translation2d turretOffset = new Translation2d(-0.127, 0.0);
 
@@ -33,13 +33,16 @@ public final class TurretConstants {
   public static final FeedbackConfigs feedbackConfig =
       new FeedbackConfigs()
           .withFeedbackSensorSource(FeedbackSensorSourceValue.RemoteCANcoder)
-          .withFeedbackRemoteSensorID(turretEncoderID);
+          .withFeedbackRemoteSensorID(turretEncoderID)
+          .withRotorToSensorRatio(0)
+          .withSensorToMechanismRatio(0);
 
   public static final MotionMagicConfigs motionMagicConfig =
       new MotionMagicConfigs()
           .withMotionMagicAcceleration(0)
           .withMotionMagicCruiseVelocity(0)
           .withMotionMagicJerk(0);
+          
 
   public static final TalonFXConfiguration turretMotorConfig =
       new TalonFXConfiguration().withFeedback(feedbackConfig).withMotionMagic(motionMagicConfig);
