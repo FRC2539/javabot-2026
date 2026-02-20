@@ -4,6 +4,7 @@ import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 
@@ -15,8 +16,9 @@ public final class TurretConstants {
   public static final String canBus = "rio";
 
   // Limits
-  public static final double minAngleRot = Units.degreesToRotations(-180);
-  public static final double maxAngleRot = Units.degreesToRotations(180);
+  public static final Rotation2d minAngle = Rotation2d.fromDegrees(-180);
+  public static final Rotation2d maxAngle = Rotation2d.fromDegrees(180);
+  public static final Rotation2d realZeroOffset = Rotation2d.fromDegrees(5); // The angle offset from "ideal" 0 (facing the intake) to the actual middle value of the turret's range.
 
   // Motion Magic
   public static final double maxVelRadPerSec = 8.0;
