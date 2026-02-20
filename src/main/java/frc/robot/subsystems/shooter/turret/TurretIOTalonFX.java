@@ -15,7 +15,8 @@ public class TurretIOTalonFX implements TurretIO {
   private final TalonFX motor = new TalonFX(TurretConstants.turretMotorId, TurretConstants.canBus);
 
   private Rotation2d targetAngle = Rotation2d.kZero;
-  private final MotionMagicVoltage controlRequest = new MotionMagicVoltage(targetAngle.getRotations());
+  private final MotionMagicVoltage controlRequest =
+      new MotionMagicVoltage(targetAngle.getRotations());
 
   public TurretIOTalonFX() {
     CANcoderConfiguration encoderConfig = new CANcoderConfiguration();
