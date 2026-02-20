@@ -62,10 +62,90 @@ public class Auto {
         drivetrain);
   }
 
-  public void setUpNamedCommands() {
+public void setUpNamedCommands() {
 
-    NamedCommands.registerCommand("No", Commands.none());
-  }
+  NamedCommands.registerCommand(
+      "roller-intake",
+      robotContainer.roller.runPositiveVoltage(10.0)); //.withTimeout(1.5)
+
+  NamedCommands.registerCommand(
+      "roller-extake",
+      robotContainer.roller.runNegativeVoltage(10.0)); //.withTimeout(1.5)
+
+  NamedCommands.registerCommand(
+      "roller-stop",
+      robotContainer.roller.runPositiveVoltage(0));
+
+  NamedCommands.registerCommand(
+      "intake-deploy",
+      robotContainer.pneumatics
+          .setIntakePosition(
+              frc.robot.subsystems.raspberry.PneumaticsSubsystem.IntakePosition.DEPLOYED));
+
+  NamedCommands.registerCommand(
+      "intake-retract",
+      robotContainer.pneumatics
+          .setIntakePosition(
+              frc.robot.subsystems.raspberry.PneumaticsSubsystem.IntakePosition.RETRACTED));
+
+  NamedCommands.registerCommand(
+      "raspberry-expand",
+      robotContainer.pneumatics
+          .setRaspberryPosition(
+              frc.robot.subsystems.raspberry.PneumaticsSubsystem.raspberryPosition.EXPANDED));
+
+  NamedCommands.registerCommand(
+      "raspberry-retract",
+      robotContainer.pneumatics
+          .setRaspberryPosition(
+              frc.robot.subsystems.raspberry.PneumaticsSubsystem.raspberryPosition.RETRACTED));
+
+  NamedCommands.registerCommand(
+      "raspberry2-expand",
+      robotContainer.pneumatics
+          .setRaspberry2Position(
+              frc.robot.subsystems.raspberry.PneumaticsSubsystem.raspberry2Position.EXPANDED));
+
+  NamedCommands.registerCommand(
+      "raspberry2-retract",
+      robotContainer.pneumatics
+          .setRaspberry2Position(
+              frc.robot.subsystems.raspberry.PneumaticsSubsystem.raspberry2Position.RETRACTED));
+
+  NamedCommands.registerCommand(
+    "climber-cycle",
+    Commands.sequence(
+        robotContainer.climber
+            .setVoltage(
+                frc.robot.subsystems.climber.ClimberConstants.climberUpVoltage)
+            .withTimeout(2.0),
+
+        robotContainer.climber
+            .setVoltage(
+                frc.robot.subsystems.climber.ClimberConstants.climberDownVoltage)
+            .withTimeout(2.0)
+    ));
+
+  NamedCommands.registerCommand(
+    "climber-up",
+    Commands.sequence(
+        robotContainer.climber
+            .setVoltage(
+                frc.robot.subsystems.climber.ClimberConstants.climberUpVoltage)
+            .withTimeout(2.0)
+    ));
+
+  NamedCommands.registerCommand(
+    "climber-down",
+    Commands.sequence(
+        robotContainer.climber
+            .setVoltage(
+                frc.robot.subsystems.climber.ClimberConstants.climberDownVoltage)
+            .withTimeout(2.0)
+    ));
+
+
+}
 
   public Command getAutoCommand() {
     return autoChooser.get();

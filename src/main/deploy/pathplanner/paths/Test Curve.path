@@ -3,35 +3,47 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.62036379769299,
-        "y": 2.968651286601597
+        "x": 1.4809489916963232,
+        "y": 7.052953736654803
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.459405501328833,
-        "y": 2.7111180124234613
+        "x": 3.0384223013048657,
+        "y": 7.127425860023725
       },
       "isLocked": false,
-      "linkedName": "RScore"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 0.41523513753327346,
-        "y": 0.6669476486246664
+        "x": 2.922680901542112,
+        "y": 5.417556346381969
       },
       "prevControl": {
-        "x": 1.9765306122448978,
-        "y": 0.46574977817213736
+        "x": 2.922680901542112,
+        "y": 7.10015797217577
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Chute"
+      "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": -45.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "turn",
+      "waypointRelativePos": 0.5,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 4.8,
     "maxAcceleration": 12.8,
@@ -42,13 +54,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -90.9877603996398
   },
   "reversed": false,
-  "folder": "initial path folder",
+  "folder": "Test Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -108.9542316995112
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }

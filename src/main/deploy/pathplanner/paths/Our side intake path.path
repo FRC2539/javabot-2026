@@ -1,0 +1,73 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.1884230769230784,
+        "y": 6.3490128205128205
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 0.43258974358974533,
+        "y": 5.6978333333333335
+      },
+      "isLocked": false,
+      "linkedName": "OurSideBallSweep"
+    },
+    {
+      "anchor": {
+        "x": 2.7582307692307704,
+        "y": 3.988487179487179
+      },
+      "prevControl": {
+        "x": 1.3394361477288388,
+        "y": 4.6746342643000425
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "ShootingMiddle"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.3140350877192981,
+      "rotationDegrees": 180.0
+    }
+  ],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0,
+      "maxWaypointRelativePos": 0.7,
+      "constraints": {
+        "maxVelocity": 1.0,
+        "maxAcceleration": 12.8,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 4.8,
+    "maxAcceleration": 12.8,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 1.005086005254175
+  },
+  "reversed": false,
+  "folder": "Our Zone",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -166.61651958510612
+  },
+  "useDefaultConstraints": true
+}
