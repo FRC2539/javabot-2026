@@ -26,8 +26,6 @@ import frc.robot.subsystems.shooter.turret.TurretIOTalonFX;
 import frc.robot.subsystems.shooter.turret.TurretSubsystem;
 import frc.robot.subsystems.transporter.TransportIOTalonFX;
 import frc.robot.subsystems.transporter.TransportSubsystem;
-import frc.robot.subsystems.vision.VisionIOLimelight;
-import frc.robot.subsystems.vision.VisionSubsystem;
 
 public class RobotContainer {
 
@@ -67,7 +65,7 @@ public class RobotContainer {
 
   // public final PneumaticsSubsystem pneumatics = new PneumaticsSubsystem(new PneumaticsIORevPH());
 
-  //public final Auto auto;
+  // public final Auto auto;
 
   // public final VisionSubsystem vision =
   //     new VisionSubsystem(
@@ -81,7 +79,7 @@ public class RobotContainer {
 
     configureBindings();
 
-    //auto = new Auto(this);
+    // auto = new Auto(this);
 
     drivetrain.setDefaultCommand(
         drivetrain.applyRequest(
@@ -160,7 +158,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    //return auto.getAutoCommand();
+    // return auto.getAutoCommand();
 
     return Commands.none();
   }

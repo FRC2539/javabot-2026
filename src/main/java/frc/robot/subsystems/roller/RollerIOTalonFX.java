@@ -1,18 +1,20 @@
 package frc.robot.subsystems.roller;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.TalonFXSConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.hardware.TalonFXS;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 public class RollerIOTalonFX implements RollerIO {
   // #region Motor
-  private final TalonFX rollerMotor =
-      new TalonFX(IntakeConstants.rollerMotorId, IntakeConstants.rollerMotorCanBus);
+  private final TalonFXS rollerMotor =
+      new TalonFXS(IntakeConstants.rollerMotorId, IntakeConstants.rollerMotorCanBus);
 
   public RollerIOTalonFX() {
 
-    TalonFXConfiguration rollerConfig =
-        new TalonFXConfiguration().withCurrentLimits(IntakeConstants.rollerCurrentLimit);
+    TalonFXSConfiguration rollerConfig =
+        new TalonFXSConfiguration().withCurrentLimits(IntakeConstants.rollerCurrentLimit);
 
     rollerMotor.getConfigurator().apply(rollerConfig);
     rollerMotor.setNeutralMode(NeutralModeValue.Brake);
