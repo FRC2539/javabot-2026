@@ -10,16 +10,11 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.lib.controller.LogitechController;
 import frc.robot.lib.controller.ThrustmasterJoystick;
-import frc.robot.subsystems.climber.ClimberConstants;
-import frc.robot.subsystems.climber.ClimberIOTalonFX;
-import frc.robot.subsystems.climber.ClimberSubsystem;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 import frc.robot.subsystems.drive.DriveConstants;
 import frc.robot.subsystems.drive.TunerConstants;
 import frc.robot.subsystems.indexer.IndexerIOTalonFX;
 import frc.robot.subsystems.indexer.IndexerSubsystem;
-import frc.robot.subsystems.raspberry.PneumaticsIORevPH;
-import frc.robot.subsystems.raspberry.PneumaticsSubsystem;
 import frc.robot.subsystems.roller.RollerIOTalonFX;
 import frc.robot.subsystems.roller.RollerSubsystem;
 import frc.robot.subsystems.shooter.flywheel.FlywheelIOTalonFX;
@@ -55,7 +50,7 @@ public class RobotContainer {
 
   public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
-  public final ClimberSubsystem climber = new ClimberSubsystem(new ClimberIOTalonFX());
+  // public final ClimberSubsystem climber = new ClimberSubsystem(new ClimberIOTalonFX());
 
   public final RollerSubsystem roller = new RollerSubsystem(new RollerIOTalonFX());
 
@@ -69,7 +64,7 @@ public class RobotContainer {
 
   public final TurretSubsystem turret = new TurretSubsystem(new TurretIOTalonFX());
 
-  public final PneumaticsSubsystem pneumatics = new PneumaticsSubsystem(new PneumaticsIORevPH());
+  // public final PneumaticsSubsystem pneumatics = new PneumaticsSubsystem(new PneumaticsIORevPH());
 
   public final Auto auto;
 
@@ -101,34 +96,34 @@ public class RobotContainer {
 
   private void configureBindings() {
 
-    operatorController
-        .getLeftTrigger()
-        .whileTrue(climber.setVoltage(ClimberConstants.climberUpVoltage));
-    operatorController
-        .getRightTrigger()
-        .whileTrue(climber.setVoltage(ClimberConstants.climberDownVoltage));
+    // operatorController
+    //     .getLeftTrigger()
+    //     .whileTrue(climber.setVoltage(ClimberConstants.climberUpVoltage));
+    // operatorController
+    //     .getRightTrigger()
+    //     .whileTrue(climber.setVoltage(ClimberConstants.climberDownVoltage));
 
-    rightDriveController.getLeftThumb().onTrue(pneumatics.toggleIntake());
-    // operatorController.getDPadUp().onTrue(pneumatics.toggleRaspberry()); // v (its a secret)
-    operatorController.getDPadLeft().onTrue(pneumatics.toggleRaspberry2());
+    // rightDriveController.getLeftThumb().onTrue(pneumatics.toggleIntake());
+    // // operatorController.getDPadUp().onTrue(pneumatics.toggleRaspberry()); // v (its a secret)
+    // operatorController.getDPadLeft().onTrue(pneumatics.toggleRaspberry2());
 
     rightDriveController.getTrigger().whileTrue(roller.runPositiveVoltage(10.0));
     operatorController.getA().whileTrue(roller.runNegativeVoltage(10.0));
 
     // simple commands for the first deploy
 
-    operatorController
-        .getLeftTrigger()
-        .whileTrue(climber.setVoltage(ClimberConstants.climberUpTestVoltage));
+    // operatorController
+    //     .getLeftTrigger()
+    //     .whileTrue(climber.setVoltage(ClimberConstants.climberUpTestVoltage));
 
-    operatorController
-        .getRightTrigger()
-        .whileTrue(climber.setVoltage(ClimberConstants.climberDownTestVoltage));
+    // operatorController
+    //     .getRightTrigger()
+    //     .whileTrue(climber.setVoltage(ClimberConstants.climberDownTestVoltage));
 
-    operatorController.getDPadUp().onTrue(pneumatics.toggleIntake());
+    // operatorController.getDPadUp().onTrue(pneumatics.toggleIntake());
 
-    // operatorController.getDPadDownRight().onTrue(pneumatics.toggleRaspberry());
-    operatorController.getDPadLeft().onTrue(pneumatics.toggleRaspberry2());
+    // // operatorController.getDPadDownRight().onTrue(pneumatics.toggleRaspberry());
+    // operatorController.getDPadLeft().onTrue(pneumatics.toggleRaspberry2());
 
     operatorController.getLeftBumper().whileTrue(roller.runPositiveVoltage(3.0));
     operatorController.getRightBumper().whileTrue(roller.runNegativeVoltage(3.0));

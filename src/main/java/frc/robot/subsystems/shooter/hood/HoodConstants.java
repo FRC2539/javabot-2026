@@ -6,7 +6,7 @@ import edu.wpi.first.math.util.Units;
 public final class HoodConstants {
 
   // CAN
-  public static final int kMotorId = 31;
+  public static final int kMotorId = 11;
   public static final String kCanBus = "rio";
   public static final double kGearRatio = 120.0;
 

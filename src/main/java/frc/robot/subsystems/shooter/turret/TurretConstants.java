@@ -10,8 +10,8 @@ import edu.wpi.first.math.util.Units;
 public final class TurretConstants {
 
   // CAN
-  public static final int turretMotorId = 20;
-  public static final int turretEncoderID = 21;
+  public static final int turretMotorId = 17;
+  public static final int turretEncoderID = 40;
   public static final String canBus = "rio";
 
   // Limits
