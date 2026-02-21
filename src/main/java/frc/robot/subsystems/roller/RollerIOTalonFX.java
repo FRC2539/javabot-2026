@@ -1,9 +1,9 @@
 package frc.robot.subsystems.roller;
 
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXSConfiguration;
-import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.hardware.TalonFXS;
+import com.ctre.phoenix6.signals.MotorArrangementValue;
+
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 public class RollerIOTalonFX implements RollerIO {
@@ -15,7 +15,9 @@ public class RollerIOTalonFX implements RollerIO {
 
     TalonFXSConfiguration rollerConfig =
         new TalonFXSConfiguration().withCurrentLimits(IntakeConstants.rollerCurrentLimit);
+    
 
+    rollerConfig.Commutation.MotorArrangement = MotorArrangementValue.Minion_JST;
     rollerMotor.getConfigurator().apply(rollerConfig);
     rollerMotor.setNeutralMode(NeutralModeValue.Brake);
   }
