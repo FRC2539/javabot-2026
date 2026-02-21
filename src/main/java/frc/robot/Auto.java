@@ -67,12 +67,12 @@ public class Auto {
 
   public void setUpNamedCommands() {
     NamedCommands.registerCommand(
-        "roller-intake", robotContainer.roller.runPositiveVoltage(IntakeConstants.intakeVoltage));
+        "roller-intake", robotContainer.roller.setVoltage(IntakeConstants.intakeVoltage));
 
     NamedCommands.registerCommand(
-        "roller-extake", robotContainer.roller.runNegativeVoltage(IntakeConstants.intakeVoltage));
+        "roller-extake", robotContainer.roller.setVoltage(-IntakeConstants.intakeVoltage));
 
-    NamedCommands.registerCommand("roller-stop", robotContainer.roller.runPositiveVoltage(0));
+    NamedCommands.registerCommand("roller-stop", robotContainer.roller.setVoltage(0));
 
     NamedCommands.registerCommand(
         "intake-deploy", robotContainer.pneumatics.setIntakePosition(PneumaticPosition.FORWARD));
@@ -110,7 +110,7 @@ public class Auto {
             robotContainer.pneumatics.setRaspberry2Position(PneumaticPosition.FORWARD),
             Commands.waitSeconds(0.1),
             robotContainer.pneumatics.setIntakePosition(PneumaticPosition.FORWARD),
-            robotContainer.roller.runPositiveVoltage(IntakeConstants.intakeVoltage)));
+            robotContainer.roller.setVoltage(IntakeConstants.intakeVoltage)));
 
     NamedCommands.registerCommand(
         "hold-to-shoot",

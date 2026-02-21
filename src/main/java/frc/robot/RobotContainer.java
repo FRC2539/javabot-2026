@@ -21,7 +21,7 @@ import frc.robot.subsystems.indexer.IndexerIOTalonFX;
 import frc.robot.subsystems.indexer.IndexerSubsystem;
 import frc.robot.subsystems.raspberry.PneumaticsIORevPH;
 import frc.robot.subsystems.raspberry.PneumaticsSubsystem;
-import frc.robot.subsystems.roller.RollerIOTalonFX;
+import frc.robot.subsystems.roller.RollerIOTalonFXS;
 import frc.robot.subsystems.roller.RollerSubsystem;
 import frc.robot.subsystems.shooter.flywheel.FlywheelIOTalonFX;
 import frc.robot.subsystems.shooter.flywheel.FlywheelSubsystem;
@@ -57,7 +57,7 @@ public class RobotContainer {
 
   public final ClimberSubsystem climber = new ClimberSubsystem(new ClimberIOTalonFX());
 
-  public final RollerSubsystem roller = new RollerSubsystem(new RollerIOTalonFX());
+  public final RollerSubsystem roller = new RollerSubsystem(new RollerIOTalonFXS());
 
   public final IndexerSubsystem indexer = new IndexerSubsystem(new IndexerIOTalonFX());
 
@@ -114,9 +114,9 @@ public class RobotContainer {
     // operatorController.getDPadUp().onTrue(pneumatics.toggleRaspberry()); // v (its a secret)
     operatorController.getDPadLeft().onTrue(pneumatics.toggleRaspberry2());
 
-    rightDriveController.getTrigger().whileTrue(roller.runPositiveVoltage(10.0));
+    rightDriveController.getTrigger().whileTrue(roller.setVoltage(10.0));
 
-    operatorController.getRightBumper().whileTrue(roller.runNegativeVoltage(10.0));
+    operatorController.getRightBumper().whileTrue(roller.setVoltage(-10.0));
 
     operatorController.getStart().whileTrue(indexer.indexReverse());
 

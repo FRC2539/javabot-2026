@@ -4,6 +4,7 @@ import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.hardware.TalonFXS;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
@@ -12,7 +13,7 @@ public class HoodIOTalonFX implements HoodIO {
 
   private final CANcoder hoodEncoder = new CANcoder(HoodConstants.hoodEncoderID);
 
-  private final TalonFX motor = new TalonFX(HoodConstants.kMotorId, HoodConstants.kCanBus);
+  private final TalonFXS motor = new TalonFXS(HoodConstants.kMotorId, HoodConstants.kCanBus);
 
   private Rotation2d targetAngle = HoodConstants.minHoodAngle;
 
@@ -47,5 +48,10 @@ public class HoodIOTalonFX implements HoodIO {
     double error = Math.abs(currentAngleRot - targetAngle.getRotations());
 
     return error < HoodConstants.angleDeadband.getRotations();
+  }
+
+  @Override
+  public void setHoodVoltage(double voltage) {
+    motor.setVoltage(voltage);
   }
 }
