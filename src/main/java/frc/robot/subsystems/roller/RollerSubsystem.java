@@ -13,7 +13,7 @@ public class RollerSubsystem extends SubsystemBase {
   public RollerSubsystem(RollerIO rollerIO) {
     this.rollerIO = rollerIO;
 
-    //setDefaultCommand(stopRoller());
+    setDefaultCommand(runPositiveVoltage(0));
   }
 
   @Override

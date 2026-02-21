@@ -7,7 +7,7 @@ public class IntakeConstants {
   // #region Motors
 
   public static final int rollerMotorId = 15;
-  public static final String rollerMotorCanBus = "rio"; // TODO: Correct CANbus
+  public static final String rollerMotorCanBus = "CANivore"; // TODO: Correct CANbus
   public static final CurrentLimitsConfigs rollerCurrentLimit = new CurrentLimitsConfigs();
 
   // #region Constants

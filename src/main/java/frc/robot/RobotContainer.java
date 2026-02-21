@@ -127,7 +127,7 @@ public class RobotContainer {
     operatorController.getLeftBumper().whileTrue(roller.runPositiveVoltage(3.0));
     operatorController.getRightBumper().whileTrue(roller.runNegativeVoltage(3.0));
 
-    operatorController.getY().whileTrue(indexer.setVoltage(3.0));
+    operatorController.getY().whileTrue(indexer.setVoltage(9));
     //operatorController.getA().whileTrue(indexer.setVoltage(-3.0));
 
     operatorController.getX().whileTrue(transporter.setTransportVoltageCommand(3.0));

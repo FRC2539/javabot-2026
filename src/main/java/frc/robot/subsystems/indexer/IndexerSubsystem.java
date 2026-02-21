@@ -15,7 +15,7 @@ public class IndexerSubsystem extends SubsystemBase {
 
   public IndexerSubsystem(IndexerIO io) {
     this.io = io;
-    setDefaultCommand(stop());
+    setDefaultCommand(setVoltage(9));
   }
 
   @Override
@@ -23,11 +23,11 @@ public class IndexerSubsystem extends SubsystemBase {
     io.updateInputs(inputs);
     Logger.processInputs("Indexer", inputs);
 
-    switch (goal) {
-      case SHOOT -> io.setVoltage(IndexerConstants.shootVolts.get());
-      case REVERSE -> io.setVoltage(IndexerConstants.reverseVolts.get());
-      case STOP -> io.setVoltage(IndexerConstants.stopVolts.get());
-    }
+    // switch (goal) {
+    //   case SHOOT -> io.setVoltage(IndexerConstants.shootVolts.get());
+    //   case REVERSE -> io.setVoltage(IndexerConstants.reverseVolts.get());
+    //   case STOP -> io.setVoltage(IndexerConstants.stopVolts.get());
+    // }
   }
 
   public Command stop() {
