@@ -13,6 +13,8 @@ public class HoodSubsystem extends SubsystemBase {
 
   public HoodSubsystem(HoodIO io) {
     this.io = io;
+
+    setDefaultCommand(setVoltage(0));
   }
 
   @Override
