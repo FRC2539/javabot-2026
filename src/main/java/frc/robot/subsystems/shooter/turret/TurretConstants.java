@@ -9,9 +9,10 @@ import edu.wpi.first.math.geometry.Translation2d;
 
 public final class TurretConstants {
 
-  // CAN
-  public static final int turretMotorId = 20;
-  public static final int turretEncoderID = 21;
+  private TurretConstants() {}
+
+  public static final int turretMotorId = 17;
+  public static final int turretEncoderID = 40;
   public static final String canBus = "rio";
 
   // Limits
@@ -22,15 +23,15 @@ public final class TurretConstants {
           30); // The angle offset from "ideal" 0 (facing the intake) to the actual middle value of
   // the turret's range.
 
-  // Motion Magic
-  public static final double maxVelRadPerSec = 8.0;
-  public static final double maxAccelRadPerSec2 = 30.0;
+  public static final double maxAngleRot = Units.degreesToRotations(180);
 
   public static final Rotation2d setpointTolerance = Rotation2d.fromDegrees(1.5);
 
-  public static final Translation2d turretOffset = new Translation2d(-0.127, 0.0);
+  public static final double maxVelRotPerSec = Units.radiansToRotations(8.0);
 
-  // Motor Configs
+  public static final double maxAccelRotPerSec2 = Units.radiansToRotations(30.0);
+
+  public static final Translation2d turretOffset = new Translation2d(-0.127, 0.0);
 
   public static final FeedbackConfigs feedbackConfig =
       new FeedbackConfigs()
@@ -41,8 +42,8 @@ public final class TurretConstants {
 
   public static final MotionMagicConfigs motionMagicConfig =
       new MotionMagicConfigs()
-          .withMotionMagicAcceleration(0)
-          .withMotionMagicCruiseVelocity(0)
+          .withMotionMagicCruiseVelocity(maxVelRotPerSec)
+          .withMotionMagicAcceleration(maxAccelRotPerSec2)
           .withMotionMagicJerk(0);
 
   public static final TalonFXConfiguration turretMotorConfig =
