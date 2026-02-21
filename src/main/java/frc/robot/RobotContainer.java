@@ -8,6 +8,7 @@ import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.lib.controller.LogitechController;
 import frc.robot.lib.controller.ThrustmasterJoystick;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
@@ -66,21 +67,21 @@ public class RobotContainer {
 
   // public final PneumaticsSubsystem pneumatics = new PneumaticsSubsystem(new PneumaticsIORevPH());
 
-  public final Auto auto;
+  //public final Auto auto;
 
-  public final VisionSubsystem vision =
-      new VisionSubsystem(
-          drivetrain::filterAndAddMeasurements,
-          new VisionIOLimelight("limelight-turretright", drivetrain::getRotation),
-          new VisionIOLimelight("limelight-turretcenter", drivetrain::getRotation),
-          new VisionIOLimelight("limelight-turretback", drivetrain::getRotation),
-          new VisionIOLimelight("limelight-left", drivetrain::getRotation));
+  // public final VisionSubsystem vision =
+  //     new VisionSubsystem(
+  //         drivetrain::filterAndAddMeasurements,
+  //         new VisionIOLimelight("limelight-turretright", drivetrain::getRotation),
+  //         new VisionIOLimelight("limelight-turretcenter", drivetrain::getRotation),
+  //         new VisionIOLimelight("limelight-turretback", drivetrain::getRotation),
+  //         new VisionIOLimelight("limelight-left", drivetrain::getRotation));
 
   public RobotContainer() {
 
     configureBindings();
 
-    auto = new Auto(this);
+    //auto = new Auto(this);
 
     drivetrain.setDefaultCommand(
         drivetrain.applyRequest(
@@ -159,6 +160,8 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return auto.getAutoCommand();
+    //return auto.getAutoCommand();
+
+    return Commands.none();
   }
 }
