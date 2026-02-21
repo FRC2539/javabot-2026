@@ -34,7 +34,7 @@ public class TargetingSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     Pose2d robotPose = drivetrain.getRobotPose();
-    ChassisSpeeds fieldSpeeds = drivetrain.getFieldRelativeChassisSpeeds();
+    ChassisSpeeds fieldSpeeds = drivetrain.getFieldSpeeds();
 
     Translation2d target = isInAllianceZone(robotPose) ? hubPosition : getFerryingTarget(robotPose);
 

@@ -41,7 +41,7 @@ public class Auto {
     AutoBuilder.configure(
         drivetrain::getRobotPose,
         drivetrain::resetPose,
-        drivetrain::getChassisSpeeds,
+        drivetrain::getRobotSpeeds,
         (speeds, feedforwards) ->
             drivetrain.setControl(
                 autoApplySpeeds
