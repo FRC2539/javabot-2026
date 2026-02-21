@@ -130,13 +130,17 @@ public class RobotContainer {
     operatorController.getY().whileTrue(indexer.setVoltage(9));
     //operatorController.getA().whileTrue(indexer.setVoltage(-3.0));
 
-    operatorController.getX().whileTrue(transporter.setTransportVoltageCommand(-3));
-    operatorController.getB().whileTrue(transporter.setTransportVoltageCommand(3));
+    //operatorController.getX().whileTrue(transporter.setTransportVoltageCommand(-3));
+    //operatorController.getB().whileTrue(transporter.setTransportVoltageCommand(3));
 
     operatorController.getStart().whileTrue(hood.setVoltage(.5));
     operatorController.getBack().whileTrue(hood.setVoltage(-.5));
 
     operatorController.getDPadDown().whileTrue(hood.setVoltage(4.0));
+
+    operatorController.getX().whileTrue(Commands.parallel(transporter.setTransportVoltageCommand(-3), indexer.setVoltage(9)));
+
+    operatorController.getB().whileTrue(shooter.setVoltage(6));
   }
 
   private ChassisSpeeds getDriverChassisSpeeds() {
