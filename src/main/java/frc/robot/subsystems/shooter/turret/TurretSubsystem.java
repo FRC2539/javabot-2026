@@ -11,6 +11,7 @@ public class TurretSubsystem extends SubsystemBase {
 
   public TurretSubsystem(TurretIO io) {
     this.io = io;
+    setDefaultCommand(runVoltage(0));
   }
 
   @Override

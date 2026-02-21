@@ -1,22 +1,27 @@
 package frc.robot.subsystems.shooter.hood;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.TalonFXSConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.hardware.TalonFXS;
+import com.ctre.phoenix6.signals.MotorArrangementValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 
 public class HoodIOTalonFX implements HoodIO {
 
-  private final TalonFX motor = new TalonFX(HoodConstants.kMotorId, HoodConstants.kCanBus);
+  private final TalonFXS motor = new TalonFXS(HoodConstants.kMotorId, HoodConstants.kCanBus);
 
   public double targetAngle = 0; // radians
 
   private final MotionMagicVoltage motorRequest = new MotionMagicVoltage(targetAngle);
 
   public HoodIOTalonFX() {
-    TalonFXConfiguration config = new TalonFXConfiguration();
+    TalonFXSConfiguration config = new TalonFXSConfiguration();
+
+    config.Commutation.MotorArrangement = MotorArrangementValue.Minion_JST;
     motor.getConfigurator().apply(config);
 
     motor.setNeutralMode(NeutralModeValue.Brake);

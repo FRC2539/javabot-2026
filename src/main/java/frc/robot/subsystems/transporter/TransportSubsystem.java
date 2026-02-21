@@ -8,8 +8,8 @@ import org.littletonrobotics.junction.Logger;
 
 public class TransportSubsystem extends SubsystemBase {
 
-  private static final LoggedTunableNumber setTransportVoltage =
-      new LoggedTunableNumber("/transport/TransportVoltage", 12.0);
+  // private static final LoggedTunableNumber setTransportVoltage =
+  //     new LoggedTunableNumber("/transport/TransportVoltage", 12.0);
 
   private final TransportIO transportIO;
   private final TransportIO.TransportIOInputs transportInputs = new TransportIO.TransportIOInputs();

@@ -14,6 +14,7 @@ public class FlywheelIOTalonFX implements FlywheelIO {
       new TalonFX(ShooterConstants.leftShooterMotorID, ShooterConstants.shooterCanBus);
   private TalonFX rightMotor =
       new TalonFX(ShooterConstants.rightShooterMotorID, ShooterConstants.shooterCanBus);
+      
   private MotionMagicVelocityVoltage controlRequest = new MotionMagicVelocityVoltage(targetRPS);
   private Follower motorFollowerRequest =
       new Follower(leftMotor.getDeviceID(), MotorAlignmentValue.Opposed);

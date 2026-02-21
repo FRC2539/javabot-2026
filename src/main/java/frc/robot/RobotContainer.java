@@ -130,11 +130,12 @@ public class RobotContainer {
     operatorController.getY().whileTrue(indexer.setVoltage(9));
     //operatorController.getA().whileTrue(indexer.setVoltage(-3.0));
 
-    operatorController.getX().whileTrue(transporter.setTransportVoltageCommand(3.0));
-    operatorController.getB().whileTrue(transporter.setTransportVoltageCommand(-3.0));
+    operatorController.getX().whileTrue(transporter.setTransportVoltageCommand(-3));
+    operatorController.getB().whileTrue(transporter.setTransportVoltageCommand(3));
 
-    operatorController.getStart().whileTrue(shooter.setVoltage(4.0));
-    operatorController.getBack().whileTrue(turret.runVoltage(4.0));
+    operatorController.getStart().whileTrue(hood.setVoltage(.5));
+    operatorController.getBack().whileTrue(hood.setVoltage(-.5));
+
     operatorController.getDPadDown().whileTrue(hood.setVoltage(4.0));
   }
 

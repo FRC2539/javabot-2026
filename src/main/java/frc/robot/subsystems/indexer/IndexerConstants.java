@@ -4,7 +4,7 @@ import frc.robot.util.LoggedTunableNumber;
 
 public final class IndexerConstants {
 
-  public static final int kMotorId = 40;
+  public static final int kMotorId = 16;
   public static final String kCanBus = "";
 
   public static final LoggedTunableNumber shootVolts =
