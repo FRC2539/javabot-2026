@@ -16,7 +16,7 @@ import frc.robot.subsystems.drive.DriveConstants;
 import frc.robot.subsystems.drive.TunerConstants;
 import frc.robot.subsystems.indexer.IndexerIOTalonFX;
 import frc.robot.subsystems.indexer.IndexerSubsystem;
-import frc.robot.subsystems.roller.RollerIOTalonFX;
+import frc.robot.subsystems.roller.RollerIOTalonFXS;
 import frc.robot.subsystems.roller.RollerSubsystem;
 import frc.robot.subsystems.shooter.flywheel.FlywheelIOTalonFX;
 import frc.robot.subsystems.shooter.flywheel.FlywheelSubsystem;
@@ -51,7 +51,7 @@ public class RobotContainer {
 
   // public final ClimberSubsystem climber = new ClimberSubsystem(new ClimberIOTalonFX());
 
-  public final RollerSubsystem roller = new RollerSubsystem(new RollerIOTalonFX());
+  public final RollerSubsystem roller = new RollerSubsystem(new RollerIOTalonFXS());
 
   public final IndexerSubsystem indexer = new IndexerSubsystem(new IndexerIOTalonFX());
 

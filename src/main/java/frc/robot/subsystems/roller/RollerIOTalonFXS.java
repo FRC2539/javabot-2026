@@ -6,12 +6,12 @@ import com.ctre.phoenix6.signals.MotorArrangementValue;
 
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-public class RollerIOTalonFX implements RollerIO {
+public class RollerIOTalonFXS implements RollerIO {
   // #region Motor
   private final TalonFXS rollerMotor =
       new TalonFXS(IntakeConstants.rollerMotorId, IntakeConstants.rollerMotorCanBus);
 
-  public RollerIOTalonFX() {
+  public RollerIOTalonFXS() {
 
     TalonFXSConfiguration rollerConfig =
         new TalonFXSConfiguration().withCurrentLimits(IntakeConstants.rollerCurrentLimit);
