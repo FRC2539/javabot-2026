@@ -21,6 +21,9 @@ public class PneumaticsIORevPH implements PneumaticsIO {
           PneumaticsConstants.raspberry2Forward,
           PneumaticsConstants.raspberry2Reverse);
 
+  public PneumaticsIORevPH() {
+    pneumaticHub.enableCompressorAnalog(PneumaticsConstants.minPressure, PneumaticsConstants.maxPressure);
+  }
   @Override
   public void updateInputs(PneumaticsIOInputs inputs) {
     inputs.intakeState = intakeSolenoid.get();
