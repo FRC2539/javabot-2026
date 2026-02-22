@@ -88,21 +88,21 @@ public class Auto {
         "raspberry2-retract",
         robotContainer.pneumatics.setRaspberry2Position(PneumaticPosition.REVERSE));
 
-    NamedCommands.registerCommand(
-        "climber-up",
-        Commands.sequence(
-            robotContainer
-                .climber
-                .setVoltage(frc.robot.subsystems.climber.ClimberConstants.climberUpVoltage)
-                .withTimeout(2.0)));
+    // NamedCommands.registerCommand(
+    //     "climber-up",
+    //     Commands.sequence(
+    //         robotContainer
+    //             .climber
+    //             .setVoltage(frc.robot.subsystems.climber.ClimberConstants.climberUpVoltage)
+    //             .withTimeout(2.0)));
 
-    NamedCommands.registerCommand(
-        "climber-down",
-        Commands.sequence(
-            robotContainer
-                .climber
-                .setVoltage(frc.robot.subsystems.climber.ClimberConstants.climberDownVoltage)
-                .withTimeout(2.0)));
+    // NamedCommands.registerCommand(
+    //     "climber-down",
+    //     Commands.sequence(
+    //         robotContainer
+    //             .climber
+    //             .setVoltage(frc.robot.subsystems.climber.ClimberConstants.climberDownVoltage)
+    //             .withTimeout(2.0)));
 
     NamedCommands.registerCommand(
         "intake",

@@ -8,8 +8,7 @@ public class IndexerIOTalonFX implements IndexerIO {
 
   private final TalonFX indexerMotor = new TalonFX(IndexerConstants.transportMotorID);
 
-  public IndexerIOTalonFX() {
-  }
+  public IndexerIOTalonFX() {}
 
   @Override
   public void updateInputs(IndexerIOInputs inputs) {

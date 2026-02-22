@@ -16,14 +16,14 @@ public class ShooterCommands {
       TargetingSubsystem targeting) {
 
     return Commands.sequence(
-            Commands.parallel(
-                flywheel.setShooterRPMCommand(targeting.getIdealFlywheelRPM()),
-                hood.setHoodAngle(targeting.getIdealHoodAngle())),
-            indexer.indexToShooter());
-        // .finallyDo(
-        //     interrupted -> {
-        //       indexer.stop();
-        //       flywheel.setShooterRPMCommand(0);
-        //     });
+        Commands.parallel(
+            flywheel.setShooterRPMCommand(targeting.getIdealFlywheelRPM()),
+            hood.setHoodAngle(targeting.getIdealHoodAngle())),
+        indexer.indexToShooter());
+    // .finallyDo(
+    //     interrupted -> {
+    //       indexer.stop();
+    //       flywheel.setShooterRPMCommand(0);
+    //     });
   }
 }

@@ -25,7 +25,7 @@ import frc.robot.subsystems.roller.RollerIOTalonFXS;
 import frc.robot.subsystems.roller.RollerSubsystem;
 import frc.robot.subsystems.shooter.flywheel.FlywheelIOTalonFX;
 import frc.robot.subsystems.shooter.flywheel.FlywheelSubsystem;
-import frc.robot.subsystems.shooter.hood.HoodIOTalonFX;
+import frc.robot.subsystems.shooter.hood.HoodIOTalonFXS;
 import frc.robot.subsystems.shooter.hood.HoodSubsystem;
 import frc.robot.subsystems.shooter.targeting.TargetingSubsystem;
 import frc.robot.subsystems.shooter.turret.TurretIOTalonFX;
@@ -55,7 +55,7 @@ public class RobotContainer {
 
   public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
-  public final ClimberSubsystem climber = new ClimberSubsystem(new ClimberIOTalonFX());
+  //public final ClimberSubsystem climber = new ClimberSubsystem(new ClimberIOTalonFX());
 
   public final RollerSubsystem roller = new RollerSubsystem(new RollerIOTalonFXS());
 
@@ -65,7 +65,7 @@ public class RobotContainer {
 
   public final TurretSubsystem turret = new TurretSubsystem(new TurretIOTalonFX());
 
-  public final HoodSubsystem hood = new HoodSubsystem(new HoodIOTalonFX());
+  public final HoodSubsystem hood = new HoodSubsystem(new HoodIOTalonFXS());
 
   public final FlywheelSubsystem flywheel = new FlywheelSubsystem(new FlywheelIOTalonFX());
 
@@ -73,13 +73,13 @@ public class RobotContainer {
 
   public final Auto auto;
 
-  public final VisionSubsystem vision =
-      new VisionSubsystem(
-          drivetrain::filterAndAddMeasurements,
-          new VisionIOLimelight("limelight-turretleft", drivetrain::getHeading),
-          new VisionIOLimelight("limelight-turretcenter", drivetrain::getHeading),
-          new VisionIOLimelight("limelight-turretright", drivetrain::getHeading),
-          new VisionIOLimelight("limelight-left", drivetrain::getHeading));
+  // public final VisionSubsystem vision =
+  //     new VisionSubsystem(
+  //         drivetrain::filterAndAddMeasurements,
+  //         new VisionIOLimelight("limelight-turretleft", drivetrain::getHeading),
+  //         new VisionIOLimelight("limelight-turretcenter", drivetrain::getHeading),
+  //         new VisionIOLimelight("limelight-turretright", drivetrain::getHeading),
+  //         new VisionIOLimelight("limelight-left", drivetrain::getHeading));
 
   public RobotContainer() {
 
@@ -103,12 +103,12 @@ public class RobotContainer {
 
   private void configureBindings() {
 
-    operatorController
-        .getLeftTrigger()
-        .whileTrue(climber.setVoltage(ClimberConstants.climberUpVoltage));
-    operatorController
-        .getRightTrigger()
-        .whileTrue(climber.setVoltage(ClimberConstants.climberDownVoltage));
+    // operatorController
+    //     .getLeftTrigger()
+    //     .whileTrue(climber.setVoltage(ClimberConstants.climberUpVoltage));
+    // operatorController
+    //     .getRightTrigger()
+    //     .whileTrue(climber.setVoltage(ClimberConstants.climberDownVoltage));
 
     rightDriveController.getLeftThumb().onTrue(pneumatics.toggleIntake());
     // operatorController.getDPadUp().onTrue(pneumatics.toggleRaspberry()); // v (its a secret)

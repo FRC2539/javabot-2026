@@ -3,13 +3,12 @@ package frc.robot.subsystems.shooter.hood;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
-import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.hardware.TalonFXS;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 
-public class HoodIOTalonFX implements HoodIO {
+public class HoodIOTalonFXS implements HoodIO {
 
   private final CANcoder hoodEncoder = new CANcoder(HoodConstants.hoodEncoderID);
 
@@ -20,7 +19,7 @@ public class HoodIOTalonFX implements HoodIO {
   private final MotionMagicVoltage motorRequest =
       new MotionMagicVoltage(targetAngle.getRotations());
 
-  public HoodIOTalonFX() {
+  public HoodIOTalonFXS() {
     CANcoderConfiguration encoderConfig = new CANcoderConfiguration();
     hoodEncoder.getConfigurator().apply(encoderConfig);
 

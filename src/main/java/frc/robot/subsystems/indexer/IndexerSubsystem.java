@@ -8,13 +8,12 @@ import org.littletonrobotics.junction.Logger;
 public class IndexerSubsystem extends SubsystemBase {
 
   private final IndexerIO io;
-  private final IndexerIOInputsAutoLogged inputs =
-      new IndexerIOInputsAutoLogged();
+  private final IndexerIOInputsAutoLogged inputs = new IndexerIOInputsAutoLogged();
 
   public IndexerSubsystem(IndexerIO io) {
     this.io = io;
 
-    setDefaultCommand(setVoltages(0,0));
+    setDefaultCommand(setVoltages(0, 0));
   }
 
   @Override
@@ -24,12 +23,11 @@ public class IndexerSubsystem extends SubsystemBase {
   }
 
   public Command setVoltages(double indexerVoltage, double transportVoltage) {
-    return Commands.run(
-        () -> io.setVoltages(indexerVoltage, transportVoltage),
-        this);
+    return Commands.run(() -> io.setVoltages(indexerVoltage, transportVoltage), this);
   }
 
   public Command indexToShooter() {
-    return setVoltages(IndexerConstants.indexerShootVoltage, IndexerConstants.transportShootVoltage);
+    return setVoltages(
+        IndexerConstants.indexerShootVoltage, IndexerConstants.transportShootVoltage);
   }
 }
