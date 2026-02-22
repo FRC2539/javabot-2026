@@ -118,9 +118,7 @@ public class RobotContainer {
 
     operatorController.getRightBumper().whileTrue(roller.setVoltage(-10.0));
 
-    operatorController.getStart().whileTrue(indexer.indexReverse());
-
-    operatorController.getBack().whileTrue(indexer.index());
+    operatorController.getStart().whileTrue(indexer.indexToShooter());
 
     operatorController
         .getA()

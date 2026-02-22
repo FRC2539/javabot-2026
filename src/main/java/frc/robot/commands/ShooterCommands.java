@@ -19,11 +19,11 @@ public class ShooterCommands {
             Commands.parallel(
                 flywheel.setShooterRPMCommand(targeting.getIdealFlywheelRPM()),
                 hood.setHoodAngle(targeting.getIdealHoodAngle())),
-            indexer.index())
-        .finallyDo(
-            interrupted -> {
-              indexer.stop();
-              flywheel.setShooterRPMCommand(0);
-            });
+            indexer.indexToShooter());
+        // .finallyDo(
+        //     interrupted -> {
+        //       indexer.stop();
+        //       flywheel.setShooterRPMCommand(0);
+        //     });
   }
 }
