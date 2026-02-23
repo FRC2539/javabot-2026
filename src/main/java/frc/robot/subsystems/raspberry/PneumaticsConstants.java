@@ -10,6 +10,6 @@ public final class PneumaticsConstants {
   public static final int raspberry2Forward = 11;
   public static final int raspberry2Reverse = 10;
 
-  public static final double minPressure = 70.0;
+  public static final double minPressure = 80;
   public static final double maxPressure = 120.0;
 }

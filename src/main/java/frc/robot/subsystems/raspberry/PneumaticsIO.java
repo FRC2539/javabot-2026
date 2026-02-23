@@ -13,8 +13,8 @@ public interface PneumaticsIO {
 
   @AutoLog
   class PneumaticsIOInputs {
-    public Value intakeState = Value.kOff;
-    public Value raspberry2 = Value.kOff;
+    public Value intakeState = Value.kReverse;
+    public Value raspberry2 = Value.kReverse;
     public double pressurePsi = 0.0;
   }
 }

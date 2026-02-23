@@ -26,4 +26,9 @@ public class ShooterCommands {
     //       flywheel.setShooterRPMCommand(0);
     //     });
   }
+
+  public static Command shootWheels(FlywheelSubsystem flywheel, IndexerSubsystem indexer) {
+
+    return Commands.sequence(flywheel.setShooterRPMCommand(8), indexer.indexToShooter());
+  }
 }

@@ -22,11 +22,6 @@ import frc.robot.subsystems.roller.RollerIOTalonFXS;
 import frc.robot.subsystems.roller.RollerSubsystem;
 import frc.robot.subsystems.shooter.flywheel.FlywheelIOTalonFX;
 import frc.robot.subsystems.shooter.flywheel.FlywheelSubsystem;
-import frc.robot.subsystems.shooter.hood.HoodIOTalonFXS;
-import frc.robot.subsystems.shooter.hood.HoodSubsystem;
-import frc.robot.subsystems.shooter.targeting.TargetingSubsystem;
-import frc.robot.subsystems.shooter.turret.TurretIOTalonFX;
-import frc.robot.subsystems.shooter.turret.TurretSubsystem;
 
 public class RobotContainer {
 
@@ -58,13 +53,13 @@ public class RobotContainer {
 
   public final PneumaticsSubsystem pneumatics = new PneumaticsSubsystem(new PneumaticsIORevPH());
 
-  public final TurretSubsystem turret = new TurretSubsystem(new TurretIOTalonFX());
+  // public final TurretSubsystem turret = new TurretSubsystem(new TurretIOTalonFX());
 
-  public final HoodSubsystem hood = new HoodSubsystem(new HoodIOTalonFXS());
+  // public final HoodSubsystem hood = new HoodSubsystem(new HoodIOTalonFXS());
 
   public final FlywheelSubsystem flywheel = new FlywheelSubsystem(new FlywheelIOTalonFX());
 
-  public final TargetingSubsystem targeting = new TargetingSubsystem(drivetrain);
+  // public final TargetingSubsystem targeting = new TargetingSubsystem(drivetrain);
 
   public final Auto auto;
 
@@ -93,7 +88,7 @@ public class RobotContainer {
                   .withRotationalRate(speeds.omegaRadiansPerSecond);
             }));
 
-    turret.setDefaultCommand(turret.goToAngleCommand(targeting.getIdealTurretAngle()));
+    // turret.setDefaultCommand(turret.goToAngleCommand(targeting.getIdealTurretAngle()));
   }
 
   private void configureBindings() {
@@ -117,8 +112,26 @@ public class RobotContainer {
     operatorController.getY().whileTrue(indexer.indexToShooter());
 
     operatorController
-        .getA()
-        .whileTrue(ShooterCommands.holdToShoot(flywheel, hood, indexer, targeting));
+        .getDPadDownLeft()
+        .onTrue(pneumatics.setIntakePosition(PneumaticsSubsystem.PneumaticPosition.FORWARD));
+
+    operatorController
+        .getDPadDownRight()
+        .onTrue(pneumatics.setIntakePosition(PneumaticsSubsystem.PneumaticPosition.REVERSE));
+
+    operatorController
+        .getDPadUp()
+        .onTrue(pneumatics.setRaspberry2Position(PneumaticsSubsystem.PneumaticPosition.FORWARD));
+
+    operatorController
+        .getDPadDown()
+        .onTrue(pneumatics.setRaspberry2Position(PneumaticsSubsystem.PneumaticPosition.REVERSE));
+
+    operatorController.getLeftTrigger().whileTrue(ShooterCommands.shootWheels(flywheel, indexer));
+
+    // operatorController
+    //     .getA()
+    //     .whileTrue(ShooterCommands.holdToShoot(flywheel, hood, indexer, targeting));
   }
 
   private ChassisSpeeds getDriverChassisSpeeds() {
