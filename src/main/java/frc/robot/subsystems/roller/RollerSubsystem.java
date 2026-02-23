@@ -13,25 +13,13 @@ public class RollerSubsystem extends SubsystemBase {
   public RollerSubsystem(RollerIO rollerIO) {
     this.rollerIO = rollerIO;
 
-    setDefaultCommand(stopRoller());
+    setDefaultCommand(setVoltage(0));
   }
 
   @Override
   public void periodic() {
     rollerIO.updateInputs(inputs);
     Logger.processInputs("RealOutputs/Roller", inputs);
-  }
-
-  public Command stopRoller() {
-    return Commands.run(() -> rollerIO.setRollerVoltage(0.0), this);
-  }
-
-  public Command runPositiveVoltage(double volts) {
-    return Commands.run(() -> rollerIO.setRollerVoltage(volts), this);
-  }
-
-  public Command runNegativeVoltage(double volts) {
-    return Commands.run(() -> rollerIO.setRollerVoltage(-volts), this);
   }
 
   public Command setVoltage(double volts) {

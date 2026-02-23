@@ -4,9 +4,12 @@ public final class PneumaticsConstants {
 
   public static final int pneumaticHubId = 9;
 
-  public static final int intakeForward = 0;
-  public static final int intakeReverse = 1;
+  public static final int intakeForward = 9;
+  public static final int intakeReverse = 8;
 
-  public static final int raspberry2Forward = 4;
-  public static final int raspberry2Reverse = 5;
+  public static final int raspberry2Forward = 11;
+  public static final int raspberry2Reverse = 10;
+
+  public static final double minPressure = 70.0;
+  public static final double maxPressure = 120.0;
 }
