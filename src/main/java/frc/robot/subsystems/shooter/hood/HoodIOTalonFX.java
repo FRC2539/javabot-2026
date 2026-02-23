@@ -29,7 +29,7 @@ public class HoodIOTalonFX implements HoodIO {
 
   @Override
   public void updateInputs(HoodIOInputs inputs) {
-    inputs.positionRad = Units.rotationsToRadians(motor.getPosition().getValueAsDouble());
+    inputs.positionDeg = Units.rotationsToDegrees(motor.getPosition().getValueAsDouble());
     inputs.voltage = motor.getMotorVoltage().getValueAsDouble();
   }
 

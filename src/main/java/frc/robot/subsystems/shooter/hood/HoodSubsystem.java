@@ -4,6 +4,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import java.util.function.Supplier;
+
 import org.littletonrobotics.junction.Logger;
 
 public class HoodSubsystem extends SubsystemBase {
@@ -13,10 +16,8 @@ public class HoodSubsystem extends SubsystemBase {
 
   public HoodSubsystem(HoodIO io) {
     this.io = io;
-
-    setTargetAngle(HoodConstants.minHoodAngle);
-
-    setDefaultCommand(Commands.run(() -> setTargetAngle(HoodConstants.minHoodAngle), this));
+    
+    setDefaultCommand(setHoodAngle(HoodConstants.minHoodAngle));
   }
 
   @Override
@@ -25,7 +26,13 @@ public class HoodSubsystem extends SubsystemBase {
     Logger.processInputs("RealOutputs/Hood", inputs);
   }
 
-  public Command setHoodAngle(Rotation2d desiredAngle) {
+  public Command goToAngleCommand(Supplier<Rotation2d> angle) {
+    return Commands.runOnce(() -> this.setTargetAngle(angle.get()), this)
+        .andThen(Commands.run(() -> {}, this).until(this::isAtSetpoint));
+  }
+
+
+  private Command setHoodAngle(Rotation2d desiredAngle) {
     return Commands.runOnce(() -> setTargetAngle(desiredAngle), this);
   }
 

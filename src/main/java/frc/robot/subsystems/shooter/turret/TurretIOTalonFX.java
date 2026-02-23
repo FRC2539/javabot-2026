@@ -46,5 +46,6 @@ public class TurretIOTalonFX implements TurretIO {
   public boolean isAtSetpoint() {
     return Math.abs(motor.getPosition().getValueAsDouble() - targetAngle.getRotations())
         < TurretConstants.setpointTolerance.getRotations();
+
   }
 }

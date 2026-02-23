@@ -2,6 +2,7 @@ package frc.robot.subsystems.shooter.turret;
 
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
+import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -24,13 +25,7 @@ public final class TurretConstants {
           30); // The angle offset from "ideal" 0 (facing the intake) to the actual middle value of
   // the turret's range.
 
-  public static final double maxAngleRot = Units.degreesToRotations(180);
-
   public static final Rotation2d setpointTolerance = Rotation2d.fromDegrees(1.5);
-
-  public static final double maxVelRotPerSec = Units.radiansToRotations(8.0);
-
-  public static final double maxAccelRotPerSec2 = Units.radiansToRotations(30.0);
 
   public static final Translation2d turretOffset = new Translation2d(-0.127, 0.0);
 
@@ -43,10 +38,19 @@ public final class TurretConstants {
 
   public static final MotionMagicConfigs motionMagicConfig =
       new MotionMagicConfigs()
-          .withMotionMagicCruiseVelocity(maxVelRotPerSec)
-          .withMotionMagicAcceleration(maxAccelRotPerSec2)
+          .withMotionMagicCruiseVelocity(0)
+          .withMotionMagicAcceleration(0)
           .withMotionMagicJerk(0);
 
+  public static final SoftwareLimitSwitchConfigs limitSwitchConfigs =
+      new SoftwareLimitSwitchConfigs()
+          .withForwardSoftLimitEnable(true)
+          .withForwardSoftLimitThreshold(maxAngle.getRotations())
+          .withReverseSoftLimitEnable(true)
+          .withReverseSoftLimitThreshold(minAngle.getRotations());
   public static final TalonFXConfiguration turretMotorConfig =
-      new TalonFXConfiguration().withFeedback(feedbackConfig).withMotionMagic(motionMagicConfig);
+      new TalonFXConfiguration()
+          .withFeedback(feedbackConfig)
+          .withMotionMagic(motionMagicConfig)
+          .withSoftwareLimitSwitch(limitSwitchConfigs);
 }
