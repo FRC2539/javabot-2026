@@ -107,13 +107,14 @@ public class RobotContainer {
 
     rightDriveController.getLeftThumb().onTrue(pneumatics.dropIntakeRaspberry2Deployed());
     // operatorController.getDPadUp().onTrue(pneumatics.toggleRaspberry()); // v (its a secret)
-    operatorController.getB().onTrue(pneumatics.toggleRaspberry2());
 
     rightDriveController.getTrigger().whileTrue(roller.setVoltage(10.0));
 
-    operatorController.getRightBumper().whileTrue(roller.setVoltage(-10.0));
+    operatorController.getB().onTrue(pneumatics.toggleRaspberry2());
 
-    operatorController.getStart().whileTrue(indexer.indexToShooter());
+    operatorController.getX().whileTrue(roller.setVoltage(-10.0));
+
+    operatorController.getY().whileTrue(indexer.indexToShooter());
 
     operatorController
         .getA()
