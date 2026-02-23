@@ -51,17 +51,13 @@ public class PneumaticsSubsystem extends SubsystemBase {
   }
 
   public Command dropIntakeRaspberry2Deployed() {
-  return Commands.sequence(
-
-      Commands.either(
-          Commands.none(),
-          setRaspberry2Position(PneumaticPosition.FORWARD),
-          () -> inputs.raspberry2 == Value.kForward
-      ),
-
-      setIntakePosition(PneumaticPosition.FORWARD)
-  );
-}
+    return Commands.sequence(
+        Commands.either(
+            Commands.none(),
+            setRaspberry2Position(PneumaticPosition.FORWARD),
+            () -> inputs.raspberry2 == Value.kForward),
+        setIntakePosition(PneumaticPosition.FORWARD));
+  }
 
   @Override
   public void periodic() {
