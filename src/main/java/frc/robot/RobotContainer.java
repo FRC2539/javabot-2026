@@ -11,9 +11,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.ShooterCommands;
 import frc.robot.lib.controller.LogitechController;
 import frc.robot.lib.controller.ThrustmasterJoystick;
-import frc.robot.subsystems.climber.ClimberConstants;
-import frc.robot.subsystems.climber.ClimberIOTalonFX;
-import frc.robot.subsystems.climber.ClimberSubsystem;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 import frc.robot.subsystems.drive.DriveConstants;
 import frc.robot.subsystems.drive.TunerConstants;
@@ -30,8 +27,6 @@ import frc.robot.subsystems.shooter.hood.HoodSubsystem;
 import frc.robot.subsystems.shooter.targeting.TargetingSubsystem;
 import frc.robot.subsystems.shooter.turret.TurretIOTalonFX;
 import frc.robot.subsystems.shooter.turret.TurretSubsystem;
-import frc.robot.subsystems.vision.VisionIOLimelight;
-import frc.robot.subsystems.vision.VisionSubsystem;
 
 public class RobotContainer {
 
@@ -55,7 +50,7 @@ public class RobotContainer {
 
   public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
-  //public final ClimberSubsystem climber = new ClimberSubsystem(new ClimberIOTalonFX());
+  // public final ClimberSubsystem climber = new ClimberSubsystem(new ClimberIOTalonFX());
 
   public final RollerSubsystem roller = new RollerSubsystem(new RollerIOTalonFXS());
 
