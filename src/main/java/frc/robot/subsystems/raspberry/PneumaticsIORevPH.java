@@ -1,5 +1,6 @@
 package frc.robot.subsystems.raspberry;
 
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.PneumaticHub;
@@ -8,7 +9,8 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 public class PneumaticsIORevPH implements PneumaticsIO {
 
   private final PneumaticHub pneumaticHub = new PneumaticHub(PneumaticsConstants.pneumaticHubId);
-
+  private final Compressor compressor = new Compressor(PneumaticsModuleType.REVPH);
+  
   private final DoubleSolenoid intakeSolenoid =
       new DoubleSolenoid(
           PneumaticsModuleType.REVPH,
@@ -24,6 +26,9 @@ public class PneumaticsIORevPH implements PneumaticsIO {
   public PneumaticsIORevPH() {
     pneumaticHub.enableCompressorAnalog(
         PneumaticsConstants.minPressure, PneumaticsConstants.maxPressure);
+
+        compressor.enableAnalog(PneumaticsConstants.minPressure, PneumaticsConstants.maxPressure);
+    
   }
 
   @Override
