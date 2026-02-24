@@ -65,5 +65,6 @@ public class PneumaticsSubsystem extends SubsystemBase {
     Logger.processInputs("RealOutputs/Pneumatics", inputs);
 
     SmartDashboard.putNumber("Pneumatics Pressure (PSI)", inputs.pressurePsi);
+    
   }
 }

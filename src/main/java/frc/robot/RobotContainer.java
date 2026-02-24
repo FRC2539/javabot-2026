@@ -6,11 +6,14 @@ import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
+
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.ShooterCommands;
 import frc.robot.lib.controller.LogitechController;
 import frc.robot.lib.controller.ThrustmasterJoystick;
@@ -111,6 +114,9 @@ public class RobotContainer {
 
   private void configureBindings() {
 
+  rightDriveController.getLeftTopLeft().onTrue(Commands.runOnce(() -> drivetrain.resetPose(new Pose2d(0, 0, drivetrain.getOperatorForwardDirection())), drivetrain));
+
+
     // operatorController
     //     .getLeftTrigger()
     //     .whileTrue(climber.setVoltage(ClimberConstants.climberUpVoltage));
@@ -123,7 +129,7 @@ public class RobotContainer {
 
     rightDriveController.getTrigger().whileTrue(roller.setVoltage(8.0));
 
-    operatorController.getB().onTrue(pneumatics.toggleRaspberry2());
+    // operatorController.getB().onTrue(pneumatics.toggleRaspberry2());
 
     operatorController.getX().whileTrue(roller.setVoltage(-8.0));
 
@@ -134,7 +140,7 @@ public class RobotContainer {
         .onTrue(pneumatics.setIntakePosition(PneumaticsSubsystem.PneumaticPosition.FORWARD));
 
     operatorController
-        .getDPadRight()
+        .getB()
         .onTrue(pneumatics.setIntakePosition(PneumaticsSubsystem.PneumaticPosition.REVERSE));
 
     operatorController
