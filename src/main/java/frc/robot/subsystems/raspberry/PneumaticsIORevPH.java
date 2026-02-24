@@ -28,6 +28,11 @@ public class PneumaticsIORevPH implements PneumaticsIO {
     //     compressor.enableAnalog(PneumaticsConstants.minPressure,
     // PneumaticsConstants.maxPressure);
 
+    intakeSolenoid.set(Value.kReverse);
+
+    raspberry2Solenoid.set(Value.kReverse);
+
+
   }
 
   @Override
