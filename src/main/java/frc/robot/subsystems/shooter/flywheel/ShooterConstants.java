@@ -11,7 +11,7 @@ public class ShooterConstants {
 
   public static final double goalDeadbandRPM = 15;
   public static final double IdleRPM = 1.5;
-  public static final double GearRatioToWheel = 1;
+  public static final double GearRatioToWheel = 1.0714285714285714; // 15/14
 
   public static final int leftShooterMotorID = 12;
   public static final int rightShooterMotorID = 13;

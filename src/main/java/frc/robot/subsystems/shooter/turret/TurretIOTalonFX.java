@@ -13,6 +13,8 @@ public class TurretIOTalonFX implements TurretIO {
   private final CANcoder turretEncoder = new CANcoder(TurretConstants.turretEncoderID);
   private final TalonFX motor = new TalonFX(TurretConstants.turretMotorId, TurretConstants.canBus);
 
+  
+
   private double targetAngle = 0.0;
   private final MotionMagicVoltage controlRequest = new MotionMagicVoltage(targetAngle);
 

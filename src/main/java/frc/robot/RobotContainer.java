@@ -105,6 +105,8 @@ public class RobotContainer {
 
     compressor.enableAnalog(PneumaticsConstants.minPressure, PneumaticsConstants.maxPressure);
     // turret.setDefaultCommand(turret.goToAngleCommand(targeting.getIdealTurretAngle()));
+
+    turret.setDefaultCommand(turret.setVoltage(0));
   }
 
   private void configureBindings() {
@@ -128,11 +130,11 @@ public class RobotContainer {
     operatorController.getY().whileTrue(indexer.indexToShooter());
 
     operatorController
-        .getDPadDownLeft()
+        .getDPadLeft()
         .onTrue(pneumatics.setIntakePosition(PneumaticsSubsystem.PneumaticPosition.FORWARD));
 
     operatorController
-        .getDPadDownRight()
+        .getDPadRight()
         .onTrue(pneumatics.setIntakePosition(PneumaticsSubsystem.PneumaticPosition.REVERSE));
 
     operatorController
@@ -154,6 +156,8 @@ public class RobotContainer {
     operatorController.getLeftBumper().whileTrue(turret.setVoltage(1.4));
 
     operatorController.getRightBumper().whileTrue(turret.setVoltage(-1.4));
+
+    operatorController.getStart().whileTrue(flywheel.setShooterRPMCommand(2000));
   }
 
   private ChassisSpeeds getDriverChassisSpeeds() {
