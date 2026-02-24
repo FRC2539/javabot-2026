@@ -9,8 +9,8 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 public class PneumaticsIORevPH implements PneumaticsIO {
 
   private final PneumaticHub pneumaticHub = new PneumaticHub(PneumaticsConstants.pneumaticHubId);
-  private final Compressor compressor = new Compressor(PneumaticsModuleType.REVPH);
-  
+  private final Compressor compressor = new Compressor(9, PneumaticsModuleType.REVPH);
+
   private final DoubleSolenoid intakeSolenoid =
       new DoubleSolenoid(
           PneumaticsModuleType.REVPH,
