@@ -12,6 +12,7 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -25,6 +26,8 @@ import frc.robot.subsystems.drive.TunerConstants.TunerSwerveDrivetrain;
 import frc.robot.subsystems.vision.LimelightHelpers.PoseEstimate;
 import java.util.Optional;
 import java.util.function.Supplier;
+
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 /**
@@ -251,8 +254,19 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     return ChassisSpeeds.fromRobotRelativeSpeeds(getRobotSpeeds(), getHeading());
   }
 
+  
   public ChassisSpeeds getRobotSpeeds() {
     return getState().Speeds;
+  }
+
+  @AutoLogOutput
+  public SwerveModuleState[] getActualSpeeds() {
+    return getState().ModuleStates;
+  }
+
+  @AutoLogOutput
+  public SwerveModuleState[] getDesiredSpeeds() {
+    return getState().ModuleTargets;
   }
 
   public Rotation2d getHeading() {
