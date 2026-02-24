@@ -9,7 +9,7 @@ public final class IndexerConstants {
   public static final int transportMotorID = 18;
   public static final double currentLimit = 40.0;
 
-  public static final double indexerShootVoltage = 9;
+  public static final double indexerShootVoltage = -9;
   public static final double transportShootVoltage = 12;
 
   public static final LoggedTunableNumber shootVolts =

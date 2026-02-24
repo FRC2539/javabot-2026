@@ -4,10 +4,12 @@ import org.littletonrobotics.junction.AutoLog;
 
 public interface FlywheelIO {
   public void updateInputs(FlywheelIOInputs inputs);
+  public void setVoltage(double volts);
 
   @AutoLog
   public class FlywheelIOInputs {
     public double wheelVelocity = 0; // RPM
+    public double setVoltage = 0;
     public double leftMotorTemperatureCelcius = 0;
     public double rightMotorTemperatureCelcius = 0;
   }

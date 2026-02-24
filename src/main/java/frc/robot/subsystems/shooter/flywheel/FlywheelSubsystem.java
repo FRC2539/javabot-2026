@@ -34,7 +34,12 @@ public class FlywheelSubsystem extends SubsystemBase {
     return shooterIO.isAtSetpoint();
   }
 
+  public Command setVoltage(double volts) {
+    return Commands.run(() -> shooterIO.setVoltage(volts), this);
+  }
+
   public boolean atSetpoint() {
     return shooterIO.isAtSetpoint();
+
   }
 }

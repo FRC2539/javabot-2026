@@ -35,6 +35,7 @@ public class FlywheelIOTalonFX implements FlywheelIO {
     inputs.wheelVelocity = leftMotor.getVelocity().getValueAsDouble() * 60;
     inputs.leftMotorTemperatureCelcius = leftMotor.getDeviceTemp().getValueAsDouble();
     inputs.rightMotorTemperatureCelcius = rightMotor.getDeviceTemp().getValueAsDouble();
+    inputs.setVoltage = leftMotor.getMotorVoltage().getValueAsDouble();
   }
 
   @Override
@@ -48,5 +49,9 @@ public class FlywheelIOTalonFX implements FlywheelIO {
   public boolean isAtSetpoint() {
     return Math.abs(leftMotor.getVelocity().getValueAsDouble() - targetRPM)
         < ShooterConstants.goalDeadbandRPM;
+  }
+
+  public void setVoltage(double voltage) {
+    leftMotor.setVoltage(voltage);
   }
 }
