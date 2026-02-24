@@ -13,8 +13,8 @@ public class ShooterConstants {
   public static final double IdleRPM = 1.5;
   public static final double GearRatioToWheel = 1;
 
-  public static final int leftShooterMotorID = 100;
-  public static final int rightShooterMotorID = 100;
+  public static final int leftShooterMotorID = 12;
+  public static final int rightShooterMotorID = 13;
 
   public static final Slot0Configs SlotConfigs =
       new Slot0Configs().withKP(0).withKI(0).withKD(0).withKS(0).withKA(0).withKV(0);

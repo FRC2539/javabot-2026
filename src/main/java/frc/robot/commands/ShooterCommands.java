@@ -29,6 +29,6 @@ public class ShooterCommands {
 
   public static Command shootWheels(FlywheelSubsystem flywheel, IndexerSubsystem indexer) {
 
-    return Commands.sequence(flywheel.setShooterRPMCommand(8), indexer.indexToShooter());
+    return Commands.parallel(flywheel.setVoltage(8), indexer.indexToShooter());
   }
 }
