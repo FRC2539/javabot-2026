@@ -26,6 +26,8 @@ import frc.robot.subsystems.roller.RollerIOTalonFXS;
 import frc.robot.subsystems.roller.RollerSubsystem;
 import frc.robot.subsystems.shooter.flywheel.FlywheelIOTalonFX;
 import frc.robot.subsystems.shooter.flywheel.FlywheelSubsystem;
+import frc.robot.subsystems.shooter.turret.TurretIOTalonFX;
+import frc.robot.subsystems.shooter.turret.TurretSubsystem;
 
 public class RobotContainer {
 
@@ -57,7 +59,7 @@ public class RobotContainer {
 
   public final PneumaticsSubsystem pneumatics = new PneumaticsSubsystem(new PneumaticsIORevPH());
 
-  // public final TurretSubsystem turret = new TurretSubsystem(new TurretIOTalonFX());
+  public final TurretSubsystem turret = new TurretSubsystem(new TurretIOTalonFX());
 
   // public final HoodSubsystem hood = new HoodSubsystem(new HoodIOTalonFXS());
 
@@ -148,6 +150,10 @@ public class RobotContainer {
     // operatorController
     //     .getA()
     //     .whileTrue(ShooterCommands.holdToShoot(flywheel, hood, indexer, targeting));
+
+    operatorController.getLeftBumper().whileTrue(turret.setVoltage(1.4));
+
+    operatorController.getRightBumper().whileTrue(turret.setVoltage(-1.4));
   }
 
   private ChassisSpeeds getDriverChassisSpeeds() {

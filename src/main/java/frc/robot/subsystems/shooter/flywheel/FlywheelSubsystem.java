@@ -11,8 +11,9 @@ public class FlywheelSubsystem extends SubsystemBase {
 
   public FlywheelSubsystem(FlywheelIO io) {
     shooterIO = io;
+    setDefaultCommand(setVoltage(0));
 
-    setDefaultCommand(setShooterRPMCommand(ShooterConstants.IdleRPM));
+    // setDefaultCommand(setShooterRPMCommand(ShooterConstants.IdleRPM));
   }
 
   @Override
