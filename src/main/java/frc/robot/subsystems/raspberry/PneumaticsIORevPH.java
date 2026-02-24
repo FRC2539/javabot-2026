@@ -1,15 +1,13 @@
 package frc.robot.subsystems.raspberry;
 
-import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 
 public class PneumaticsIORevPH implements PneumaticsIO {
 
-  private final PneumaticHub pneumaticHub = new PneumaticHub(PneumaticsConstants.pneumaticHubId);
-  private final Compressor compressor = new Compressor(9, PneumaticsModuleType.REVPH);
+  // private final PneumaticHub pneumaticHub = new PneumaticHub(PneumaticsConstants.pneumaticHubId);
+  // private final Compressor compressor = new Compressor(9, PneumaticsModuleType.REVPH);
 
   private final DoubleSolenoid intakeSolenoid =
       new DoubleSolenoid(
@@ -24,18 +22,19 @@ public class PneumaticsIORevPH implements PneumaticsIO {
           PneumaticsConstants.raspberry2Reverse);
 
   public PneumaticsIORevPH() {
-    pneumaticHub.enableCompressorAnalog(
-        PneumaticsConstants.minPressure, PneumaticsConstants.maxPressure);
+    // pneumaticHub.enableCompressorAnalog(
+    //     PneumaticsConstants.minPressure, PneumaticsConstants.maxPressure);
 
-        compressor.enableAnalog(PneumaticsConstants.minPressure, PneumaticsConstants.maxPressure);
-    
+    //     compressor.enableAnalog(PneumaticsConstants.minPressure,
+    // PneumaticsConstants.maxPressure);
+
   }
 
   @Override
   public void updateInputs(PneumaticsIOInputs inputs) {
     inputs.intakeState = intakeSolenoid.get();
     inputs.raspberry2 = raspberry2Solenoid.get();
-    inputs.pressurePsi = pneumaticHub.getPressure(0);
+    // inputs.pressurePsi = pneumaticHub.getPressure(0);
   }
 
   @Override

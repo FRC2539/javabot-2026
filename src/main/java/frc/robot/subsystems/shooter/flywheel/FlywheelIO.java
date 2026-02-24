@@ -4,6 +4,7 @@ import org.littletonrobotics.junction.AutoLog;
 
 public interface FlywheelIO {
   public void updateInputs(FlywheelIOInputs inputs);
+
   public void setVoltage(double volts);
 
   @AutoLog
