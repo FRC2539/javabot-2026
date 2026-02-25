@@ -15,11 +15,11 @@ public final class TurretConstants {
   public static final int turretEncoderID = 40;
   public static final String canBus = "rio";
 
-  public static final double rotorToSensorRatio = 335.63;
+  public static final double rotorToSensorRatio = 335.63; // 59 , 1.2288
 
-  public static final double minAngleRot = Units.degreesToRotations(-180);
+  public static final double minAngleRot = Units.degreesToRotations(-208);
 
-  public static final double maxAngleRot = Units.degreesToRotations(180);
+  public static final double maxAngleRot = Units.degreesToRotations(133);
 
   public static final double setpointToleranceRot = Units.degreesToRotations(1.5);
 

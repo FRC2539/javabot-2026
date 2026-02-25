@@ -37,7 +37,7 @@ public class TurretSubsystem extends SubsystemBase {
     return io.isAtSetpoint();
   }
 
-    public Command setVoltage(double volts) {
+  public Command setVoltage(double volts) {
     return Commands.run(() -> io.setVoltage(volts), this);
   }
 }

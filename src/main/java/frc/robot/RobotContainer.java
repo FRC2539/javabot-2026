@@ -6,7 +6,6 @@ import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Compressor;
@@ -114,8 +113,14 @@ public class RobotContainer {
 
   private void configureBindings() {
 
-  rightDriveController.getLeftTopLeft().onTrue(Commands.runOnce(() -> drivetrain.resetPose(new Pose2d(0, 0, drivetrain.getOperatorForwardDirection())), drivetrain));
-
+    rightDriveController
+        .getLeftTopLeft()
+        .onTrue(
+            Commands.runOnce(
+                () ->
+                    drivetrain.resetPose(
+                        new Pose2d(0, 0, drivetrain.getOperatorForwardDirection())),
+                drivetrain));
 
     // operatorController
     //     .getLeftTrigger()
@@ -127,11 +132,11 @@ public class RobotContainer {
     rightDriveController.getLeftThumb().onTrue(pneumatics.dropIntakeRaspberry2Deployed());
     // operatorController.getDPadUp().onTrue(pneumatics.toggleRaspberry()); // v (its a secret)
 
-    rightDriveController.getTrigger().whileTrue(roller.setVoltage(12.0));
+    rightDriveController.getTrigger().whileTrue(roller.setVoltage(9));
 
     // operatorController.getB().onTrue(pneumatics.toggleRaspberry2());
 
-    operatorController.getX().whileTrue(roller.setVoltage(-8.0));
+    operatorController.getX().whileTrue(roller.setVoltage(-12.0));
 
     operatorController.getY().whileTrue(indexer.indexToShooter());
 

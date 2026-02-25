@@ -26,7 +26,6 @@ import frc.robot.subsystems.drive.TunerConstants.TunerSwerveDrivetrain;
 import frc.robot.subsystems.vision.LimelightHelpers.PoseEstimate;
 import java.util.Optional;
 import java.util.function.Supplier;
-
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -254,7 +253,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     return ChassisSpeeds.fromRobotRelativeSpeeds(getRobotSpeeds(), getHeading());
   }
 
-  
   public ChassisSpeeds getRobotSpeeds() {
     return getState().Speeds;
   }

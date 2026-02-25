@@ -10,13 +10,15 @@ public class PneumaticsIORevPH implements PneumaticsIO {
   // private final Compressor compressor = new Compressor(9, PneumaticsModuleType.REVPH);
 
   private final DoubleSolenoid intakeSolenoid =
-      new DoubleSolenoid(9,
+      new DoubleSolenoid(
+          9,
           PneumaticsModuleType.REVPH,
           PneumaticsConstants.intakeForward,
           PneumaticsConstants.intakeReverse);
 
   private final DoubleSolenoid raspberry2Solenoid =
-      new DoubleSolenoid(9,
+      new DoubleSolenoid(
+          9,
           PneumaticsModuleType.REVPH,
           PneumaticsConstants.raspberry2Forward,
           PneumaticsConstants.raspberry2Reverse);
@@ -31,8 +33,6 @@ public class PneumaticsIORevPH implements PneumaticsIO {
     intakeSolenoid.set(Value.kReverse);
 
     raspberry2Solenoid.set(Value.kReverse);
-
-
   }
 
   @Override
