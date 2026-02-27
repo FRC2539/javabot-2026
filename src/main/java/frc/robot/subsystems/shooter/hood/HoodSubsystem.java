@@ -14,7 +14,7 @@ public class HoodSubsystem extends SubsystemBase {
   public HoodSubsystem(HoodIO io) {
     this.io = io;
 
-    setDefaultCommand(setVoltage(0));
+    // setDefaultCommand(setVoltage(0));
   }
 
   @Override
@@ -24,8 +24,7 @@ public class HoodSubsystem extends SubsystemBase {
   }
 
   public Command setHoodAngle(Rotation2d desiredAngle) {
-
-    return run(() -> io.setTargetAngle(desiredAngle));
+    return runOnce(() -> io.setTargetAngle(desiredAngle));
   }
 
   public boolean isAtSetpoint() {

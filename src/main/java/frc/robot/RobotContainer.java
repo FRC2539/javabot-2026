@@ -7,6 +7,7 @@ import static edu.wpi.first.units.Units.RotationsPerSecond;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticHub;
@@ -28,6 +29,8 @@ import frc.robot.subsystems.roller.RollerIOTalonFXS;
 import frc.robot.subsystems.roller.RollerSubsystem;
 import frc.robot.subsystems.shooter.flywheel.FlywheelIOTalonFX;
 import frc.robot.subsystems.shooter.flywheel.FlywheelSubsystem;
+import frc.robot.subsystems.shooter.hood.HoodIOTalonFXS;
+import frc.robot.subsystems.shooter.hood.HoodSubsystem;
 import frc.robot.subsystems.shooter.turret.TurretIOTalonFX;
 import frc.robot.subsystems.shooter.turret.TurretSubsystem;
 
@@ -63,7 +66,7 @@ public class RobotContainer {
 
   public final TurretSubsystem turret = new TurretSubsystem(new TurretIOTalonFX());
 
-  // public final HoodSubsystem hood = new HoodSubsystem(new HoodIOTalonFXS());
+  public final HoodSubsystem hood = new HoodSubsystem(new HoodIOTalonFXS());
 
   public final FlywheelSubsystem flywheel = new FlywheelSubsystem(new FlywheelIOTalonFX());
 
@@ -74,9 +77,9 @@ public class RobotContainer {
   // public final VisionSubsystem vision =
   //     new VisionSubsystem(
   //         drivetrain::filterAndAddMeasurements,
-  //         new VisionIOLimelight("limelight-turretleft", drivetrain::getHeading),
-  //         new VisionIOLimelight("limelight-turretcenter", drivetrain::getHeading),
-  //         new VisionIOLimelight("limelight-turretright", drivetrain::getHeading),
+  //         new VisionIOLimelight("limelight-climber", drivetrain::getHeading),
+  //         new VisionIOLimelight("limelight-turret", drivetrain::getHeading),
+  //         new VisionIOLimelight("limelight-right", drivetrain::getHeading),
   //         new VisionIOLimelight("limelight-left", drivetrain::getHeading));
 
   PneumaticHub pneumaticHub;
@@ -108,7 +111,7 @@ public class RobotContainer {
     compressor.enableAnalog(PneumaticsConstants.minPressure, PneumaticsConstants.maxPressure);
     // turret.setDefaultCommand(turret.goToAngleCommand(targeting.getIdealTurretAngle()));
 
-    turret.setDefaultCommand(turret.setVoltage(0));
+    // turret.setDefaultCommand(turret.setVoltage(0));
   }
 
   private void configureBindings() {
@@ -144,9 +147,9 @@ public class RobotContainer {
         .getDPadLeft()
         .onTrue(pneumatics.setIntakePosition(PneumaticsSubsystem.PneumaticPosition.FORWARD));
 
-    operatorController
-        .getB()
-        .onTrue(pneumatics.setIntakePosition(PneumaticsSubsystem.PneumaticPosition.REVERSE));
+    // operatorController
+    //     .getB()
+    //     .onTrue(pneumatics.setIntakePosition(PneumaticsSubsystem.PneumaticPosition.REVERSE));
 
     operatorController
         .getDPadUp()
@@ -164,11 +167,16 @@ public class RobotContainer {
     //     .getA()
     //     .whileTrue(ShooterCommands.holdToShoot(flywheel, hood, indexer, targeting));
 
-    operatorController.getLeftBumper().whileTrue(turret.setVoltage(1.4));
+    operatorController.getA().onTrue(hood.setHoodAngle(Rotation2d.fromRotations(0.025)));
+    operatorController.getB().onTrue(hood.setHoodAngle(Rotation2d.fromRotations(-0.064)));
+    operatorController
+        .getLeftBumper()
+        .onTrue(turret.goToAngleCommand(Rotation2d.fromRotations(0.1)));
 
-    operatorController.getRightBumper().whileTrue(turret.setVoltage(-1.4));
-
-    operatorController.getStart().whileTrue(flywheel.setShooterRPMCommand(2000));
+    operatorController
+        .getRightBumper()
+        .onTrue(turret.goToAngleCommand(Rotation2d.fromRotations(-0.1)));
+    // operatorController.getStart().whileTrue(flywheel.setShooterRPMCommand(2000));
   }
 
   private ChassisSpeeds getDriverChassisSpeeds() {

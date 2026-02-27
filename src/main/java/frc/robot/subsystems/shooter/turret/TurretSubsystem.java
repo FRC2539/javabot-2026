@@ -25,7 +25,7 @@ public class TurretSubsystem extends SubsystemBase {
 
   public Command goToAngleCommand(Rotation2d angle) {
     return Commands.runOnce(() -> this.setTargetAngle(angle), this)
-        .andThen(Commands.run(() -> {}, this).until(this::isAtSetpoint));
+        .andThen(Commands.run(() -> {}, this)); // .until(this::isAtSetpoint)
   }
 
   public void setTargetAngle(Rotation2d angle) {
