@@ -267,6 +267,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     return getState().ModuleTargets;
   }
 
+  @AutoLogOutput
   public Rotation2d getHeading() {
     return getRobotPose().getRotation();
   }
@@ -299,7 +300,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             // VecBuilder.fill(
             //     0, 0, .99999)); // increase values to trust vision estimate less. (x, y, heading)
             VecBuilder.fill(
-                0.5, 0.5,
+                0.65, 0.65,
                 .99999)); // increase values to trust vision estimate less. (x, y, heading)
       }
     }

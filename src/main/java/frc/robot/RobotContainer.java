@@ -4,6 +4,8 @@ import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
+import java.util.Set;
+
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -14,6 +16,7 @@ import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.commands.SHOOTONTHEFLY;
 import frc.robot.commands.ShooterCommands;
 import frc.robot.lib.controller.LogitechController;
 import frc.robot.lib.controller.ThrustmasterJoystick;
@@ -29,8 +32,10 @@ import frc.robot.subsystems.roller.RollerIOTalonFXS;
 import frc.robot.subsystems.roller.RollerSubsystem;
 import frc.robot.subsystems.shooter.flywheel.FlywheelIOTalonFX;
 import frc.robot.subsystems.shooter.flywheel.FlywheelSubsystem;
+import frc.robot.subsystems.shooter.hood.HoodConstants;
 import frc.robot.subsystems.shooter.hood.HoodIOTalonFXS;
 import frc.robot.subsystems.shooter.hood.HoodSubsystem;
+import frc.robot.subsystems.shooter.targeting.TargetingSubsystem;
 import frc.robot.subsystems.shooter.turret.TurretIOTalonFX;
 import frc.robot.subsystems.shooter.turret.TurretSubsystem;
 import frc.robot.subsystems.vision.VisionIOLimelight;
@@ -72,7 +77,7 @@ public class RobotContainer {
 
   public final FlywheelSubsystem flywheel = new FlywheelSubsystem(new FlywheelIOTalonFX());
 
-  // public final TargetingSubsystem targeting = new TargetingSubsystem(drivetrain);
+  public final TargetingSubsystem targeting = new TargetingSubsystem(drivetrain);
 
   public final Auto auto;
 
@@ -134,16 +139,16 @@ public class RobotContainer {
     //     .getRightTrigger()
     //     .whileTrue(climber.setVoltage(ClimberConstants.climberDownVoltage));
 
-    rightDriveController.getLeftThumb().onTrue(pneumatics.dropIntakeRaspberry2Deployed());
     // operatorController.getDPadUp().onTrue(pneumatics.toggleRaspberry()); // v (its a secret)
 
-    rightDriveController.getTrigger().whileTrue(roller.setVoltage(9));
+    rightDriveController.getTrigger().whileTrue(roller.setVoltage(8));
 
     // operatorController.getB().onTrue(pneumatics.toggleRaspberry2());
 
     operatorController.getX().whileTrue(roller.setVoltage(-12.0));
 
     operatorController.getY().whileTrue(indexer.indexToShooter());
+    
 
     operatorController
         .getDPadLeft()
@@ -154,16 +159,8 @@ public class RobotContainer {
         .onTrue(pneumatics.setIntakePosition(PneumaticsSubsystem.PneumaticPosition.REVERSE));
 
     operatorController
-        .getDPadUp()
-        .onTrue(pneumatics.setRaspberry2Position(PneumaticsSubsystem.PneumaticPosition.FORWARD));
-
-    operatorController
-        .getDPadDown()
-        .onTrue(pneumatics.setRaspberry2Position(PneumaticsSubsystem.PneumaticPosition.REVERSE));
-
-    operatorController
         .getLeftTrigger()
-        .whileTrue(ShooterCommands.HubShot(flywheel, indexer, turret, hood, 60));
+        .onTrue(new SHOOTONTHEFLY(turret, hood, targeting, flywheel, indexer));
 
     operatorController.getRightTrigger().whileTrue(flywheel.setShooterRPSForever(25));
 
@@ -171,13 +168,13 @@ public class RobotContainer {
     //     .getA()
     //     .whileTrue(ShooterCommands.holdToShoot(flywheel, hood, indexer, targeting));
 
-    operatorController.getA().onTrue(hood.setHoodAngle(Rotation2d.fromRotations(0.025)));
-    operatorController.getB().onTrue(hood.setHoodAngle(Rotation2d.fromRotations(-0.064)));
-    operatorController.getLeftBumper().onTrue(turret.goToAngleCommand(Rotation2d.fromRotations(0)));
+    // operatorController.getA().onTrue(hood.setHoodAngle(Rotation2d.fromRotations(0.025)));
+    // operatorController.getB().onTrue(hood.setHoodAngle(Rotation2d.fromRotations(-0.064)));
+    operatorController.getLeftBumper().onTrue(turret.goToAngleCommand(() -> Rotation2d.fromRotations(0)));
 
     operatorController
         .getRightBumper()
-        .onTrue(turret.goToAngleCommand(Rotation2d.fromRotations(-0.1)));
+        .onTrue(turret.goToAngleCommand(() -> Rotation2d.fromRotations(-0.1)));
     // operatorController.getStart().whileTrue(flywheel.setShooterRPMCommand(2000));
   }
 

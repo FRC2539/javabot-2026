@@ -5,6 +5,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import java.util.function.Supplier;
+
 import org.littletonrobotics.junction.Logger;
 
 public class TurretSubsystem extends SubsystemBase {
@@ -26,8 +29,8 @@ public class TurretSubsystem extends SubsystemBase {
     return io.isAtSetpoint();
   }
 
-  public Command goToAngleCommand(Rotation2d angle) {
-    return Commands.runOnce(() -> this.setTargetAngle(angle), this)
+  public Command goToAngleCommand(Supplier<Rotation2d> angle) {
+    return Commands.runOnce(() -> this.setTargetAngle(angle.get()), this)
         .andThen(Commands.run(() -> {}, this))
         .until(this::isAtSetpoint);
   }

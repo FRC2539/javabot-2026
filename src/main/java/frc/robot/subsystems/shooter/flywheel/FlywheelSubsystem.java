@@ -3,6 +3,9 @@ package frc.robot.subsystems.shooter.flywheel;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import java.util.function.Supplier;
+
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -25,8 +28,8 @@ public class FlywheelSubsystem extends SubsystemBase {
     shooterIO.setControlVelocityRPS(targetRPS);
   }
 
-  public Command setShooterRPSCommand(double desiredRPS) {
-    return Commands.runOnce(() -> this.setTargetRPS(desiredRPS), this)
+  public Command setShooterRPSCommand(Supplier<Double> desiredRPS) {
+    return Commands.runOnce(() -> this.setTargetRPS(desiredRPS.get()), this)
         .andThen(Commands.run(() -> {}, this))
         .until(this::isAtSetpoint);
   }

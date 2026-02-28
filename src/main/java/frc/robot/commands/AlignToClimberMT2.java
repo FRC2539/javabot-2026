@@ -82,6 +82,8 @@ public class AlignToClimberMT2 extends Command {
 
     boolean leftHasTarget = LimelightHelpers.getTV("limelight-left");
     boolean rightHasTarget = LimelightHelpers.getTV("limelight-right");
+    boolean turretHasTarget = LimelightHelpers.getTV("limelight-turret");
+    boolean climberHasTarget = LimelightHelpers.getTV("limelight-climber");
 
     if (leftHasTarget || rightHasTarget) {
       if (leftHasTarget

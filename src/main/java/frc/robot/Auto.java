@@ -79,13 +79,6 @@ public class Auto {
     NamedCommands.registerCommand(
         "intake-retract", robotContainer.pneumatics.setIntakePosition(PneumaticPosition.REVERSE));
 
-    NamedCommands.registerCommand(
-        "raspberry2-expand",
-        robotContainer.pneumatics.setRaspberry2Position(PneumaticPosition.FORWARD));
-
-    NamedCommands.registerCommand(
-        "raspberry2-retract",
-        robotContainer.pneumatics.setRaspberry2Position(PneumaticPosition.REVERSE));
 
     // NamedCommands.registerCommand(
     //     "climber-up",
@@ -106,8 +99,6 @@ public class Auto {
     NamedCommands.registerCommand(
         "intake",
         Commands.sequence(
-            robotContainer.pneumatics.setRaspberry2Position(PneumaticPosition.FORWARD),
-            Commands.waitSeconds(0.1),
             robotContainer.pneumatics.setIntakePosition(PneumaticPosition.FORWARD),
             robotContainer.roller.setVoltage(IntakeConstants.intakeVoltage)));
 

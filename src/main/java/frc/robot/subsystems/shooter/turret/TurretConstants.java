@@ -28,7 +28,7 @@ public final class TurretConstants {
 
   //   public static final double maxAccelRotPerSec2 = Units.radiansToRotations(30.0);
 
-  public static final Translation2d turretOffset = new Translation2d(0.15875, -0.20955);
+  public static final Translation2d turretOffset = new Translation2d(-0.21, -0.171);
 
   public static final FeedbackConfigs feedbackConfig =
       new FeedbackConfigs()

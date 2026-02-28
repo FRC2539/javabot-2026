@@ -39,26 +39,6 @@ public class PneumaticsSubsystem extends SubsystemBase {
         () -> inputs.intakeState == Value.kForward);
   }
 
-  public Command setRaspberry2Position(PneumaticPosition position) {
-    return runOnce(() -> io.setRaspberry2Solenoid(position.value));
-  }
-
-  public Command toggleRaspberry2() {
-    return Commands.either(
-        setRaspberry2Position(PneumaticPosition.REVERSE),
-        setRaspberry2Position(PneumaticPosition.FORWARD),
-        () -> inputs.raspberry2 == Value.kForward);
-  }
-
-  public Command dropIntakeRaspberry2Deployed() {
-    return Commands.sequence(
-        Commands.either(
-            Commands.none(),
-            setRaspberry2Position(PneumaticPosition.FORWARD),
-            () -> inputs.raspberry2 == Value.kForward),
-        setIntakePosition(PneumaticPosition.FORWARD));
-  }
-
   @Override
   public void periodic() {
     io.updateInputs(inputs);

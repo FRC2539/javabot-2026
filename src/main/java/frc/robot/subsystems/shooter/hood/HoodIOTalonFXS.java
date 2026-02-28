@@ -2,9 +2,12 @@ package frc.robot.subsystems.shooter.hood;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFXS;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 
@@ -16,8 +19,8 @@ public class HoodIOTalonFXS implements HoodIO {
 
   private Rotation2d targetAngle = HoodConstants.minHoodAngle;
 
-  private final MotionMagicVoltage motorRequest =
-      new MotionMagicVoltage(targetAngle.getRotations());
+  private final PositionVoltage motorRequest =
+      new PositionVoltage(targetAngle.getRotations());
 
   public HoodIOTalonFXS() {
     CANcoderConfiguration encoderConfig = new CANcoderConfiguration();
@@ -39,6 +42,7 @@ public class HoodIOTalonFXS implements HoodIO {
   public void setTargetAngle(Rotation2d desiredTargetAngle) {
     targetAngle = desiredTargetAngle;
 
+    targetAngle = Rotation2d.fromDegrees(MathUtil.clamp(targetAngle.getDegrees(), HoodConstants.minHoodAngle.getDegrees(), HoodConstants.maxHoodAngle.getDegrees()));
     motor.setControl(motorRequest.withPosition(targetAngle.getRotations()));
   }
 
