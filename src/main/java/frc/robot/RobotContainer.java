@@ -159,9 +159,9 @@ public class RobotContainer {
         .getDPadDown()
         .onTrue(pneumatics.setRaspberry2Position(PneumaticsSubsystem.PneumaticPosition.REVERSE));
 
-    operatorController.getLeftTrigger().whileTrue(ShooterCommands.shootWheels(flywheel, indexer));
+    operatorController.getLeftTrigger().whileTrue(ShooterCommands.HubShot(flywheel, indexer, turret, hood, 60));
 
-    operatorController.getRightTrigger().whileTrue(flywheel.setVoltage(5.0));
+    operatorController.getRightTrigger().whileTrue(flywheel.setShooterRPSForever(25));
 
     // operatorController
     //     .getA()

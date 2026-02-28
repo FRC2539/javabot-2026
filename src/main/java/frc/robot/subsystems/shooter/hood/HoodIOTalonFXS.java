@@ -21,6 +21,8 @@ public class HoodIOTalonFXS implements HoodIO {
 
   public HoodIOTalonFXS() {
     CANcoderConfiguration encoderConfig = new CANcoderConfiguration();
+    encoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 1;
+    encoderConfig.MagnetSensor.MagnetOffset = 0.30444351562;
     hoodEncoder.getConfigurator().apply(encoderConfig);
 
     motor.getConfigurator().apply(HoodConstants.hoodMotorConfig);

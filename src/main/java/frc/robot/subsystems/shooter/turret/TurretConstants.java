@@ -25,7 +25,7 @@ public final class TurretConstants {
 
   public static final double maxAngleRot = Units.degreesToRotations(108);
 
-  public static final double setpointToleranceRot = Units.degreesToRotations(1.5);
+  public static final double setpointToleranceRot = Units.degreesToRotations(2.5);
 
   //   public static final double maxVelRotPerSec = Units.radiansToRotations(8.0);
 
@@ -39,7 +39,7 @@ public final class TurretConstants {
           .withFeedbackRemoteSensorID(turretEncoderID)
           .withRotorToSensorRatio(rotorToSensorRatio);
 
-  public static final Slot0Configs slot0configs = new Slot0Configs().withKP(35).withKS(2);
+  public static final Slot0Configs slot0configs = new Slot0Configs().withKP(37.5).withKS(2).withKD(1);
 
   public static final SoftwareLimitSwitchConfigs limitSwitchConfigs =
       new SoftwareLimitSwitchConfigs()

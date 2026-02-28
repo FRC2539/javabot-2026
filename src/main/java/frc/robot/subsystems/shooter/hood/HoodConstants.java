@@ -23,14 +23,14 @@ public final class HoodConstants {
   public static final Rotation2d minHoodAngle = Rotation2d.fromDegrees(45.0);
   public static final Rotation2d maxHoodAngle = Rotation2d.fromDegrees(85.0);
 
-  public static final Rotation2d angleDeadband = Rotation2d.fromDegrees(1);
+  public static final Rotation2d angleDeadband = Rotation2d.fromDegrees(0.5);
   public static final TalonFXConfiguration motorConfig = new TalonFXConfiguration();
 
   public static final ExternalFeedbackConfigs feedbackConfig =
       new ExternalFeedbackConfigs()
           .withExternalFeedbackSensorSource(ExternalFeedbackSensorSourceValue.RemoteCANcoder)
           .withFeedbackRemoteSensorID(hoodEncoderID)
-          .withSensorToMechanismRatio(Math.PI);
+          .withSensorToMechanismRatio(3.142857074737549);
 
   public static final Slot0Configs slot0configs = new Slot0Configs().withKP(10).withKS(1);
 

@@ -24,7 +24,7 @@ public class HoodSubsystem extends SubsystemBase {
   }
 
   public Command setHoodAngle(Rotation2d desiredAngle) {
-    return runOnce(() -> io.setTargetAngle(desiredAngle));
+    return runOnce(() -> io.setTargetAngle(desiredAngle)).andThen(Commands.run(() -> {}, this)).until(this::isAtSetpoint);
   }
 
   public boolean isAtSetpoint() {

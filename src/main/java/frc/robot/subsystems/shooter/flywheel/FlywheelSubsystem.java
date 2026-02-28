@@ -13,7 +13,6 @@ public class FlywheelSubsystem extends SubsystemBase {
     shooterIO = io;
     setDefaultCommand(setVoltage(0));
 
-    // setDefaultCommand(setShooterRPMCommand(ShooterConstants.IdleRPM));
   }
 
   @Override
@@ -22,14 +21,21 @@ public class FlywheelSubsystem extends SubsystemBase {
     Logger.processInputs("RealOutputs/Shooter", shooterInputs);
   }
 
-  private void setTargetRPM(double targetRPM) {
-    shooterIO.setControlVelocity(targetRPM);
+  private void setTargetRPS(double targetRPS) {
+    shooterIO.setControlVelocityRPS(targetRPS);
   }
 
-  public Command setShooterRPMCommand(double desiredRPM) {
-    return Commands.runOnce(() -> this.setTargetRPM(desiredRPM), this)
-        .andThen(Commands.run(() -> {}, this).until(this::isAtSetpoint));
+  public Command setShooterRPSCommand(double desiredRPS) {
+    return Commands.runOnce(() -> this.setTargetRPS(desiredRPS), this)
+        .andThen(Commands.run(() -> {}, this)).until(this::isAtSetpoint);
   }
+
+  public Command setShooterRPSForever(double desiredRPS) {
+    return Commands.runOnce(() -> this.setTargetRPS(desiredRPS), this)
+        .andThen(Commands.run(() -> {}, this));
+  }
+
+  
 
   public boolean isAtSetpoint() {
     return shooterIO.isAtSetpoint();

@@ -1,6 +1,7 @@
 package frc.robot.subsystems.shooter.flywheel;
 
 import org.littletonrobotics.junction.AutoLog;
+import org.littletonrobotics.junction.AutoLogOutput;
 
 public interface FlywheelIO {
   public void updateInputs(FlywheelIOInputs inputs);
@@ -15,7 +16,9 @@ public interface FlywheelIO {
     public double rightMotorTemperatureCelcius = 0;
   }
 
+  @AutoLogOutput
   public boolean isAtSetpoint();
 
-  public void setControlVelocity(double targetVelocity);
+  @AutoLogOutput
+  public void setControlVelocityRPS(double targetVelocity);
 }
