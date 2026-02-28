@@ -27,7 +27,6 @@ import frc.robot.subsystems.vision.LimelightHelpers.PoseEstimate;
 import java.util.Optional;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.AutoLogOutput;
-import org.littletonrobotics.junction.Logger;
 
 /**
  * Class that extends the Phoenix 6 SwerveDrivetrain class and implements Subsystem so it can easily
@@ -249,6 +248,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     m_simNotifier.startPeriodic(kSimLoopPeriod);
   }
 
+  @AutoLogOutput
   public ChassisSpeeds getFieldSpeeds() {
     return ChassisSpeeds.fromRobotRelativeSpeeds(getRobotSpeeds(), getHeading());
   }
@@ -271,6 +271,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     return getRobotPose().getRotation();
   }
 
+  @AutoLogOutput
   public Pose2d getRobotPose() {
     return getState().Pose;
   }
@@ -291,7 +292,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
       }
 
       if (!rejectPose) {
-        Logger.recordOutput("accepted limelight pose", estimate.pose);
+        // Logger.recordOutput("accepted limelight pose", estimate.pose);
         addVisionMeasurement(
             estimate.pose,
             estimate.timestampSeconds,

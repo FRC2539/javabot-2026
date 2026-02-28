@@ -10,7 +10,7 @@ public interface FlywheelIO {
 
   @AutoLog
   public class FlywheelIOInputs {
-    public double wheelVelocity = 0; // RPM
+    public double currentRPS = 0;
     public double setVoltage = 0;
     public double leftMotorTemperatureCelcius = 0;
     public double rightMotorTemperatureCelcius = 0;

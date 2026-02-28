@@ -36,6 +36,7 @@ public class TurretIOTalonFX implements TurretIO {
 
     inputs.voltage = motor.getMotorVoltage().getValueAsDouble();
     inputs.tempCelsius = motor.getDeviceTemp().getValueAsDouble();
+    inputs.atSetpoint = isAtSetpoint();
   }
 
   @Override

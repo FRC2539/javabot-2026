@@ -33,6 +33,8 @@ import frc.robot.subsystems.shooter.hood.HoodIOTalonFXS;
 import frc.robot.subsystems.shooter.hood.HoodSubsystem;
 import frc.robot.subsystems.shooter.turret.TurretIOTalonFX;
 import frc.robot.subsystems.shooter.turret.TurretSubsystem;
+import frc.robot.subsystems.vision.VisionIOLimelight;
+import frc.robot.subsystems.vision.VisionSubsystem;
 
 public class RobotContainer {
 
@@ -49,7 +51,7 @@ public class RobotContainer {
   private final SwerveRequest.FieldCentric driveRequest =
       new SwerveRequest.FieldCentric()
           .withDeadband(maxSpeed * 0.05)
-          .withRotationalDeadband(maxAngularRate * 0.1)
+          .withRotationalDeadband(maxAngularRate * 0.025)
           .withDriveRequestType(DriveRequestType.Velocity);
 
   // subsystems
@@ -74,13 +76,13 @@ public class RobotContainer {
 
   public final Auto auto;
 
-  // public final VisionSubsystem vision =
-  //     new VisionSubsystem(
-  //         drivetrain::filterAndAddMeasurements,
-  //         new VisionIOLimelight("limelight-climber", drivetrain::getHeading),
-  //         new VisionIOLimelight("limelight-turret", drivetrain::getHeading),
-  //         new VisionIOLimelight("limelight-right", drivetrain::getHeading),
-  //         new VisionIOLimelight("limelight-left", drivetrain::getHeading));
+  public final VisionSubsystem vision =
+      new VisionSubsystem(
+          drivetrain::filterAndAddMeasurements,
+          // new VisionIOLimelight("limelight-climber", drivetrain::getHeading),
+          new VisionIOLimelight("limelight-turret", drivetrain::getHeading),
+          new VisionIOLimelight("limelight-right", drivetrain::getHeading),
+          new VisionIOLimelight("limelight-left", drivetrain::getHeading));
 
   PneumaticHub pneumaticHub;
   Compressor compressor;
@@ -147,9 +149,9 @@ public class RobotContainer {
         .getDPadLeft()
         .onTrue(pneumatics.setIntakePosition(PneumaticsSubsystem.PneumaticPosition.FORWARD));
 
-    // operatorController
-    //     .getB()
-    //     .onTrue(pneumatics.setIntakePosition(PneumaticsSubsystem.PneumaticPosition.REVERSE));
+    operatorController
+        .getDPadRight()
+        .onTrue(pneumatics.setIntakePosition(PneumaticsSubsystem.PneumaticPosition.REVERSE));
 
     operatorController
         .getDPadUp()
@@ -159,7 +161,9 @@ public class RobotContainer {
         .getDPadDown()
         .onTrue(pneumatics.setRaspberry2Position(PneumaticsSubsystem.PneumaticPosition.REVERSE));
 
-    operatorController.getLeftTrigger().whileTrue(ShooterCommands.HubShot(flywheel, indexer, turret, hood, 60));
+    operatorController
+        .getLeftTrigger()
+        .whileTrue(ShooterCommands.HubShot(flywheel, indexer, turret, hood, 60));
 
     operatorController.getRightTrigger().whileTrue(flywheel.setShooterRPSForever(25));
 
@@ -169,9 +173,7 @@ public class RobotContainer {
 
     operatorController.getA().onTrue(hood.setHoodAngle(Rotation2d.fromRotations(0.025)));
     operatorController.getB().onTrue(hood.setHoodAngle(Rotation2d.fromRotations(-0.064)));
-    operatorController
-        .getLeftBumper()
-        .onTrue(turret.goToAngleCommand(Rotation2d.fromRotations(0.1)));
+    operatorController.getLeftBumper().onTrue(turret.goToAngleCommand(Rotation2d.fromRotations(0)));
 
     operatorController
         .getRightBumper()

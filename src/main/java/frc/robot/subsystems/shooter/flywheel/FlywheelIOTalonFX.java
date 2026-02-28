@@ -1,7 +1,6 @@
 package frc.robot.subsystems.shooter.flywheel;
 
 import com.ctre.phoenix6.controls.Follower;
-import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
@@ -15,8 +14,7 @@ public class FlywheelIOTalonFX implements FlywheelIO {
       new TalonFX(ShooterConstants.leftShooterMotorID, ShooterConstants.shooterCanBus);
   private TalonFX rightMotor =
       new TalonFX(ShooterConstants.rightShooterMotorID, ShooterConstants.shooterCanBus);
-  private VelocityVoltage controlRequest =
-      new VelocityVoltage(targetRPS);
+  private VelocityVoltage controlRequest = new VelocityVoltage(targetRPS);
   private Follower motorFollowerRequest =
       new Follower(leftMotor.getDeviceID(), MotorAlignmentValue.Opposed);
 
@@ -25,13 +23,13 @@ public class FlywheelIOTalonFX implements FlywheelIO {
     rightMotor.setNeutralMode(NeutralModeValue.Coast);
 
     leftMotor.getConfigurator().apply(ShooterConstants.leftMotorConfig);
-  
+
     rightMotor.setControl(motorFollowerRequest);
   }
 
   @Override
   public void updateInputs(FlywheelIOInputs inputs) {
-    inputs.wheelVelocity = leftMotor.getRotorVelocity().getValueAsDouble();
+    inputs.currentRPS = leftMotor.getRotorVelocity().getValueAsDouble();
     inputs.leftMotorTemperatureCelcius = leftMotor.getDeviceTemp().getValueAsDouble();
     inputs.rightMotorTemperatureCelcius = rightMotor.getDeviceTemp().getValueAsDouble();
     inputs.setVoltage = leftMotor.getMotorVoltage().getValueAsDouble();

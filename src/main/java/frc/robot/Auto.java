@@ -111,6 +111,12 @@ public class Auto {
             robotContainer.pneumatics.setIntakePosition(PneumaticPosition.FORWARD),
             robotContainer.roller.setVoltage(IntakeConstants.intakeVoltage)));
 
+    NamedCommands.registerCommand(
+        "deployintakewithkicker",
+        Commands.parallel(
+            robotContainer.roller.setVoltage(IntakeConstants.dropvoltage),
+            robotContainer.pneumatics.setIntakePosition(PneumaticPosition.FORWARD)));
+
     // NamedCommands.registerCommand(
     //     "hold-to-shoot",
     //     ShooterCommands.holdToShoot(

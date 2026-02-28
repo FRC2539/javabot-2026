@@ -8,4 +8,6 @@ public class IntakeConstants {
   public static final CurrentLimitsConfigs rollerCurrentLimit = new CurrentLimitsConfigs();
 
   public static final double intakeVoltage = 6;
+
+  public static final double dropvoltage = -3;
 }

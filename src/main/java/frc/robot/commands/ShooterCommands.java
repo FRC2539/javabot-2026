@@ -29,20 +29,25 @@ public class ShooterCommands {
     //     });
   }
 
-  public static Command shootWheels(FlywheelSubsystem flywheel, IndexerSubsystem indexer, double shooterRPS) {
+  public static Command shootWheels(
+      FlywheelSubsystem flywheel, IndexerSubsystem indexer, double shooterRPS) {
 
     // return Commands.parallel(flywheel.setVoltage(8), indexer.indexToShooter());
 
     return Commands.sequence(flywheel.setShooterRPSCommand(shooterRPS), indexer.indexToShooter());
   }
 
-
-  public static Command HubShot(FlywheelSubsystem flywheel, IndexerSubsystem indexer, TurretSubsystem turret, HoodSubsystem hood, double shooterRPS) {
+  public static Command HubShot(
+      FlywheelSubsystem flywheel,
+      IndexerSubsystem indexer,
+      TurretSubsystem turret,
+      HoodSubsystem hood,
+      double shooterRPS) {
     return Commands.sequence(
         Commands.parallel(
             flywheel.setShooterRPSCommand(shooterRPS),
-            Commands.sequence(hood.setHoodAngle(Rotation2d.fromRotations(0.05273)), hood.setVoltage(0)).withTimeout(0.35),
-            turret.goToAngleCommand(Rotation2d.fromRotations(0.1503))),
+            hood.setHoodAngle(Rotation2d.fromRotations(0.13))), // 0.05273
+        turret.goToAngleCommand(Rotation2d.fromRotations(0)),
         indexer.indexToShooter());
   }
 }
