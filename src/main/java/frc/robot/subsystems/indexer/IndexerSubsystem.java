@@ -26,6 +26,10 @@ public class IndexerSubsystem extends SubsystemBase {
     return Commands.run(() -> io.setVoltages(indexerVoltage, transportVoltage), this);
   }
 
+  public void setVoltagesFunction(double indexerVoltage, double transportVoltage) {
+    io.setVoltages(indexerVoltage, transportVoltage);
+  }
+
   public Command indexToShooter() {
     return setVoltages(
         IndexerConstants.indexerShootVoltage, IndexerConstants.transportShootVoltage);

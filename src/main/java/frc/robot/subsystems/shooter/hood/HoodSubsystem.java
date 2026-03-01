@@ -19,6 +19,7 @@ public class HoodSubsystem extends SubsystemBase {
     this.io = io;
 
     //setDefaultCommand(Commands.either(setVoltage(0), setHoodAngle(HoodConstants.minHoodAngle), this::isAtSetpoint));
+    setDefaultCommand(setHoodAngleForever(() -> HoodConstants.minHoodAngle));
   }
 
   @Override
@@ -31,6 +32,10 @@ public class HoodSubsystem extends SubsystemBase {
     return runOnce(() -> io.setTargetAngle(desiredAngle.get()))
         .andThen(Commands.run(() -> {}, this))
         .until(this::isAtSetpoint);
+  }
+
+  public Command setHoodAngleForever(Supplier<Rotation2d> desiredAngle) {
+    return runOnce(() -> io.setTargetAngle(desiredAngle.get()));
   }
 
   @AutoLogOutput

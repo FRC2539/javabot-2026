@@ -29,16 +29,14 @@ public class TargetingSubsystem extends SubsystemBase {
   // private static final LinearFilter vyFilter = LinearFilter.movingAverage(5);
 
 
-  
 
+  @AutoLogOutput
   public Pose2d hubPosition;
   @AutoLogOutput
   public Pose2d turretPos;
   @AutoLogOutput
   public double realDistance = 0;
 
-  @AutoLogOutput
-  public Translation2d realDisplacementToHub;
   boolean isFerrying = false;
   CommandSwerveDrivetrain drivetrain;
 
@@ -52,6 +50,7 @@ public class TargetingSubsystem extends SubsystemBase {
     TargetingConstants.hubShotMap.put(3.237, new ShotSettings(0.0, Rotation2d.fromRotations(0.08231), 65.0));
     TargetingConstants.hubShotMap.put(4.607, new ShotSettings(0.0, Rotation2d.fromRotations(0.052002), 75.0));
     TargetingConstants.hubShotMap.put(5.46, new ShotSettings(0.0, Rotation2d.fromRotations(0.095215), 75.0));
+    
     hubPosition = new Pose2d(new Translation2d(11.909, 4.027), new Rotation2d());
     drivetrain = dt;
   }
@@ -81,12 +80,11 @@ public class TargetingSubsystem extends SubsystemBase {
             .plus(TurretConstants.turretOffset.rotateBy(robotPose.getRotation()));
             // .plus(filteredRobotVelocity.times(TargetingConstants.estimatedShotLatency));
 
-    realDisplacementToHub = targetPose.minus(futureTurretPos);
+    Translation2d realDisplacementToHub = targetPose.minus(futureTurretPos);
 
     realDistance = realDisplacementToHub.getNorm();
 
-    turretPos = new Pose2d(futureTurretPos, robotPose.getRotation());
-    System.out.println(realDistance);
+    //System.out.println(realDistance);
     realDistance = MathUtil.clamp(realDistance, 2.1, 5.46);
     // double estimatedFlightTime = TargetingConstants.hubShotMap.get(realDistance).timeOfFlight();
 
@@ -96,6 +94,7 @@ public class TargetingSubsystem extends SubsystemBase {
 
     // if (SOTM) { // Shooting on the move!
     //   for (int i = 0; i < 5; i++) {
+
     //     virtualTarget = targetPose.minus(filteredRobotVelocity.times(estimatedFlightTime));
 
     //     virtualDistance = futureTurretPos.getDistance(virtualTarget);
@@ -111,9 +110,15 @@ public class TargetingSubsystem extends SubsystemBase {
 
     Rotation2d robotRelativeTurretAngle = aimingVector.getAngle().minus(robotPose.getRotation());
 
+    double rots = robotRelativeTurretAngle.getRotations();
+   // rots = Math.round(rots * Math.pow(10,2)) / Math.pow(10,2);
+
     ShotSettings mapValues = TargetingConstants.hubShotMap.get(realDistance);
+
+    
+    turretPos = new Pose2d(futureTurretPos, Rotation2d.fromRotations(rots));
     return new ShootingParameters(
-        robotRelativeTurretAngle, mapValues.hoodAngle(), mapValues.wheelRPS());
+        Rotation2d.fromRotations(rots), mapValues.hoodAngle(), Math.rint(mapValues.wheelRPS()));
 
   }
 

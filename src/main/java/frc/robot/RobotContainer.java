@@ -129,7 +129,7 @@ public class RobotContainer {
             Commands.runOnce(
                 () ->
                     drivetrain.resetPose(
-                        new Pose2d(0, 0, drivetrain.getOperatorForwardDirection())),
+                        new Pose2d(drivetrain.getRobotPose().getX(), drivetrain.getRobotPose().getY(), drivetrain.getOperatorForwardDirection())),
                 drivetrain));
 
     // operatorController
@@ -148,7 +148,7 @@ public class RobotContainer {
     operatorController.getX().whileTrue(roller.setVoltage(-12.0));
 
     operatorController.getY().whileTrue(indexer.indexToShooter());
-    
+
 
     operatorController
         .getDPadLeft()
@@ -160,7 +160,7 @@ public class RobotContainer {
 
     operatorController
         .getLeftTrigger()
-        .onTrue(new SHOOTONTHEFLY(turret, hood, targeting, flywheel, indexer));
+        .whileTrue(new SHOOTONTHEFLY(turret, hood, targeting, flywheel, indexer));
 
     operatorController.getRightTrigger().whileTrue(flywheel.setShooterRPSForever(25));
 

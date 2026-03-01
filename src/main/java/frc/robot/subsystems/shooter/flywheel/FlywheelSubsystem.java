@@ -24,7 +24,7 @@ public class FlywheelSubsystem extends SubsystemBase {
     Logger.processInputs("RealOutputs/FlywheelSubsystem", shooterInputs);
   }
 
-  private void setTargetRPS(double targetRPS) {
+  public void setTargetRPS(double targetRPS) {
     shooterIO.setControlVelocityRPS(targetRPS);
   }
 
@@ -38,6 +38,7 @@ public class FlywheelSubsystem extends SubsystemBase {
     return Commands.runOnce(() -> this.setTargetRPS(desiredRPS), this)
         .andThen(Commands.run(() -> {}, this));
   }
+
 
   @AutoLogOutput
   public boolean isAtSetpoint() {

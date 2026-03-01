@@ -17,6 +17,7 @@ public class TurretSubsystem extends SubsystemBase {
 
   public TurretSubsystem(TurretIO io) {
     this.io = io;
+    setDefaultCommand(setVoltage(0));
   }
 
   @Override
@@ -37,7 +38,7 @@ public class TurretSubsystem extends SubsystemBase {
 
   public void setTargetAngle(Rotation2d angle) {
 
-    Rotation2d mechanicalTarget = angle.plus(Rotation2d.fromRotations(0.155029));
+    Rotation2d mechanicalTarget = angle.plus(Rotation2d.fromRotations(0.1549902));
 
     double wrappedRotationDeg =
         MathUtil.inputModulus(
