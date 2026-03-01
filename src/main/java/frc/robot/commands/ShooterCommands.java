@@ -36,27 +36,27 @@ public class ShooterCommands {
   //   return Commands.sequence(flywheel.setShooterRPSCommand(shooterRPS), indexer.indexToShooter());
   // }
 
-  // public static Command HubShot(
-  //     FlywheelSubsystem flywheel,
-  //     IndexerSubsystem indexer,
-  //     TurretSubsystem turret,
-  //     HoodSubsystem hood,
-  //     double shooterRPS) {
-  //   return Commands.sequence(
-  //       Commands.parallel(
-  //           flywheel.setShooterRPSCommand(shooterRPS),
-  //           hood.setHoodAngle(Rotation2d.fromRotations(0.095215))), // 0.05273
-  //       //turret.goToAngleCommand(Rotation2d.fromRotations(0)),
-  //       indexer.indexToShooter());
-  // }
-
-  public static Command rangedShot(FlywheelSubsystem flywheel, IndexerSubsystem indexer, TurretSubsystem turret, HoodSubsystem hood, TargetingSubsystem targeting) {
+  public static Command HubShot(
+      FlywheelSubsystem flywheel,
+      IndexerSubsystem indexer,
+      TurretSubsystem turret,
+      HoodSubsystem hood,
+      double shooterRPS) {
     return Commands.sequence(
-      Commands.parallel(
-        flywheel.setShooterRPSCommand(targeting.getIdealFlywheelRPS()),
-        hood.setHoodAngle(targeting.getIdealHoodAngle()),
-        turret.goToAngleCommand(targeting.getIdealTurretAngle())
-      ),  indexer.indexToShooter()
-    );
+        Commands.parallel(
+            flywheel.setShooterRPSCommand(() -> shooterRPS),
+            hood.setHoodAngle(() -> Rotation2d.fromRotations(0.0464))), // 0.05273
+            turret.goToAngleCommand(() -> Rotation2d.fromRotations(-0.5)),
+        indexer.indexToShooter());
   }
+
+  // public static Command rangedShot(FlywheelSubsystem flywheel, IndexerSubsystem indexer, TurretSubsystem turret, HoodSubsystem hood, TargetingSubsystem targeting) {
+  //   return Commands.sequence(
+  //     Commands.parallel(
+  //       flywheel.setShooterRPSCommand(targeting.getIdealFlywheelRPS()),
+  //       hood.setHoodAngle(targeting.getIdealHoodAngle()),
+  //       turret.goToAngleCommand(targeting.getIdealTurretAngle())
+  //     ),  indexer.indexToShooter()
+  //   );
+  // }
 }

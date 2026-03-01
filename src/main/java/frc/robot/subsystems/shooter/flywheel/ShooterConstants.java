@@ -14,7 +14,7 @@ public class ShooterConstants {
   public static final int rightShooterMotorID = 13;
 
   public static final Slot0Configs SlotConfigs =
-      new Slot0Configs().withKP(.4).withKI(0).withKD(0).withKS(0).withKA(0).withKV(.1);
+      new Slot0Configs().withKP(0.45).withKI(0).withKD(0).withKS(0).withKA(0).withKV(.1);
 
   public static final CurrentLimitsConfigs currentLimits =
       new CurrentLimitsConfigs().withSupplyCurrentLimitEnable(true).withSupplyCurrentLimit(80);

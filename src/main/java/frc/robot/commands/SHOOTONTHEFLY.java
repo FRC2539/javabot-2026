@@ -35,7 +35,7 @@ public class SHOOTONTHEFLY extends Command {
     @Override
     public void execute() {
         Rotation2d turretAngle = targetingSubsystem.getIdealTurretAngle().get();
-        Rotation2d mechanicalTarget = turretAngle.plus(Rotation2d.fromRotations(0.155029));
+        Rotation2d mechanicalTarget = turretAngle.plus(Rotation2d.fromRotations(0.155029)).plus(Rotation2d.fromDegrees(30)).minus(Rotation2d.fromRotations(0.04117));
 
             double wrappedRotationDeg =
                 MathUtil.inputModulus(

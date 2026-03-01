@@ -34,7 +34,7 @@ public class HoodIOTalonFXS implements HoodIO {
 
   @Override
   public void updateInputs(HoodIOInputs inputs) {
-    inputs.positionRad = Units.rotationsToRadians(motor.getPosition().getValueAsDouble());
+    inputs.position = Rotation2d.fromRotations(motor.getPosition().getValueAsDouble());
     inputs.voltage = motor.getMotorVoltage().getValueAsDouble();
   }
 

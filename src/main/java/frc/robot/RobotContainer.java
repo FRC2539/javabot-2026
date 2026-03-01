@@ -136,7 +136,8 @@ public class RobotContainer {
     //     .getLeftTrigger()
     //     .whileTrue(climber.setVoltage(ClimberConstants.climberUpVoltage));
     // operatorController
-    //     .getRightTrigger()
+    //     .
+    
     //     .whileTrue(climber.setVoltage(ClimberConstants.climberDownVoltage));
 
     // operatorController.getDPadUp().onTrue(pneumatics.toggleRaspberry()); // v (its a secret)
@@ -146,6 +147,8 @@ public class RobotContainer {
     // operatorController.getB().onTrue(pneumatics.toggleRaspberry2());
 
     operatorController.getX().whileTrue(roller.setVoltage(-12.0));
+
+    operatorController.getLeftBumper().whileTrue(indexer.setVoltages(6, -6));
 
     operatorController.getY().whileTrue(indexer.indexToShooter());
 
@@ -160,9 +163,9 @@ public class RobotContainer {
 
     operatorController
         .getLeftTrigger()
-        .whileTrue(new SHOOTONTHEFLY(turret, hood, targeting, flywheel, indexer));
+        .whileTrue(ShooterCommands.HubShot(flywheel, indexer, turret, hood, 65));
 
-    operatorController.getRightTrigger().whileTrue(flywheel.setShooterRPSForever(25));
+    operatorController.getRightTrigger().whileTrue(new SHOOTONTHEFLY(turret, hood, targeting, flywheel, indexer));
 
     // operatorController
     //     .getA()
@@ -170,7 +173,7 @@ public class RobotContainer {
 
     // operatorController.getA().onTrue(hood.setHoodAngle(Rotation2d.fromRotations(0.025)));
     // operatorController.getB().onTrue(hood.setHoodAngle(Rotation2d.fromRotations(-0.064)));
-    operatorController.getLeftBumper().onTrue(turret.goToAngleCommand(() -> Rotation2d.fromRotations(0)));
+    // operatorController.getLeftBumper().onTrue(turret.goToAngleCommand(() -> Rotation2d.fromRotations(0)));
 
     operatorController
         .getRightBumper()

@@ -7,7 +7,7 @@ public interface HoodIO {
 
   @AutoLog
   class HoodIOInputs {
-    public double positionRad = 0.0;
+    public Rotation2d position = Rotation2d.fromRadians(0.0);
     public double voltage = 0.0;
   }
 

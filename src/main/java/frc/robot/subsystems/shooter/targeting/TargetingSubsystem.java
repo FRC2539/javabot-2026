@@ -37,6 +37,13 @@ public class TargetingSubsystem extends SubsystemBase {
   @AutoLogOutput
   public double realDistance = 0;
 
+  @AutoLogOutput
+  public Rotation2d targetTurretAngle;
+  @AutoLogOutput
+  public Rotation2d targetHoodAngle;
+  @AutoLogOutput
+  public double targetFlywheelRPS;
+
   boolean isFerrying = false;
   CommandSwerveDrivetrain drivetrain;
 
@@ -44,11 +51,13 @@ public class TargetingSubsystem extends SubsystemBase {
     //hubPosition = AllianceFlipUtil.apply(FieldConstants.Hub.innerCenterPoint.toTranslation2d());
     //hubPosition = FieldConstants.Hub.innerCenterPoint.toTranslation2d();
 
+    // TargetingConstants.hubShotMap.put(0, new ShotSettings(0.0, Rotation2d.fromRotations(0), 0));
 
-    TargetingConstants.hubShotMap.put(2.1, new ShotSettings(0.0, Rotation2d.fromRotations(0.052002), 65.0));
-    TargetingConstants.hubShotMap.put(2.78, new ShotSettings(0.0, Rotation2d.fromRotations(0.073486), 65.0));
-    TargetingConstants.hubShotMap.put(3.237, new ShotSettings(0.0, Rotation2d.fromRotations(0.08231), 65.0));
-    TargetingConstants.hubShotMap.put(4.607, new ShotSettings(0.0, Rotation2d.fromRotations(0.052002), 75.0));
+    TargetingConstants.hubShotMap.put(2.1, new ShotSettings(0.0, Rotation2d.fromRotations(0.052002), 75.0));
+    TargetingConstants.hubShotMap.put(2.78, new ShotSettings(0.0, Rotation2d.fromRotations(0.064697), 75.0));
+    TargetingConstants.hubShotMap.put(3.237, new ShotSettings(0.0, Rotation2d.fromRotations(0.073468), 75.0));
+    TargetingConstants.hubShotMap.put(4.52, new ShotSettings(0.0, Rotation2d.fromRotations(0.0964), 75.0));
+    TargetingConstants.hubShotMap.put(4.607, new ShotSettings(0.0, Rotation2d.fromRotations(0.08231), 75.0));
     TargetingConstants.hubShotMap.put(5.46, new ShotSettings(0.0, Rotation2d.fromRotations(0.095215), 75.0));
     
     hubPosition = new Pose2d(new Translation2d(11.909, 4.027), new Rotation2d());
@@ -111,12 +120,16 @@ public class TargetingSubsystem extends SubsystemBase {
     Rotation2d robotRelativeTurretAngle = aimingVector.getAngle().minus(robotPose.getRotation());
 
     double rots = robotRelativeTurretAngle.getRotations();
-   // rots = Math.round(rots * Math.pow(10,2)) / Math.pow(10,2);
+    rots = Math.round(rots * Math.pow(10,2)) / Math.pow(10,2);
 
     ShotSettings mapValues = TargetingConstants.hubShotMap.get(realDistance);
 
     
     turretPos = new Pose2d(futureTurretPos, Rotation2d.fromRotations(rots));
+
+    targetTurretAngle = Rotation2d.fromRotations(rots);
+    targetHoodAngle = mapValues.hoodAngle();
+    targetFlywheelRPS = mapValues.wheelRPS();
     return new ShootingParameters(
         Rotation2d.fromRotations(rots), mapValues.hoodAngle(), Math.rint(mapValues.wheelRPS()));
 
