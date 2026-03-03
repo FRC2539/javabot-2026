@@ -142,30 +142,30 @@ public class RobotContainer {
 
     // operatorController.getDPadUp().onTrue(pneumatics.toggleRaspberry()); // v (its a secret)
 
-    rightDriveController.getTrigger().whileTrue(roller.setVoltage(8));
+    // rightDriveController.getTrigger().whileTrue(roller.setVoltage(8));
 
-    // operatorController.getB().onTrue(pneumatics.toggleRaspberry2());
+    // // operatorController.getB().onTrue(pneumatics.toggleRaspberry2());
 
-    operatorController.getX().whileTrue(roller.setVoltage(-12.0));
+    // operatorController.getX().whileTrue(roller.setVoltage(-12.0));
 
-    operatorController.getLeftBumper().whileTrue(indexer.setVoltages(6, -6));
+    // operatorController.getLeftBumper().whileTrue(indexer.setVoltages(6, -6));
 
-    operatorController.getY().whileTrue(indexer.indexToShooter());
+    // operatorController.getY().whileTrue(indexer.indexToShooter());
 
 
-    operatorController
-        .getDPadLeft()
-        .onTrue(pneumatics.setIntakePosition(PneumaticsSubsystem.PneumaticPosition.FORWARD));
+    // operatorController
+    //     .getDPadLeft()
+    //     .onTrue(pneumatics.setIntakePosition(PneumaticsSubsystem.PneumaticPosition.FORWARD));
 
-    operatorController
-        .getDPadRight()
-        .onTrue(pneumatics.setIntakePosition(PneumaticsSubsystem.PneumaticPosition.REVERSE));
+    // operatorController
+    //     .getDPadRight()
+    //     .onTrue(pneumatics.setIntakePosition(PneumaticsSubsystem.PneumaticPosition.REVERSE));
 
-    operatorController
-        .getLeftTrigger()
-        .whileTrue(ShooterCommands.HubShot(flywheel, indexer, turret, hood, 65));
+    // operatorController
+    //     .getLeftTrigger()
+    //     .whileTrue(ShooterCommands.HubShot(flywheel, indexer, turret, hood, 65));
 
-    operatorController.getRightTrigger().whileTrue(new SHOOTONTHEFLY(turret, hood, targeting, flywheel, indexer));
+    // operatorController.getRightTrigger().whileTrue(new SHOOTONTHEFLY(turret, hood, targeting, flywheel, indexer));
 
     // operatorController
     //     .getA()
@@ -175,10 +175,31 @@ public class RobotContainer {
     // operatorController.getB().onTrue(hood.setHoodAngle(Rotation2d.fromRotations(-0.064)));
     // operatorController.getLeftBumper().onTrue(turret.goToAngleCommand(() -> Rotation2d.fromRotations(0)));
 
-    operatorController
-        .getRightBumper()
-        .onTrue(turret.goToAngleCommand(() -> Rotation2d.fromRotations(-0.1)));
+    // operatorController
+    //     .getRightBumper()
+    //     .onTrue(turret.goToAngleCommand(() -> Rotation2d.fromRotations(-0.1)));
     // operatorController.getStart().whileTrue(flywheel.setShooterRPMCommand(2000));
+
+
+    //comp controls - driver
+      rightDriveController.getTrigger().whileTrue(roller.setVoltage(8));
+      leftDriveController.getTrigger().onTrue(pneumatics.toggleIntake());
+
+    //comp controls - operator
+    operatorController.getLeftTrigger().whileTrue(new SHOOTONTHEFLY(turret, hood, targeting, flywheel, indexer));
+    operatorController.getRightTrigger().whileTrue(ShooterCommands.HubShot(flywheel, indexer, turret, hood, 65));
+    // operatorController.getLeftBumper().whileTrue(ShooterCommands.LeftTrench(flywheel, indexer, turret, hood, 65));
+    // operatorController.getRightBumper().whileTrue(ShooterCommands.RightTrench(flywheel, indexer, turret, hood, 65));
+
+    // operatorController.getDPadUp().onTrue(getAutonomousCommand()); //move shot up
+    // operatorController.getDPadLeft().onTrue(getAutonomousCommand()); //move shot left
+    // operatorController.getDPadRight().onTrue(getAutonomousCommand()); //move shot right
+    // operatorController.getDPadDown().onTrue(getAutonomousCommand()); //move shot down
+
+    // operatorController.getY().whileTrue(getAutonomousCommand()); //feed
+    operatorController.getX().onTrue(pneumatics.toggleIntake()); // in case
+    operatorController.getB().whileTrue(indexer.setVoltages(4, -4)); //in case
+    operatorController.getA().onTrue(roller.setVoltage(-12.0)); // in case
   }
 
   private ChassisSpeeds getDriverChassisSpeeds() {
