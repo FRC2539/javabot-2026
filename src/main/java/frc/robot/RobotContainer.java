@@ -188,9 +188,12 @@ public class RobotContainer {
     operatorController
         .getLeftTrigger()
         .whileTrue(new SHOOTONTHEFLY(turret, hood, targeting, flywheel, indexer));
+    // operatorController
+    //     .getRightTrigger()
+    //     .whileTrue(ShooterCommands.HubShot(flywheel, indexer, turret, hood, 65));
     operatorController
         .getRightTrigger()
-        .whileTrue(ShooterCommands.HubShot(flywheel, indexer, turret, hood, 65));
+        .whileTrue(ShooterCommands.tuning(flywheel, indexer, hood, 70));
     // operatorController.getLeftBumper().whileTrue(ShooterCommands.LeftTrench(flywheel, indexer,
     // turret, hood, 65));
     // operatorController.getRightBumper().whileTrue(ShooterCommands.RightTrench(flywheel, indexer,

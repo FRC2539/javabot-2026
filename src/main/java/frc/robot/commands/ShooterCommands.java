@@ -49,6 +49,15 @@ public class ShooterCommands {
         indexer.indexToShooter());
   }
 
+  public static Command tuning(
+      FlywheelSubsystem flywheel, IndexerSubsystem indexer, HoodSubsystem hood, double shooterRPS) {
+    return Commands.sequence(
+        Commands.parallel(
+            flywheel.setShooterRPSCommand(() -> shooterRPS),
+            hood.setHoodAngle(() -> Rotation2d.fromRotations(0.04248))),
+        indexer.indexToShooter());
+  }
+
   // public static Command rangedShot(FlywheelSubsystem flywheel, IndexerSubsystem indexer,
   // TurretSubsystem turret, HoodSubsystem hood, TargetingSubsystem targeting) {
   //   return Commands.sequence(

@@ -36,19 +36,31 @@ public class TargetingSubsystem extends SubsystemBase {
 
     // TargetingConstants.hubShotMap.put(0, new ShotSettings(0.0, Rotation2d.fromRotations(0), 0));
 
-    TargetingConstants.hubShotMap.put(
-        2.1, new ShotSettings(0.0, Rotation2d.fromRotations(0.052002), 75.0));
-    TargetingConstants.hubShotMap.put(
-        2.78, new ShotSettings(0.0, Rotation2d.fromRotations(0.064697), 75.0));
-    TargetingConstants.hubShotMap.put(
-        3.237, new ShotSettings(0.0, Rotation2d.fromRotations(0.073468), 75.0));
-    TargetingConstants.hubShotMap.put(
-        4.52, new ShotSettings(0.0, Rotation2d.fromRotations(0.0964), 75.0));
-    TargetingConstants.hubShotMap.put(
-        4.607, new ShotSettings(0.0, Rotation2d.fromRotations(0.08231), 75.0));
-    TargetingConstants.hubShotMap.put(
-        5.46, new ShotSettings(0.0, Rotation2d.fromRotations(0.095215), 75.0));
+    // TargetingConstants.hubShotMap.put(
+    //     2.1, new ShotSettings(0.0, Rotation2d.fromRotations(0.052002), 75.0));
+    // TargetingConstants.hubShotMap.put(
+    //     2.78, new ShotSettings(0.0, Rotation2d.fromRotations(0.064697), 75.0));
+    // TargetingConstants.hubShotMap.put(
+    //     3.237, new ShotSettings(0.0, Rotation2d.fromRotations(0.073468), 75.0));
+    // TargetingConstants.hubShotMap.put(
+    //     4.52, new ShotSettings(0.0, Rotation2d.fromRotations(0.0964), 75.0));
+    // TargetingConstants.hubShotMap.put(
+    //     4.607, new ShotSettings(0.0, Rotation2d.fromRotations(0.08231), 75.0));
+    // TargetingConstants.hubShotMap.put(
+    //     5.46, new ShotSettings(0.0, Rotation2d.fromRotations(0.095215), 75.0));
 
+    TargetingConstants.hubShotMap.put(
+        2.1, new ShotSettings(0.0, Rotation2d.fromRotations(0.04248), 70.0));
+    TargetingConstants.hubShotMap.put(
+        2.706, new ShotSettings(0.0, Rotation2d.fromRotations(0.063721), 70.0));
+    TargetingConstants.hubShotMap.put(
+        3.486, new ShotSettings(0.0, Rotation2d.fromRotations(0.080780), 75.0));
+    TargetingConstants.hubShotMap.put(
+        4.135, new ShotSettings(0.0, Rotation2d.fromRotations(0.084229), 75.0));
+    TargetingConstants.hubShotMap.put(
+        4.583, new ShotSettings(0.0, Rotation2d.fromRotations(0.091064), 80.0));
+    TargetingConstants.hubShotMap.put(
+        5.122, new ShotSettings(0.0, Rotation2d.fromRotations(0.096), 80.0));
     hubPosition = new Pose2d(new Translation2d(11.909, 4.027), new Rotation2d());
     drivetrain = dt;
   }
@@ -83,7 +95,7 @@ public class TargetingSubsystem extends SubsystemBase {
     realDistance = realDisplacementToHub.getNorm();
 
     // System.out.println(realDistance);
-    realDistance = MathUtil.clamp(realDistance, 2.1, 5.46);
+    realDistance = MathUtil.clamp(realDistance, 2.1, 5.122);
     // double estimatedFlightTime = TargetingConstants.hubShotMap.get(realDistance).timeOfFlight();
 
     // Translation2d virtualTarget = targetPose;

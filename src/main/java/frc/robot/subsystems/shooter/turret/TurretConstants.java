@@ -20,8 +20,8 @@ public final class TurretConstants {
 
   public static final double rotorToSensorRatio = 1.112288; // 59 , 335.63
 
-  public static final Rotation2d minAngle = Rotation2d.fromRotations(-0.4206);
-  public static final Rotation2d maxAngle = Rotation2d.fromRotations(0.43105);
+  public static final Rotation2d minAngle = Rotation2d.fromRotations(-0.422607);
+  public static final Rotation2d maxAngle = Rotation2d.fromRotations(0.294678);
   public static final double setpointToleranceRot = Units.degreesToRotations(5.0);
 
   //   public static final double maxVelRotPerSec = Units.radiansToRotations(8.0);
