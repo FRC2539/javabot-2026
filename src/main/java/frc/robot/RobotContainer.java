@@ -105,7 +105,16 @@ public class RobotContainer {
                   .withRotationalRate(speeds.omegaRadiansPerSecond);
             }));
 
-    turret.setDefaultCommand(turret.goToAngleCommand(() -> targeting.getIdealTurretAngle()));
+    pneumaticHub = new PneumaticHub(PneumaticsConstants.pneumaticHubId);
+    compressor = new Compressor(9, PneumaticsModuleType.REVPH);
+
+    pneumaticHub.enableCompressorAnalog(
+        PneumaticsConstants.minPressure, PneumaticsConstants.maxPressure);
+
+    compressor.enableAnalog(PneumaticsConstants.minPressure, PneumaticsConstants.maxPressure);
+    // turret.setDefaultCommand(turret.goToAngleCommand(targeting.getIdealTurretAngle()));
+
+    // turret.setDefaultCommand(turret.setVoltage(0));
   }
 
   private void configureBindings() {
