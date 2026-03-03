@@ -13,6 +13,8 @@ public class VisionIOLimelight implements VisionIO {
     this.cameraName = cameraName;
     this.currentHeading = currentHeading;
     LimelightHelpers.Flush();
+
+    LimelightHelpers.SetIMUMode(cameraName, 0);
   }
 
   @Override

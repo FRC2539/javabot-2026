@@ -47,4 +47,8 @@ public class TurretIOTalonFX implements TurretIO {
     return Math.abs(motor.getPosition().getValueAsDouble() - targetAngle.getRotations())
         < TurretConstants.setpointTolerance.getRotations();
   }
+
+  public void setVoltage(double voltage) {
+    motor.setVoltage(voltage);
+  }
 }

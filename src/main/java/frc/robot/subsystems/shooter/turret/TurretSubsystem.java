@@ -16,6 +16,7 @@ public class TurretSubsystem extends SubsystemBase {
 
   public TurretSubsystem(TurretIO io) {
     this.io = io;
+    setDefaultCommand(setVoltage(0));
   }
 
   @Override
@@ -43,5 +44,14 @@ public class TurretSubsystem extends SubsystemBase {
 
   public boolean isAtSetpoint() {
     return io.isAtSetpoint();
+  }
+
+  public Command setVoltage(double volts) {
+    return Commands.run(() -> io.setVoltage(volts), this);
+  }
+
+  @AutoLogOutput
+  public Rotation2d currentTurretHeading() {
+    return Rotation2d.fromDegrees(inputs.positionDeg).minus(Rotation2d.fromRotations(0.1549902));
   }
 }

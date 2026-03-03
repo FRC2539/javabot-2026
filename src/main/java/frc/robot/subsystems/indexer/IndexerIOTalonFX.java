@@ -1,8 +1,6 @@
 package frc.robot.subsystems.indexer;
 
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.NeutralModeValue;
 
 public class IndexerIOTalonFX implements IndexerIO {
 
@@ -10,20 +8,12 @@ public class IndexerIOTalonFX implements IndexerIO {
 
   private final TalonFX indexerMotor = new TalonFX(IndexerConstants.transportMotorID);
 
-  public IndexerIOTalonFX() {
-    TalonFXConfiguration transportConfig =
-        new TalonFXConfiguration().withCurrentLimits(IndexerConstants.currentLimits);
-
-    transportMotor.getConfigurator().apply(transportConfig);
-    transportMotor.setNeutralMode(NeutralModeValue.Brake);
-
-    indexerMotor.getConfigurator().apply(transportConfig);
-  }
+  public IndexerIOTalonFX() {}
 
   @Override
   public void updateInputs(IndexerIOInputs inputs) {
     inputs.indexerMotorVoltage = indexerMotor.getMotorVoltage().getValueAsDouble();
-    inputs.transportMotorVoltage = transportMotor.getMotorVoltage().refresh().getValueAsDouble();
+    inputs.transportMotorVoltage = transportMotor.getMotorVoltage().getValueAsDouble();
   }
 
   @Override

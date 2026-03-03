@@ -3,6 +3,8 @@ package frc.robot.subsystems.shooter.flywheel;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import java.util.function.Supplier;
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 public class FlywheelSubsystem extends SubsystemBase {
@@ -11,27 +13,37 @@ public class FlywheelSubsystem extends SubsystemBase {
 
   public FlywheelSubsystem(FlywheelIO io) {
     shooterIO = io;
-
-    setDefaultCommand(setShooterRPMCommand(ShooterConstants.IdleRPM));
+    setDefaultCommand(setVoltage(0));
   }
 
   @Override
   public void periodic() {
     shooterIO.updateInputs(shooterInputs);
-    Logger.processInputs("RealOutputs/Shooter", shooterInputs);
+    Logger.processInputs("RealOutputs/FlywheelSubsystem", shooterInputs);
   }
 
-  private void setTargetRPM(double targetRPM) {
-    shooterIO.setControlVelocity(targetRPM);
+  public void setTargetRPS(double targetRPS) {
+    shooterIO.setControlVelocityRPS(targetRPS);
   }
 
-  public Command setShooterRPMCommand(double desiredRPM) {
-    return Commands.runOnce(() -> this.setTargetRPM(desiredRPM), this)
-        .andThen(Commands.run(() -> {}, this).until(this::isAtSetpoint));
+  public Command setShooterRPSCommand(Supplier<Double> desiredRPS) {
+    return Commands.runOnce(() -> this.setTargetRPS(desiredRPS.get()), this)
+        .andThen(Commands.run(() -> {}, this))
+        .until(this::isAtSetpoint);
   }
 
+  public Command setShooterRPSForever(double desiredRPS) {
+    return Commands.runOnce(() -> this.setTargetRPS(desiredRPS), this)
+        .andThen(Commands.run(() -> {}, this));
+  }
+
+  @AutoLogOutput
   public boolean isAtSetpoint() {
     return shooterIO.isAtSetpoint();
+  }
+
+  public Command setVoltage(double volts) {
+    return Commands.run(() -> shooterIO.setVoltage(volts), this);
   }
 
   public boolean atSetpoint() {
