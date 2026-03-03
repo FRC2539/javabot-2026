@@ -14,14 +14,15 @@ public class TurretIOTalonFX implements TurretIO {
   private final CANcoder turretEncoder = new CANcoder(TurretConstants.turretEncoderID);
   private final TalonFX motor = new TalonFX(TurretConstants.turretMotorId, TurretConstants.canBus);
 
-  private double targetAngle = 0.0;
-  private final MotionMagicVoltage controlRequest = new MotionMagicVoltage(targetAngle);
+  private Rotation2d targetAngle = Rotation2d.kZero;
+  private final MotionMagicVoltage controlRequest =
+      new MotionMagicVoltage(targetAngle.getRotations());
 
   public TurretIOTalonFX() {
     CANcoderConfiguration encoderConfig = new CANcoderConfiguration();
-    encoderConfig.MagnetSensor.MagnetOffset = -0.085;
-    encoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = .5;
-    encoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
+    encoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
+    encoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5;
+
     turretEncoder.getConfigurator().apply(encoderConfig);
     motor.getConfigurator().apply(TurretConstants.turretMotorConfig);
 
@@ -33,22 +34,18 @@ public class TurretIOTalonFX implements TurretIO {
     inputs.positionDeg = Units.rotationsToDegrees(motor.getPosition().getValueAsDouble());
 
     inputs.velocityDegPerSec = Units.rotationsToDegrees(motor.getVelocity().getValueAsDouble());
-
-    inputs.voltage = motor.getMotorVoltage().getValueAsDouble();
-    inputs.tempCelsius = motor.getDeviceTemp().getValueAsDouble();
-    inputs.atSetpoint = isAtSetpoint();
   }
 
   @Override
   public void setTargetHeading(Rotation2d desiredAngle) {
-    targetAngle = desiredAngle.getRotations();
-    motor.setControl(controlRequest.withPosition(targetAngle));
+    targetAngle = desiredAngle;
+    motor.setControl(controlRequest.withPosition(targetAngle.getRotations()));
   }
 
   @Override
   public boolean isAtSetpoint() {
-    return Math.abs(motor.getPosition().getValueAsDouble() - targetAngle)
-        < TurretConstants.setpointToleranceRot;
+    return Math.abs(motor.getPosition().getValueAsDouble() - targetAngle.getRotations())
+        < TurretConstants.setpointTolerance.getRotations();
   }
 
   public void setVoltage(double voltage) {

@@ -7,7 +7,6 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
-import com.ctre.phoenix6.signals.InvertedValue;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
@@ -18,11 +17,17 @@ public final class TurretConstants {
   public static final int turretEncoderID = 40;
   public static final String canBus = "rio";
 
-  public static final double rotorToSensorRatio = 1.112288; // 59 , 335.63
+  // Limits
+  public static final Rotation2d minAngle = Rotation2d.fromDegrees(-180);
+  public static final Rotation2d maxAngle = Rotation2d.fromDegrees(180);
+  public static final Rotation2d realZeroOffset =
+      Rotation2d.fromDegrees(
+          30); // The angle offset from "ideal" 0 (facing the intake) to the actual middle value of
+  // the turret's range.
 
-  public static final Rotation2d minAngle = Rotation2d.fromRotations(-0.4206);
-  public static final Rotation2d maxAngle = Rotation2d.fromRotations(0.43105);
-  public static final double setpointToleranceRot = Units.degreesToRotations(5.0);
+  public static final double maxAngleRot = Units.degreesToRotations(180);
+
+  public static final Rotation2d setpointTolerance = Rotation2d.fromDegrees(1.5);
 
   //   public static final double maxVelRotPerSec = Units.radiansToRotations(8.0);
 
@@ -34,7 +39,8 @@ public final class TurretConstants {
       new FeedbackConfigs()
           .withFeedbackSensorSource(FeedbackSensorSourceValue.RemoteCANcoder)
           .withFeedbackRemoteSensorID(turretEncoderID)
-          .withRotorToSensorRatio(rotorToSensorRatio);
+          .withRotorToSensorRatio(0)
+          .withSensorToMechanismRatio(0);
 
   public static final Slot0Configs slot0configs = new Slot0Configs().withKP(60).withKS(4).withKD(4);
 
