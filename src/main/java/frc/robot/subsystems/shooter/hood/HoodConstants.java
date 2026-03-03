@@ -2,7 +2,6 @@ package frc.robot.subsystems.shooter.hood;
 
 import com.ctre.phoenix6.configs.CommutationConfigs;
 import com.ctre.phoenix6.configs.ExternalFeedbackConfigs;
-import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -36,8 +35,6 @@ public final class HoodConstants {
 
   public static final MotorOutputConfigs outputConfigs =
       new MotorOutputConfigs().withInverted(InvertedValue.CounterClockwise_Positive);
-
-
 
   public static final TalonFXSConfiguration hoodMotorConfig =
       new TalonFXSConfiguration()

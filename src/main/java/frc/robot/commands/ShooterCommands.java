@@ -5,9 +5,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.indexer.IndexerSubsystem;
 import frc.robot.subsystems.shooter.flywheel.FlywheelSubsystem;
-import frc.robot.subsystems.shooter.hood.HoodConstants;
 import frc.robot.subsystems.shooter.hood.HoodSubsystem;
-import frc.robot.subsystems.shooter.targeting.TargetingSubsystem;
 import frc.robot.subsystems.shooter.turret.TurretSubsystem;
 
 public class ShooterCommands {
@@ -33,7 +31,8 @@ public class ShooterCommands {
 
   //   // return Commands.parallel(flywheel.setVoltage(8), indexer.indexToShooter());
 
-  //   return Commands.sequence(flywheel.setShooterRPSCommand(shooterRPS), indexer.indexToShooter());
+  //   return Commands.sequence(flywheel.setShooterRPSCommand(shooterRPS),
+  // indexer.indexToShooter());
   // }
 
   public static Command HubShot(
@@ -46,11 +45,12 @@ public class ShooterCommands {
         Commands.parallel(
             flywheel.setShooterRPSCommand(() -> shooterRPS),
             hood.setHoodAngle(() -> Rotation2d.fromRotations(0.0464))), // 0.05273
-            turret.goToAngleCommand(() -> Rotation2d.fromRotations(-0.5)),
+        turret.goToAngleCommand(() -> Rotation2d.fromRotations(-0.5)),
         indexer.indexToShooter());
   }
 
-  // public static Command rangedShot(FlywheelSubsystem flywheel, IndexerSubsystem indexer, TurretSubsystem turret, HoodSubsystem hood, TargetingSubsystem targeting) {
+  // public static Command rangedShot(FlywheelSubsystem flywheel, IndexerSubsystem indexer,
+  // TurretSubsystem turret, HoodSubsystem hood, TargetingSubsystem targeting) {
   //   return Commands.sequence(
   //     Commands.parallel(
   //       flywheel.setShooterRPSCommand(targeting.getIdealFlywheelRPS()),

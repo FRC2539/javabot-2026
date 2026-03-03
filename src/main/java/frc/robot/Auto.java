@@ -79,7 +79,6 @@ public class Auto {
     NamedCommands.registerCommand(
         "intake-retract", robotContainer.pneumatics.setIntakePosition(PneumaticPosition.REVERSE));
 
-
     // NamedCommands.registerCommand(
     //     "climber-up",
     //     Commands.sequence(

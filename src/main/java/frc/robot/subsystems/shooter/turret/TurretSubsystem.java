@@ -5,9 +5,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
 import java.util.function.Supplier;
-
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -39,7 +37,11 @@ public class TurretSubsystem extends SubsystemBase {
 
   public void setTargetAngle(Rotation2d angle) {
 
-    Rotation2d mechanicalTarget = angle.plus(Rotation2d.fromRotations(0.1549902)).plus(Rotation2d.fromDegrees(30)).minus(Rotation2d.fromRotations(0.04117));
+    Rotation2d mechanicalTarget =
+        angle
+            .plus(Rotation2d.fromRotations(0.1549902))
+            .plus(Rotation2d.fromDegrees(30))
+            .minus(Rotation2d.fromRotations(0.04117));
 
     double wrappedRotationDeg =
         MathUtil.inputModulus(

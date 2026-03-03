@@ -4,9 +4,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
 import java.util.function.Supplier;
-
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -18,7 +16,8 @@ public class HoodSubsystem extends SubsystemBase {
   public HoodSubsystem(HoodIO io) {
     this.io = io;
 
-    //setDefaultCommand(Commands.either(setVoltage(0), setHoodAngle(HoodConstants.minHoodAngle), this::isAtSetpoint));
+    // setDefaultCommand(Commands.either(setVoltage(0), setHoodAngle(HoodConstants.minHoodAngle),
+    // this::isAtSetpoint));
     setDefaultCommand(setHoodAngleForever(() -> HoodConstants.minHoodAngle));
   }
 

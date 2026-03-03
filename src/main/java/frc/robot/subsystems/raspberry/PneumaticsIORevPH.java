@@ -32,13 +32,13 @@ public class PneumaticsIORevPH implements PneumaticsIO {
 
     intakeSolenoid.set(Value.kReverse);
 
-    //raspberry2Solenoid.set(Value.kReverse);
+    // raspberry2Solenoid.set(Value.kReverse);
   }
 
   @Override
   public void updateInputs(PneumaticsIOInputs inputs) {
     inputs.intakeState = intakeSolenoid.get();
-    //inputs.raspberry2 = raspberry2Solenoid.get();
+    // inputs.raspberry2 = raspberry2Solenoid.get();
     // inputs.pressurePsi = pneumaticHub.getPressure(0);
   }
 
@@ -46,6 +46,4 @@ public class PneumaticsIORevPH implements PneumaticsIO {
   public void setIntakeSolenoid(Value value) {
     intakeSolenoid.set(value);
   }
-
-  
 }
