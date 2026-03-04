@@ -35,21 +35,20 @@ public class SHOOTONTHEFLY extends Command {
   @Override
   public void execute() {
 
-      turretSubsystem.setTargetAngle(targetingSubsystem.getIdealTurretAngle().get());
-      hoodSubsystem.setTargetAngle(targetingSubsystem.getIdealHoodAngle());
-      flywheelSubsystem.setTargetRPS(targetingSubsystem.getIdealFlywheelRPS().get());
-      //System.out.println(
-        //   "flywheel "
-        //       + targetingSubsystem.getIdealFlywheelRPS().get()
-        //       + "hood "
-        //       + targetingSubsystem.getIdealHoodAngle().get().getDegrees()
-        //       + "turret "
-        //       + targetingSubsystem.getIdealTurretAngle().get().getDegrees());
-      if (turretSubsystem.isAtSetpoint()
-          && hoodSubsystem.isAtSetpoint()
-          && flywheelSubsystem.atSetpoint()) {
-        indexerSubsystem.setVoltagesFunction(-9, 12);
-      }
-    
+    turretSubsystem.setTargetAngle(targetingSubsystem.getIdealTurretAngle().get());
+    hoodSubsystem.setTargetAngle(targetingSubsystem.getIdealHoodAngle());
+    flywheelSubsystem.setTargetRPS(targetingSubsystem.getIdealFlywheelRPS().get());
+    // System.out.println(
+    //   "flywheel "
+    //       + targetingSubsystem.getIdealFlywheelRPS().get()
+    //       + "hood "
+    //       + targetingSubsystem.getIdealHoodAngle().get().getDegrees()
+    //       + "turret "
+    //       + targetingSubsystem.getIdealTurretAngle().get().getDegrees());
+    if (turretSubsystem.isAtSetpoint()
+        && hoodSubsystem.isAtSetpoint()
+        && flywheelSubsystem.atSetpoint()) {
+      indexerSubsystem.setVoltagesFunction(-9, 12);
+    }
   }
 }

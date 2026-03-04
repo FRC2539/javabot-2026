@@ -5,6 +5,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 import frc.robot.subsystems.shooter.targeting.TargetingConstants.ShootingParameters;
@@ -14,7 +15,8 @@ import java.util.function.Supplier;
 import org.littletonrobotics.junction.AutoLogOutput;
 
 public class TargetingSubsystem extends SubsystemBase {
-  private ShootingParameters calculatedParams = new ShootingParameters(new Rotation2d(), new Rotation2d(), 0.0);
+  private ShootingParameters calculatedParams =
+      new ShootingParameters(new Rotation2d(), new Rotation2d(), 0.0);
 
   // private static final LinearFilter vxFilter = LinearFilter.movingAverage(5);
   // private static final LinearFilter vyFilter = LinearFilter.movingAverage(5);
@@ -26,6 +28,9 @@ public class TargetingSubsystem extends SubsystemBase {
   @AutoLogOutput public Rotation2d targetTurretAngle;
   @AutoLogOutput public Rotation2d targetHoodAngle;
   @AutoLogOutput public double targetFlywheelRPS;
+
+  @AutoLogOutput public double turretPaddingDeg = 0.0;
+  @AutoLogOutput public double distancePaddingMeters = 0.0;
 
   boolean isFerrying = false;
   CommandSwerveDrivetrain drivetrain;
@@ -67,6 +72,11 @@ public class TargetingSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    edu.wpi.first.wpilibj.smartdashboard.SmartDashboard.putNumber(
+        "Targeting/Turret Padding", turretPaddingDeg);
+    edu.wpi.first.wpilibj.smartdashboard.SmartDashboard.putNumber(
+        "Targeting/Dist Padding", distancePaddingMeters);
+
     Pose2d robotPose = drivetrain.getRobotPose();
     ChassisSpeeds fieldSpeeds = drivetrain.getFieldSpeeds();
 
@@ -74,7 +84,30 @@ public class TargetingSubsystem extends SubsystemBase {
     // getFerryingTarget(robotPose);
 
     calculatedParams = calculateShot(robotPose, fieldSpeeds, hubPosition.getTranslation(), false);
+  }
 
+  public Command resetPadding() {
+    return runOnce(
+        () -> {
+          turretPaddingDeg = 0.0;
+          distancePaddingMeters = 0.0;
+        });
+  }
+
+  public Command padtargetleft() {
+    return runOnce(() -> turretPaddingDeg += 0.5);
+  }
+
+  public Command padtargetright() {
+    return runOnce(() -> turretPaddingDeg -= 0.5);
+  }
+
+  public Command padtargetdeep() {
+    return runOnce(() -> distancePaddingMeters += 0.1); // Distance is usually meters
+  }
+
+  public Command padtargetclose() {
+    return runOnce(() -> distancePaddingMeters -= 0.1);
   }
 
   public ShootingParameters calculateShot(
@@ -123,21 +156,42 @@ public class TargetingSubsystem extends SubsystemBase {
 
     Rotation2d robotRelativeTurretAngle = aimingVector.getAngle().minus(robotPose.getRotation());
 
-    // double rots = robotRelativeTurretAngle.getRotations();
-    // rots = Math.round(rots * Math.pow(10, 2)) / Math.pow(10, 2);
+    // // double rots = robotRelativeTurretAngle.getRotations();
+    // // rots = Math.round(rots * Math.pow(10, 2)) / Math.pow(10, 2);
 
-    ShotSettings mapValues = TargetingConstants.hubShotMap.get(realDistance);
+    // ShotSettings mapValues = TargetingConstants.hubShotMap.get(realDistance);
+    // if (mapValues == null) {
+    //   return calculatedParams; // Return last known good params
+    // }
+
+    // turretPos = new Pose2d(futureTurretPos, robotRelativeTurretAngle);
+
+    // targetTurretAngle = robotRelativeTurretAngle;
+    // targetHoodAngle = mapValues.hoodAngle();
+    // targetFlywheelRPS = mapValues.wheelRPS();
+    // return new ShootingParameters(
+    //     robotRelativeTurretAngle, mapValues.hoodAngle(), Math.rint(mapValues.wheelRPS()));
+
+    double paddedDistance = MathUtil.clamp(realDistance + distancePaddingMeters, 2.1, 5.122);
+    ShotSettings mapValues = TargetingConstants.hubShotMap.get(paddedDistance);
+
     if (mapValues == null) {
-        return calculatedParams; // Return last known good params
+      return calculatedParams;
     }
 
-    turretPos = new Pose2d(futureTurretPos, robotRelativeTurretAngle);
+    Rotation2d paddedTurretAngle =
+        robotRelativeTurretAngle.plus(Rotation2d.fromDegrees(turretPaddingDeg));
 
-    targetTurretAngle = robotRelativeTurretAngle;
+    turretPos = new Pose2d(futureTurretPos, paddedTurretAngle);
+
+    targetTurretAngle = paddedTurretAngle;
     targetHoodAngle = mapValues.hoodAngle();
     targetFlywheelRPS = mapValues.wheelRPS();
-    return new ShootingParameters(
-        robotRelativeTurretAngle, mapValues.hoodAngle(), Math.rint(mapValues.wheelRPS()));
+
+    calculatedParams =
+        new ShootingParameters(targetTurretAngle, targetHoodAngle, Math.rint(targetFlywheelRPS));
+
+    return calculatedParams;
   }
 
   public Supplier<Rotation2d> getIdealTurretAngle() {
