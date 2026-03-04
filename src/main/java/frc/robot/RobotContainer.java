@@ -7,14 +7,17 @@ import static edu.wpi.first.units.Units.RotationsPerSecond;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.commands.AlignToClimberMT2;
+import frc.robot.commands.AlignToClimberMT2.AlignToRightPoleMT2;
 import frc.robot.commands.SHOOTONTHEFLY;
-import frc.robot.commands.ShooterCommands;
 import frc.robot.lib.controller.LogitechController;
 import frc.robot.lib.controller.ThrustmasterJoystick;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
@@ -36,6 +39,7 @@ import frc.robot.subsystems.shooter.turret.TurretIOTalonFX;
 import frc.robot.subsystems.shooter.turret.TurretSubsystem;
 import frc.robot.subsystems.vision.VisionIOLimelight;
 import frc.robot.subsystems.vision.VisionSubsystem;
+import java.util.Optional;
 
 public class RobotContainer {
 
@@ -54,6 +58,16 @@ public class RobotContainer {
           .withDeadband(maxSpeed * 0.05)
           .withRotationalDeadband(maxAngularRate * 0.025)
           .withDriveRequestType(DriveRequestType.Velocity);
+
+  private final Pose2d climbTag16 =
+      new Pose2d(16.4989764, 3.8806881999999994, Rotation2d.fromDegrees(180));
+
+  private final Pose2d climbTag32 =
+      new Pose2d(0.0140462, 4.1619931999999995, Rotation2d.fromDegrees(0));
+
+  private final Pose2d climbTag15 = new Pose2d(16.4989764, 4.3124882, Rotation2d.fromDegrees(180));
+
+  private final Pose2d climbTag31 = new Pose2d(0.0140462, 3.7301932, Rotation2d.fromDegrees(0));
 
   // subsystems
 
@@ -81,12 +95,41 @@ public class RobotContainer {
       new VisionSubsystem(
           drivetrain::filterAndAddMeasurements,
           // new VisionIOLimelight("limelight-climber", drivetrain::getHeading),
-         new VisionIOLimelight("limelight-turret", drivetrain::getHeading),
+          new VisionIOLimelight("limelight-turret", drivetrain::getHeading),
           new VisionIOLimelight("limelight-right", drivetrain::getHeading),
           new VisionIOLimelight("limelight-left", drivetrain::getHeading));
 
   PneumaticHub pneumaticHub;
   Compressor compressor;
+
+  private Pose2d getAllianceRightPoleTag() {
+    Optional<DriverStation.Alliance> alliance = DriverStation.getAlliance();
+
+    if (alliance.isPresent()) {
+      if (alliance.get() == DriverStation.Alliance.Red) {
+        return climbTag15;
+      } else {
+        return climbTag31;
+      }
+    }
+
+    return climbTag15;
+  }
+
+  private Pose2d getAllianceClimbTag() {
+    Optional<DriverStation.Alliance> alliance = DriverStation.getAlliance();
+
+    if (alliance.isPresent()) {
+      if (alliance.get() == DriverStation.Alliance.Red) {
+        return climbTag16;
+      } else {
+        return climbTag32;
+      }
+    }
+
+    // Default to Red if alliance unknown
+    return climbTag16;
+  }
 
   public RobotContainer() {
 
@@ -163,8 +206,9 @@ public class RobotContainer {
     //     .getLeftTrigger()
     //     .whileTrue(ShooterCommands.HubShot(flywheel, indexer, turret, hood, 65));
 
-    operatorController.getRightTrigger().whileTrue(new SHOOTONTHEFLY(turret, hood, targeting,
-    flywheel, indexer));
+    operatorController
+        .getRightTrigger()
+        .whileTrue(new SHOOTONTHEFLY(turret, hood, targeting, flywheel, indexer));
 
     // operatorController
     //     .getA()
@@ -208,6 +252,22 @@ public class RobotContainer {
     operatorController.getX().onTrue(pneumatics.toggleIntake()); // in case
     operatorController.getB().whileTrue(indexer.setVoltages(4, -4)); // in case
     operatorController.getA().onTrue(roller.setVoltage(-12.0)); // in case
+
+    operatorController
+        .getBack()
+        .whileTrue(
+            new AlignToClimberMT2(
+                drivetrain, getAllianceClimbTag(), 2, -2, Rotation2d.fromDegrees(0)));
+
+    operatorController
+        .getStart()
+        .whileTrue(
+            new AlignToRightPoleMT2(
+                drivetrain,
+                getAllianceRightPoleTag(),
+                2, // forward offset from tag
+                2, // sideways offset
+                Rotation2d.fromDegrees(0)));
   }
 
   private ChassisSpeeds getDriverChassisSpeeds() {

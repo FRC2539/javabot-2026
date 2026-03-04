@@ -35,8 +35,8 @@ public class SHOOTONTHEFLY extends Command {
   @Override
   public void execute() {
 
-      turretSubsystem.setTargetAngle(targetingSubsystem.getIdealTurretAngle().get());
-      hoodSubsystem.setTargetAngle(targetingSubsystem.getIdealHoodAngle());
+    turretSubsystem.setTargetAngle(targetingSubsystem.getIdealTurretAngle().get());
+    hoodSubsystem.setTargetAngle(targetingSubsystem.getIdealHoodAngle());
     //   flywheelSubsystem.setTargetRPS(targetingSubsystem.getIdealFlywheelRPS().get());
     //   System.out.println(
     //       "flywheel "
@@ -50,6 +50,6 @@ public class SHOOTONTHEFLY extends Command {
     //       && flywheelSubsystem.atSetpoint()) {
     //     indexerSubsystem.setVoltagesFunction(-9, 12);
     //   }
-    
+
   }
 }
