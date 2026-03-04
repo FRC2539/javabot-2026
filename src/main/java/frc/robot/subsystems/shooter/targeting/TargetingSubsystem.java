@@ -5,11 +5,16 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 import frc.robot.subsystems.shooter.targeting.TargetingConstants.ShootingParameters;
 import frc.robot.subsystems.shooter.targeting.TargetingConstants.ShotSettings;
 import frc.robot.subsystems.shooter.turret.TurretConstants;
+
+import java.util.List;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.AutoLogOutput;
 
@@ -27,27 +32,24 @@ public class TargetingSubsystem extends SubsystemBase {
   @AutoLogOutput public Rotation2d targetHoodAngle;
   @AutoLogOutput public double targetFlywheelRPS;
 
-  boolean isFerrying = false;
+  public Pose2d leftFerryingPosition = TargetingConstants.leftFerryingTarget;
+  public Pose2d rightFerryingPosition = TargetingConstants.rightFerryingTarget;
+
+  List<Pose2d> ferryingPositions;
+  public boolean isFerrying = false;
   CommandSwerveDrivetrain drivetrain;
 
   public TargetingSubsystem(CommandSwerveDrivetrain dt) {
-    // hubPosition = AllianceFlipUtil.apply(FieldConstants.Hub.innerCenterPoint.toTranslation2d());
-    // hubPosition = FieldConstants.Hub.innerCenterPoint.toTranslation2d();
+    // hubPosition = new Pose2d(new Translation2d(11.909, 4.027), new Rotation2d());
 
-    // TargetingConstants.hubShotMap.put(0, new ShotSettings(0.0, Rotation2d.fromRotations(0), 0));
+    hubPosition = TargetingConstants.blueHubPosition;
 
-    // TargetingConstants.hubShotMap.put(
-    //     2.1, new ShotSettings(0.0, Rotation2d.fromRotations(0.052002), 75.0));
-    // TargetingConstants.hubShotMap.put(
-    //     2.78, new ShotSettings(0.0, Rotation2d.fromRotations(0.064697), 75.0));
-    // TargetingConstants.hubShotMap.put(
-    //     3.237, new ShotSettings(0.0, Rotation2d.fromRotations(0.073468), 75.0));
-    // TargetingConstants.hubShotMap.put(
-    //     4.52, new ShotSettings(0.0, Rotation2d.fromRotations(0.0964), 75.0));
-    // TargetingConstants.hubShotMap.put(
-    //     4.607, new ShotSettings(0.0, Rotation2d.fromRotations(0.08231), 75.0));
-    // TargetingConstants.hubShotMap.put(
-    //     5.46, new ShotSettings(0.0, Rotation2d.fromRotations(0.095215), 75.0));
+    if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
+      hubPosition = new Pose2d(TargetingConstants.fieldLengthMeters - hubPosition.getX(), hubPosition.getY(), Rotation2d.kZero);
+      leftFerryingPosition = new Pose2d(TargetingConstants.fieldLengthMeters - leftFerryingPosition.getX(), leftFerryingPosition.getY(), Rotation2d.kZero);
+      rightFerryingPosition = new Pose2d(TargetingConstants.fieldLengthMeters - rightFerryingPosition.getX(), leftFerryingPosition.getY(), Rotation2d.kZero);
+    }
+    ferryingPositions = List.of(leftFerryingPosition, rightFerryingPosition);
 
     TargetingConstants.hubShotMap.put(
         2.1, new ShotSettings(0.0, Rotation2d.fromRotations(0.04248), 70.0));
@@ -61,7 +63,6 @@ public class TargetingSubsystem extends SubsystemBase {
         4.583, new ShotSettings(0.0, Rotation2d.fromRotations(0.091064), 80.0));
     TargetingConstants.hubShotMap.put(
         5.122, new ShotSettings(0.0, Rotation2d.fromRotations(0.096), 80.0));
-    hubPosition = new Pose2d(new Translation2d(11.909, 4.027), new Rotation2d());
     drivetrain = dt;
   }
 
@@ -70,10 +71,13 @@ public class TargetingSubsystem extends SubsystemBase {
     Pose2d robotPose = drivetrain.getRobotPose();
     ChassisSpeeds fieldSpeeds = drivetrain.getFieldSpeeds();
 
-    // Translation2d target = isInAllianceZone(robotPose) ? hubPosition :
-    // getFerryingTarget(robotPose);
-
-    calculatedParams = calculateShot(robotPose, fieldSpeeds, hubPosition.getTranslation(), false);
+    if (isFerrying) {
+      ShootingParameters ferryingParams = calculateShot(robotPose, fieldSpeeds, robotPose.nearest(ferryingPositions).getTranslation(), false);
+      calculatedParams = new ShootingParameters(ferryingParams.turretAngle(), TargetingConstants.ferryingHoodAngle, TargetingConstants.ferryingRPS);
+    } else {
+      calculatedParams = calculateShot(robotPose, fieldSpeeds, hubPosition.getTranslation(), false);
+    }
+    
 
   }
 
@@ -152,16 +156,7 @@ public class TargetingSubsystem extends SubsystemBase {
     return () -> calculatedParams.flywheelRPS();
   }
 
-  // public static boolean isInAllianceZone(Pose2d robotPose) {
-  //   double boundaryLine = AllianceFlipUtil.applyX(FieldConstants.LinesVertical.allianceZone);
-
-  //   return DriverStation.getAlliance().get() == Alliance.Blue
-  //       ? (robotPose.getX() < boundaryLine)
-  //       : (robotPose.getX() > boundaryLine);
-  // }
-
-  // public static Translation2d getFerryingTarget(Pose2d robotPose) {
-  //   return AllianceFlipUtil.apply(
-  //       robotPose.getTranslation().nearest(TargetingConstants.ferryingTargets));
-  // }
+  public void isFerrying(boolean x) {
+    isFerrying = x;
+  }
 }

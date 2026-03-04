@@ -1,20 +1,23 @@
 package frc.robot.subsystems.shooter.targeting;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.interpolation.Interpolatable;
 import edu.wpi.first.math.interpolation.InterpolatingTreeMap;
 import edu.wpi.first.math.interpolation.InverseInterpolator;
-import java.util.List;
+import edu.wpi.first.math.util.Units;
+import frc.robot.subsystems.shooter.hood.HoodConstants;
 
 public class TargetingConstants {
   public static double estimatedShotLatency = 0.04;
+  public static double fieldLengthMeters = 16.54098798984;
+  public static Rotation2d ferryingHoodAngle = HoodConstants.maxHoodAngle;
+  public static double ferryingRPS = 80;
+  public static Pose2d blueHubPosition = new Pose2d(4.3647,4.0345, Rotation2d.kZero);
 
-  public static Translation2d leftFerryingTarget = new Translation2d();
-  public static Translation2d rightFerryingTarget = new Translation2d();
-  public static List<Translation2d> ferryingTargets =
-      List.of(leftFerryingTarget, rightFerryingTarget);
+  public static Pose2d leftFerryingTarget = new Pose2d(Units.inchesToMeters(40), Units.inchesToMeters(40), Rotation2d.kZero);
+  public static Pose2d rightFerryingTarget = new Pose2d(Units.inchesToMeters(40), Units.inchesToMeters(40), Rotation2d.kZero);
 
   public static final InterpolatingTreeMap<Double, ShotSettings> hubShotMap =
       new InterpolatingTreeMap<>(InverseInterpolator.forDouble(), ShotSettings::interpolate);
