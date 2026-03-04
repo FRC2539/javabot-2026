@@ -22,6 +22,7 @@ import frc.robot.subsystems.drive.DriveConstants;
 import frc.robot.subsystems.drive.TunerConstants;
 import frc.robot.subsystems.indexer.IndexerIOTalonFX;
 import frc.robot.subsystems.indexer.IndexerSubsystem;
+import frc.robot.subsystems.lights.LightsSubsystem;
 import frc.robot.subsystems.raspberry.PneumaticsConstants;
 import frc.robot.subsystems.raspberry.PneumaticsIORevPH;
 import frc.robot.subsystems.raspberry.PneumaticsSubsystem;
@@ -74,6 +75,8 @@ public class RobotContainer {
   public final FlywheelSubsystem flywheel = new FlywheelSubsystem(new FlywheelIOTalonFX());
 
   public final TargetingSubsystem targeting = new TargetingSubsystem(drivetrain);
+
+  public final LightsSubsystem lights = new LightsSubsystem();
 
   public final Auto auto;
 
@@ -208,6 +211,11 @@ public class RobotContainer {
     operatorController.getX().onTrue(pneumatics.toggleIntake()); // in case
     operatorController.getB().whileTrue(indexer.setVoltages(4, -4)); // in case
     operatorController.getA().onTrue(roller.setVoltage(-12.0)); // in case
+
+    // #region Lights Suppliers
+    lights.isAiming = () -> operatorController.getA().getAsBoolean();
+    lights.isShooting = () -> operatorController.getBack().getAsBoolean();
+    // lights.isIntaking = () -> pneumatics.get;
   }
 
   private ChassisSpeeds getDriverChassisSpeeds() {

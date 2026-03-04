@@ -18,4 +18,6 @@ public interface HoodIO {
   public void setHoodVoltage(double voltage);
 
   public boolean isAtSetpoint();
+
+  public double getExpectedDelta();
 }
