@@ -122,18 +122,18 @@ public class TargetingSubsystem extends SubsystemBase {
 
     Rotation2d robotRelativeTurretAngle = aimingVector.getAngle().minus(robotPose.getRotation());
 
-    double rots = robotRelativeTurretAngle.getRotations();
-    rots = Math.round(rots * Math.pow(10, 2)) / Math.pow(10, 2);
+    // double rots = robotRelativeTurretAngle.getRotations();
+    // rots = Math.round(rots * Math.pow(10, 2)) / Math.pow(10, 2);
 
     ShotSettings mapValues = TargetingConstants.hubShotMap.get(realDistance);
 
-    turretPos = new Pose2d(futureTurretPos, Rotation2d.fromRotations(rots));
+    turretPos = new Pose2d(futureTurretPos, robotRelativeTurretAngle);
 
-    targetTurretAngle = Rotation2d.fromRotations(rots);
+    targetTurretAngle = robotRelativeTurretAngle;
     targetHoodAngle = mapValues.hoodAngle();
     targetFlywheelRPS = mapValues.wheelRPS();
     return new ShootingParameters(
-        Rotation2d.fromRotations(rots), mapValues.hoodAngle(), Math.rint(mapValues.wheelRPS()));
+        robotRelativeTurretAngle, mapValues.hoodAngle(), Math.rint(mapValues.wheelRPS()));
   }
 
   public Supplier<Rotation2d> getIdealTurretAngle() {

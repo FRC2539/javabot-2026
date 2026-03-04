@@ -1,5 +1,6 @@
 package frc.robot.subsystems.vision;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.subsystems.vision.LimelightHelpers.PoseEstimate;
 import java.util.function.Supplier;
@@ -17,6 +18,8 @@ public interface VisionIO {
   public void updateInputs(VisionIOInputs inputs);
 
   public PoseEstimate getPoseEstimateMT2();
+
+  public Pose2d getPose();
 
   public void updateHeading(Supplier<Rotation2d> currentHeading);
 }

@@ -20,9 +20,9 @@ public final class TurretConstants {
 
   public static final double rotorToSensorRatio = 1.112288; // 59 , 335.63
 
-  public static final Rotation2d minAngle = Rotation2d.fromRotations(-0.422607);
-  public static final Rotation2d maxAngle = Rotation2d.fromRotations(0.294678);
-  public static final double setpointToleranceRot = Units.degreesToRotations(5.0);
+  public static final Rotation2d minAngle = Rotation2d.fromRotations(-0.4289);
+  public static final Rotation2d maxAngle = Rotation2d.fromRotations(0.442);
+  public static final double setpointToleranceRot = Units.degreesToRotations(2.5);
 
   //   public static final double maxVelRotPerSec = Units.radiansToRotations(8.0);
 
@@ -36,7 +36,7 @@ public final class TurretConstants {
           .withFeedbackRemoteSensorID(turretEncoderID)
           .withRotorToSensorRatio(rotorToSensorRatio);
 
-  public static final Slot0Configs slot0configs = new Slot0Configs().withKP(60).withKS(4).withKD(4);
+  public static final Slot0Configs slot0configs = new Slot0Configs().withKP(50).withKS(2).withKV(1);
 
   public static final SoftwareLimitSwitchConfigs limitSwitchConfigs =
       new SoftwareLimitSwitchConfigs()
@@ -50,9 +50,9 @@ public final class TurretConstants {
 
   public static final MotionMagicConfigs motionMagicConfig =
       new MotionMagicConfigs()
-          .withMotionMagicCruiseVelocity(500)
-          .withMotionMagicAcceleration(2000)
-          .withMotionMagicJerk(8000);
+          .withMotionMagicCruiseVelocity(2)
+          .withMotionMagicAcceleration(8)
+          .withMotionMagicJerk(40);
 
   public static final TalonFXConfiguration turretMotorConfig =
       new TalonFXConfiguration()

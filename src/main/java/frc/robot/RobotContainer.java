@@ -81,7 +81,7 @@ public class RobotContainer {
       new VisionSubsystem(
           drivetrain::filterAndAddMeasurements,
           // new VisionIOLimelight("limelight-climber", drivetrain::getHeading),
-          new VisionIOLimelight("limelight-turret", drivetrain::getHeading),
+         new VisionIOLimelight("limelight-turret", drivetrain::getHeading),
           new VisionIOLimelight("limelight-right", drivetrain::getHeading),
           new VisionIOLimelight("limelight-left", drivetrain::getHeading));
 
@@ -163,8 +163,8 @@ public class RobotContainer {
     //     .getLeftTrigger()
     //     .whileTrue(ShooterCommands.HubShot(flywheel, indexer, turret, hood, 65));
 
-    // operatorController.getRightTrigger().whileTrue(new SHOOTONTHEFLY(turret, hood, targeting,
-    // flywheel, indexer));
+    operatorController.getRightTrigger().whileTrue(new SHOOTONTHEFLY(turret, hood, targeting,
+    flywheel, indexer));
 
     // operatorController
     //     .getA()
@@ -185,15 +185,15 @@ public class RobotContainer {
     leftDriveController.getTrigger().onTrue(pneumatics.toggleIntake());
 
     // comp controls - operator
-    operatorController
-        .getLeftTrigger()
-        .whileTrue(new SHOOTONTHEFLY(turret, hood, targeting, flywheel, indexer));
+    // operatorController
+    //     .getLeftTrigger()
+    //     .whileTrue(new SHOOTONTHEFLY(turret, hood, targeting, flywheel, indexer));
     // operatorController
     //     .getRightTrigger()
     //     .whileTrue(ShooterCommands.HubShot(flywheel, indexer, turret, hood, 65));
-    operatorController
-        .getRightTrigger()
-        .whileTrue(ShooterCommands.tuning(flywheel, indexer, hood, 70));
+    // operatorController
+    //     .getRightTrigger()
+    //     .whileTrue(ShooterCommands.tuning(flywheel, indexer, hood, 70));
     // operatorController.getLeftBumper().whileTrue(ShooterCommands.LeftTrench(flywheel, indexer,
     // turret, hood, 65));
     // operatorController.getRightBumper().whileTrue(ShooterCommands.RightTrench(flywheel, indexer,
