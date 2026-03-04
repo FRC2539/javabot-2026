@@ -36,11 +36,11 @@ public class VisionSubsystem extends SubsystemBase {
       PoseEstimate currentPoseEstimate = io[i].getPoseEstimateMT2();
 
       if (LimelightHelpers.validPoseEstimate(currentPoseEstimate)) {
-        if (currentPoseEstimate.avgTagDist < lowestAvgDistance) {
-          lowestAvgDistance = currentPoseEstimate.avgTagDist;
-          bestPoseEstimate = currentPoseEstimate;
+      //  if (currentPoseEstimate.avgTagDist < lowestAvgDistance) {
+        lowestAvgDistance = currentPoseEstimate.avgTagDist;
+        bestPoseEstimate = currentPoseEstimate;
           //System.out.println("Merged Pose!");
-        }
+        //}
       }
       
       // if (LimelightHelpers.validPoseEstimate(currentPoseEstimate)) {
