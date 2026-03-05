@@ -44,12 +44,14 @@ public enum LEDSegment {
   public static final CANdle candle = LightsSubsystem.candle;
   public final int animSlot;
   public final boolean reversed;
+  public final int segmentSize;
   public final int startIndex;
   public final int endIndex;
 
   LEDSegment(int animSlot, boolean reversed, int size) {
     this.animSlot = animSlot;
     this.reversed = reversed;
+    segmentSize = size;
     startIndex = LightsConstants.lastIndex;
     LightsConstants.lastIndex += size;
     endIndex = LightsConstants.lastIndex - 1;
@@ -57,6 +59,7 @@ public enum LEDSegment {
   LEDSegment(int animSlot, boolean reversed, int startIndex, int endIndex) {
     this.animSlot = animSlot;
     this.reversed = reversed;
+    segmentSize = endIndex - startIndex + 1;
     this.startIndex = startIndex;
     this.endIndex = endIndex;
   }
@@ -116,7 +119,7 @@ public enum LEDSegment {
 
   public void setFlowAnimation(RGBWColor color, double periodSeconds, boolean inverted) {
     double frameRateHz =
-        2.0 * LightsConstants.StripSize / periodSeconds; // Hz of 2 = 1 cycle per second
+        2.0 * segmentSize / periodSeconds; // Hz of 2 = 1 cycle per second
     candle.setControl(new ColorFlowAnimation(startIndex, endIndex)
             .withColor(color)
             .withFrameRate(frameRateHz)
@@ -128,7 +131,7 @@ public enum LEDSegment {
   public void setLarsonAnimation(RGBWColor color, double periodSeconds, int size) {
     size = Math.min(size, 15);
     double frameRateHz =
-        2.0 * (LightsConstants.StripSize - size) / periodSeconds; // Hz of 2 = 1 cycle per second
+        2.0 * (segmentSize - size) / periodSeconds; // Hz of 2 = 1 cycle per second
     candle.setControl(
         new LarsonAnimation(startIndex, endIndex)
             .withColor(color)
