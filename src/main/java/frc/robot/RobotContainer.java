@@ -20,6 +20,8 @@ import frc.robot.commands.AlignToClimberMT2.AlignToRightPoleMT2;
 import frc.robot.commands.SHOOTONTHEFLY;
 import frc.robot.lib.controller.LogitechController;
 import frc.robot.lib.controller.ThrustmasterJoystick;
+import frc.robot.subsystems.climber.ClimberIOTalonFX;
+import frc.robot.subsystems.climber.ClimberSubsystem;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 import frc.robot.subsystems.drive.DriveConstants;
 import frc.robot.subsystems.drive.TunerConstants;
@@ -73,7 +75,7 @@ public class RobotContainer {
 
   public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
-  // public final ClimberSubsystem climber = new ClimberSubsystem(new ClimberIOTalonFX());
+  public final ClimberSubsystem climber = new ClimberSubsystem(new ClimberIOTalonFX());
 
   public final RollerSubsystem roller = new RollerSubsystem(new RollerIOTalonFXS());
 
@@ -227,6 +229,10 @@ public class RobotContainer {
     // comp controls - driver
     rightDriveController.getTrigger().whileTrue(roller.setVoltage(8));
     leftDriveController.getTrigger().onTrue(pneumatics.toggleIntake());
+
+    rightDriveController.getLeftThumb().whileTrue(climber.setVoltage(-8));
+    rightDriveController.getRightThumb().whileTrue(climber.setVoltage(8));
+
 
     // comp controls - operator
     // operatorController
