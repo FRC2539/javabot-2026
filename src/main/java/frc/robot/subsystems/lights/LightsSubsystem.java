@@ -29,7 +29,7 @@ import java.util.function.BooleanSupplier;
 
 public class LightsSubsystem extends SubsystemBase {
 
-  public CANdle candle = new CANdle(LightsConstants.CandleID);
+  public static CANdle candle = new CANdle(LightsConstants.CandleID);
 
   public LightsSubsystem() {
     CANdleConfiguration cfg = new CANdleConfiguration();
@@ -61,23 +61,23 @@ public class LightsSubsystem extends SubsystemBase {
 
     switch (getAnimationState()) {
       case DISABLED:
-        if (gameEnded) setRainbowAnimation(2, false);
-        else setFlowAnimation(ColorPalette.Orange, 3, false);
+        if (gameEnded) Presets.RainbowSplit(false);
+        else Presets.FlowQuads(ColorPalette.Orange, 3, false);
         gameEnded = false;
       case PLAYING:
         if (InputSubsystem.currentMatchTimeframe.duration - InputSubsystem.MatchTimeframeTimer.get()
             <= 3)
           if (InputSubsystem.currentMatchTimeframe == MatchTimeframe.EndGame) {
-            setFadeAnimation(ColorPalette.Red, 0.5);
+            Presets.Fade(ColorPalette.Red, 0.5);
           } else if (InputSubsystem.getWillActivitySwap()) {
-            setFadeAnimation(
+            Presets.Fade(
                 (InputSubsystem.IsHubActive()) ? ColorPalette.Orange : ColorPalette.Yellow, 1);
           } else
-            setSolidColor(
+            Presets.SolidColor(
                 (InputSubsystem.IsHubActive()) ? ColorPalette.Orange : ColorPalette.Yellow);
         if (InputSubsystem.currentMatchTimeframe == MatchTimeframe.EndGame) gameEnded = true;
       case INTAKING:
-        setFadeAnimation(ColorPalette.Blue, 0.5);
+        Presets.Fade(ColorPalette.Blue, 0.5);
       case SHOOTING:
         double ready = 1;
         if (turretIO.getExpectedDelta() > 0.01)
@@ -86,146 +86,103 @@ public class LightsSubsystem extends SubsystemBase {
         if (flywheelIO.getExpectedDelta() > 1) ready -= Math.abs(flywheelIO.getExpectedDelta()) / 5;
         if (ready < 0) ready = 0;
 
-        if (ready >= 0.995) setSolidColor(ColorPalette.Green);
-        else setSolidColor(ColorPalette.Crossfade(ColorPalette.Red, ColorPalette.Yellow, ready));
+        if (ready >= 0.995) Presets.SolidColor(ColorPalette.Green);
+        else Presets.SolidColor(ColorPalette.Crossfade(ColorPalette.Red, ColorPalette.Yellow, ready));
       case CLIMBING:
-        setStrobeAnimation(ColorPalette.Green, 0.25);
+        Presets.Strobe(ColorPalette.Green, 0.25);
       case IDLE:
-        setFadeAnimation(ColorPalette.White, 10);
+        Presets.Fade(ColorPalette.White, 10);
       case ESTOP:
-        setStrobeAnimation(ColorPalette.Red, 0.25);
+        Presets.Fade(ColorPalette.Red, 0.5);
       case ERROR:
-        setSolidColor(ColorPalette.Yellow);
+        Presets.SolidColor(ColorPalette.Yellow);
     }
   }
 
-  boolean gameEnded = false;
+  //#region Animation States
+  public boolean gameEnded = false;
   public BooleanSupplier isAiming = () -> false;
   public BooleanSupplier isShooting = () -> false;
   public BooleanSupplier isClimbing = () -> false;
   public BooleanSupplier isIntaking = () -> false;
-
+  
   public static TurretIO turretIO;
   public static HoodIO hoodIO;
   public static FlywheelIO flywheelIO;
-
+  
   AnimationState getAnimationState() {
     MatchPeriod period = InputSubsystem.getMatchPeriod();
-
+    
     switch (period) {
       case Disabled:
-        if (InputSubsystem.MatchPeriodTimer.get() > 180)
+      if (InputSubsystem.MatchPeriodTimer.get() > 180)
           return AnimationState.IDLE; // After 3 minutes
-        return AnimationState.DISABLED;
+          return AnimationState.DISABLED;
       case Teleop, Auto, Test:
-        if (isShooting.getAsBoolean() && !isAiming.getAsBoolean()) return AnimationState.ERROR;
-        if (isAiming.getAsBoolean()) return AnimationState.SHOOTING;
-        if (isClimbing.getAsBoolean()) return AnimationState.CLIMBING;
-        if (isIntaking.getAsBoolean()) return AnimationState.INTAKING;
-        return AnimationState.PLAYING;
+      if (isShooting.getAsBoolean() && !isAiming.getAsBoolean()) return AnimationState.ERROR;
+      if (isAiming.getAsBoolean()) return AnimationState.SHOOTING;
+      if (isClimbing.getAsBoolean()) return AnimationState.CLIMBING;
+      if (isIntaking.getAsBoolean()) return AnimationState.INTAKING;
+      return AnimationState.PLAYING;
       case EStop:
-        return AnimationState.ESTOP;
+      return AnimationState.ESTOP;
     }
     return AnimationState.ERROR;
   }
 
-  // #region Animations
+  //#region Animation Presets
+  static class Presets {
+    // Uniform
+    public static void SolidColor(RGBWColor color) {
+      LEDSegment.ClearAnimIDs(0, 7);
+      LEDSegment.All.setSolidColor(color);
+    }
+    public static void Strobe(RGBWColor color, double period) {
+      LEDSegment.ClearAnimIDs(1, 7);
+      LEDSegment.All.setStrobeAnimation(color, period);
+    }
+    public static void Fade(RGBWColor color, double period) {
+      LEDSegment.ClearAnimIDs(1, 7);
+      LEDSegment.All.setFadeAnimation(color, period);
+    }
+    public static void RGBFade(double period) {
+      LEDSegment.ClearAnimIDs(1, 7);
+      LEDSegment.All.setRGBFadeAnimation(period);
+    }
 
-  public void setSolidColor(RGBWColor color) {
-    candle.setControl(new EmptyAnimation(0));
-    candle.setControl(
-        new SolidColor(
-                LightsConstants.StartIndex,
-                LightsConstants.StartIndex + LightsConstants.StripSize - 1)
-            .withColor(color));
-  }
+    // Non-Uniform
+    public static void Fire(boolean inverted) { // Flow to center (edges if inverted)
+      for (LEDSegment s : LightsConstants.OuterSegments) s.setFireAnimation(0.4, 0.4, inverted, 40);
+      for (LEDSegment s : LightsConstants.InnerSegments) s.setFireAnimation(0.4, 0.4, inverted, 40);
+    }
+    public static void RainbowSingle(boolean inverted) { // Flow to left (right if inverted)
+      for (LEDSegment s : LightsConstants.QuadsRight) s.setRainbowAnimation(1, inverted);
+      for (LEDSegment s : LightsConstants.QuadsLeft) s.setRainbowAnimation(1, !inverted);
+    }
+    public static void RainbowSplit(boolean inverted) { // Flow to center (edges if inverted)
+      for (LEDSegment s : LightsConstants.AllQuadSegments) s.setRainbowAnimation(1, inverted);
+    }
+    public static void FlowIndividualMerging(RGBWColor color, double period, boolean inverted) { // Flow to quad centers (quad edges if inverted)
+      for (LEDSegment s : LightsConstants.OuterSegments) s.setFlowAnimation(color, period, inverted);
+      for (LEDSegment s : LightsConstants.InnerSegments) s.setFlowAnimation(color, period, !inverted);
+    }
+    public static void FlowIndividualSynced(RGBWColor color, double period, boolean inverted) { // Flow to center (edges if inverted)
+      for (LEDSegment s : LightsConstants.OuterSegments) s.setFlowAnimation(color, period, inverted);
+    }
+    public static void FlowQuads(RGBWColor color, double period, boolean inverted) { // Flow to center (edges if inverted)
+      for (LEDSegment s : LightsConstants.AllQuadSegments) s.setFlowAnimation(color, period, inverted);
+    }
 
-  public void setStrobeAnimation(RGBWColor color, double periodSeconds) {
-    double frameRateHz = 2.0 / periodSeconds; // Hz of 2 = 1 cycle per second
-    candle.setControl(
-        new StrobeAnimation(
-                LightsConstants.StartIndex,
-                LightsConstants.StartIndex + LightsConstants.StripSize - 1)
-            .withColor(color)
-            .withSlot(0)
-            .withFrameRate(frameRateHz));
+    // // Shooter Interrupt
+    // static boolean shooterInterrupted = false;
+    // public static void releaseShooter() { shooterInterrupted = false; }
+    // public static void interruptShooter() {
+    //   shooterInterrupted = true;
+    //   for (LEDSegment s : LightsConstants.ShooterSegments)
+    // }
   }
-
-  public void setFadeAnimation(RGBWColor color, double periodSeconds) {
-    double frameRateHz = 200.0 / periodSeconds; // Hz of 200 = 1 cycle per second
-    candle.setControl(
-        new SingleFadeAnimation(
-                LightsConstants.StartIndex,
-                LightsConstants.StartIndex + LightsConstants.StripSize - 1)
-            .withColor(color)
-            .withFrameRate(frameRateHz)
-            .withSlot(0));
-  }
-
-  public void setRGBFadeAnimation(double periodSeconds) {
-    double frameRateHz = 600.0 / periodSeconds; // Hz of 600 = 1 cycle per second
-    candle.setControl(
-        new RgbFadeAnimation(
-                LightsConstants.StartIndex,
-                LightsConstants.StartIndex + LightsConstants.StripSize - 1)
-            .withFrameRate(frameRateHz)
-            .withSlot(0));
-  }
-
-  public void setRainbowAnimation(double periodSeconds, boolean inverted) {
-    double frameRateHz = 120.0 / periodSeconds; // Hz of 120 = 1 cycle per second
-    candle.setControl(
-        new RainbowAnimation(
-                LightsConstants.StartIndex,
-                LightsConstants.StartIndex + LightsConstants.StripSize - 1)
-            .withFrameRate(frameRateHz)
-            .withDirection(
-                (inverted) ? AnimationDirectionValue.Backward : AnimationDirectionValue.Forward)
-            .withSlot(0));
-  }
-
-  public void setFlowAnimation(RGBWColor color, double periodSeconds, boolean inverted) {
-    double frameRateHz =
-        2.0 * LightsConstants.StripSize / periodSeconds; // Hz of 2 = 1 cycle per second
-    ColorFlowAnimation flow =
-        new ColorFlowAnimation(
-                LightsConstants.StartIndex,
-                LightsConstants.StartIndex + LightsConstants.StripSize - 1)
-            .withColor(color)
-            .withFrameRate(frameRateHz)
-            .withDirection(
-                (inverted) ? AnimationDirectionValue.Backward : AnimationDirectionValue.Forward)
-            .withSlot(0);
-    candle.setControl(flow);
-  }
-
-  public void setLarsonAnimation(RGBWColor color, double periodSeconds, int size) {
-    size = Math.min(size, 15);
-    double frameRateHz =
-        2.0 * (LightsConstants.StripSize - size) / periodSeconds; // Hz of 2 = 1 cycle per second
-    candle.setControl(
-        new LarsonAnimation(
-                LightsConstants.StartIndex,
-                LightsConstants.StartIndex + LightsConstants.StripSize - 1)
-            .withColor(color)
-            .withFrameRate(frameRateHz)
-            .withSize(size)
-            .withBounceMode(LarsonBounceValue.Front)
-            .withSlot(0));
-  }
-
-  public void setFireAnimation(double cooling, double sparking, boolean inverted, double fps) {
-    candle.setControl(
-        new FireAnimation(
-                LightsConstants.StartIndex,
-                LightsConstants.StartIndex + LightsConstants.StripSize - 1)
-            .withCooling(cooling)
-            .withSparking(sparking)
-            .withFrameRate(fps)
-            .withDirection(
-                (inverted) ? AnimationDirectionValue.Backward : AnimationDirectionValue.Forward)
-            .withSlot(0));
-  }
+  
+  //#region Segmentation
 
   public void setBrightness(double brightness) {
     if (candle != null) {
