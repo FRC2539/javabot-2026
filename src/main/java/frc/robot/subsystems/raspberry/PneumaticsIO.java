@@ -14,4 +14,6 @@ public interface PneumaticsIO {
     public Value intakeState = Value.kReverse;
     public double pressurePsi = 0.0;
   }
+
+  public Value getIntakeSolenoid();
 }

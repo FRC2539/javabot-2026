@@ -74,11 +74,13 @@ public class LightsSubsystem extends SubsystemBase {
         else setFlowAnimation(ColorPalette.Orange, 3, false);
         gameEnded = false;
       case PLAYING:
-        if (InputSubsystem.currentMatchTimeframe.duration - InputSubsystem.MatchTimeframeTimer.get()
-                <= 3
-            && InputSubsystem.getWillActivitySwap())
-          setFadeAnimation(
-              (InputSubsystem.IsHubActive()) ? ColorPalette.Orange : ColorPalette.Yellow, 1);
+        if (InputSubsystem.currentMatchTimeframe.duration - InputSubsystem.MatchTimeframeTimer.get() <= 3)
+            if (InputSubsystem.currentMatchTimeframe == MatchTimeframe.EndGame) {
+              setFadeAnimation(ColorPalette.Red, 0.5);
+            }
+            else if (InputSubsystem.getWillActivitySwap()) {
+              setFadeAnimation((InputSubsystem.IsHubActive()) ? ColorPalette.Orange : ColorPalette.Yellow, 1);
+            }
         else
           setSolidColor((InputSubsystem.IsHubActive()) ? ColorPalette.Orange : ColorPalette.Yellow);
         if (InputSubsystem.currentMatchTimeframe == MatchTimeframe.EndGame) gameEnded = true;
@@ -86,7 +88,7 @@ public class LightsSubsystem extends SubsystemBase {
         setFadeAnimation(ColorPalette.Blue, 0.5);
       case SHOOTING:
         double ready = 1;
-        if (turretIO.getExpectedDelta() > 0.01) ready -= Math.abs(turretIO.getExpectedDelta()) * 50;
+        if (turretIO.getExpectedDelta() > 0.01) ready -= Math.abs(turretIO.getExpectedDelta()) * 50; // TODO: Tweak Constants
         if (hoodIO.getExpectedDelta() > 0.01) ready -= Math.abs(hoodIO.getExpectedDelta()) * 50;
         if (flywheelIO.getExpectedDelta() > 1) ready -= Math.abs(flywheelIO.getExpectedDelta()) / 5;
         if (ready < 0) ready = 0;
