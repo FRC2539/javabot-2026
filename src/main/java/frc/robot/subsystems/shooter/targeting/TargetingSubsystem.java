@@ -40,16 +40,17 @@ public class TargetingSubsystem extends SubsystemBase {
   CommandSwerveDrivetrain drivetrain;
 
   public TargetingSubsystem(CommandSwerveDrivetrain dt) {
-    // hubPosition = new Pose2d(new Translation2d(11.909, 4.027), new Rotation2d());
+    //hubPosition = new Pose2d(new Translation2d(11.909, 4.027), new Rotation2d());
 
-    hubPosition = TargetingConstants.blueHubPosition;
+    hubPosition = new Pose2d(new Translation2d(11.909 - 0.0381, 4.027), new Rotation2d());
+   // hubPosition = TargetingConstants.blueHubPosition;
 
     if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
-      hubPosition = new Pose2d(TargetingConstants.fieldLengthMeters - hubPosition.getX(), hubPosition.getY(), Rotation2d.kZero);
+      //hubPosition = new Pose2d(TargetingConstants.fieldLengthMeters - hubPosition.getX(), hubPosition.getY(), Rotation2d.kZero);
       leftFerryingPosition = new Pose2d(TargetingConstants.fieldLengthMeters - leftFerryingPosition.getX(), leftFerryingPosition.getY(), Rotation2d.kZero);
       rightFerryingPosition = new Pose2d(TargetingConstants.fieldLengthMeters - rightFerryingPosition.getX(), leftFerryingPosition.getY(), Rotation2d.kZero);
     }
-    ferryingPositions = List.of(leftFerryingPosition, rightFerryingPosition);
+    //ferryingPositions = List.of(leftFerryingPosition, rightFerryingPosition);
 
     TargetingConstants.hubShotMap.put(
         2.1, new ShotSettings(0.0, Rotation2d.fromRotations(0.04248), 70.0));
@@ -71,6 +72,7 @@ public class TargetingSubsystem extends SubsystemBase {
     Pose2d robotPose = drivetrain.getRobotPose();
     ChassisSpeeds fieldSpeeds = drivetrain.getFieldSpeeds();
 
+    isFerrying = false;
     if (isFerrying) {
       ShootingParameters ferryingParams = calculateShot(robotPose, fieldSpeeds, robotPose.nearest(ferryingPositions).getTranslation(), false);
       calculatedParams = new ShootingParameters(ferryingParams.turretAngle(), TargetingConstants.ferryingHoodAngle, TargetingConstants.ferryingRPS);

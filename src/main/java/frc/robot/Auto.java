@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.commands.SHOOTONTHEFLY;
+import frc.robot.commands.ShooterCommands;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 import frc.robot.subsystems.drive.DriveConstants;
 import frc.robot.subsystems.raspberry.PneumaticsSubsystem.PneumaticPosition;
@@ -107,13 +109,16 @@ public class Auto {
             robotContainer.roller.setVoltage(IntakeConstants.dropvoltage),
             robotContainer.pneumatics.setIntakePosition(PneumaticPosition.FORWARD)));
 
-    // NamedCommands.registerCommand(
-    //     "hold-to-shoot",
-    //     ShooterCommands.holdToShoot(
-    //         robotContainer.flywheel,
-    //         robotContainer.hood,
-    //         robotContainer.indexer,
-    //         robotContainer.targeting));
+
+    NamedCommands.registerCommand(
+        "shoot",
+        new SHOOTONTHEFLY(
+            robotContainer.turret,
+            robotContainer.hood,
+            robotContainer.targeting,
+            robotContainer.flywheel,
+            robotContainer.indexer));
+          
   }
 
   public Command getAutoCommand() {

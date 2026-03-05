@@ -163,8 +163,9 @@ public class RobotContainer {
     //     .getLeftTrigger()
     //     .whileTrue(ShooterCommands.HubShot(flywheel, indexer, turret, hood, 65));
 
-    operatorController.getRightTrigger().whileTrue(new SHOOTONTHEFLY(turret, hood, targeting,
-    flywheel, indexer));
+    // operatorController.getRightTrigger().whileTrue(new 
+    // SHOOTONTHEFLY(turret, hood, targeting,
+    // flywheel, indexer));
 
     // operatorController
     //     .getA()
@@ -185,12 +186,12 @@ public class RobotContainer {
     leftDriveController.getTrigger().onTrue(pneumatics.toggleIntake());
 
     // comp controls - operator
-    // operatorController
-    //     .getLeftTrigger()
-    //     .whileTrue(new SHOOTONTHEFLY(turret, hood, targeting, flywheel, indexer));
-    // operatorController
-    //     .getRightTrigger()
-    //     .whileTrue(ShooterCommands.HubShot(flywheel, indexer, turret, hood, 65));
+    operatorController
+        .getLeftTrigger()
+        .whileTrue(new SHOOTONTHEFLY(turret, hood, targeting, flywheel, indexer));
+    operatorController
+        .getRightTrigger()
+        .whileTrue(ShooterCommands.HubShot(flywheel, indexer, turret, hood, 65));
     // operatorController
     //     .getRightTrigger()
     //     .whileTrue(ShooterCommands.tuning(flywheel, indexer, hood, 70));

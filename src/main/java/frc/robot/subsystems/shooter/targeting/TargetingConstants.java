@@ -13,7 +13,7 @@ public class TargetingConstants {
   public static double estimatedShotLatency = 0.04;
   public static double fieldLengthMeters = 16.54098798984;
   public static Rotation2d ferryingHoodAngle = HoodConstants.maxHoodAngle;
-  public static double ferryingRPS = 80;
+  public static double ferryingRPS = 70;
   public static Pose2d blueHubPosition = new Pose2d(4.3647,4.0345, Rotation2d.kZero);
 
   public static Pose2d leftFerryingTarget = new Pose2d(Units.inchesToMeters(40), Units.inchesToMeters(40), Rotation2d.kZero);
