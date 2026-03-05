@@ -18,14 +18,14 @@ public enum LEDSegment {
   // NOTE: All segments point towards the middle of the robot (meaning between the center and shooter segments) by default
 
   // Individual
-  ShooterTop(0, true, 10), // TODO: Sizing
-  RightTop(1, true, 10),
-  RightBottom(2, false, 10),
-  ShooterBottom(3, false, 10),
-  CenterBottom(4, true, 10),
-  LeftBottom(5, true, 10),
-  LeftTop(6, false, 10),
-  CenterTop(7, false, 10),
+  ShooterTop(0, true, 20), // TODO: Sizing
+  RightTop(1, true, 17),
+  RightBottom(2, false, 17),
+  ShooterBottom(3, false, 20),
+  CenterBottom(4, true, 12),
+  LeftBottom(5, true, 20),
+  LeftTop(6, false, 20),
+  CenterTop(7, false, 12),
 
   // All
   All(0, false, ShooterTop.startIndex, CenterTop.endIndex),

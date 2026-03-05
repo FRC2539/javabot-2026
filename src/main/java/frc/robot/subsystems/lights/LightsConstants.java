@@ -5,7 +5,6 @@ import com.ctre.phoenix6.signals.RGBWColor;
 public class LightsConstants {
   //#region Constants
   public static int CandleID = 10;
-  public static int StripSize = 200;
   public static int lastIndex = 0;
   
   //#region Segments
