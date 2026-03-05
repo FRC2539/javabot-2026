@@ -7,7 +7,7 @@ public class LightsConstants {
   public static int CandleID = 10;
   public static int StripSize = 200;
 
-  public static int StartIndex = 0;
+  public static int StartIndex = 8;
 
   public static class ColorPalette {
     static RGBWColor Orange = new RGBWColor(240, 50, 10);
