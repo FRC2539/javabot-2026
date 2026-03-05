@@ -14,6 +14,7 @@ public class SHOOTONTHEFLY extends Command {
   FlywheelSubsystem flywheelSubsystem;
   IndexerSubsystem indexerSubsystem;
 
+  public boolean hasSpunUp = false;
   public SHOOTONTHEFLY(
       TurretSubsystem turret,
       HoodSubsystem hood,
@@ -45,10 +46,14 @@ public class SHOOTONTHEFLY extends Command {
         //       + targetingSubsystem.getIdealHoodAngle().get().getDegrees()
         //       + "turret "
         //       + targetingSubsystem.getIdealTurretAngle().get().getDegrees());
+
+        if (flywheelSubsystem.atSetpoint()) {
+            hasSpunUp = true;
+        }
       if (turretSubsystem.isAtSetpoint()
           && hoodSubsystem.isAtSetpoint()
-          && flywheelSubsystem.atSetpoint()) {
-        indexerSubsystem.setVoltagesFunction(-9, 12);
+          && (flywheelSubsystem.atSetpoint() || hasSpunUp)) {
+        indexerSubsystem.setVoltagesFunction(-12, 12);
       }
     
   }

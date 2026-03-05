@@ -82,8 +82,8 @@ public class RobotContainer {
           drivetrain::filterAndAddMeasurements,
           // new VisionIOLimelight("limelight-climber", drivetrain::getHeading),
          new VisionIOLimelight("limelight-turret", drivetrain::getHeading),
-          new VisionIOLimelight("limelight-right", drivetrain::getHeading),
-          new VisionIOLimelight("limelight-left", drivetrain::getHeading));
+          new VisionIOLimelight("limelight-right", drivetrain::getHeading));
+          //new VisionIOLimelight("limelight-left", drivetrain::getHeading));
 
   PneumaticHub pneumaticHub;
   Compressor compressor;

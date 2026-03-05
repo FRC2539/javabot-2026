@@ -14,11 +14,14 @@ public class TargetingConstants {
   public static double fieldLengthMeters = 16.54098798984;
   public static Rotation2d ferryingHoodAngle = Rotation2d.fromRotations(HoodConstants.maxHoodAngle.getRotations() - 0.03);
   public static double ferryingRPS = 70;
-  public static Pose2d blueHubPosition = new Pose2d(4.3647,4.0345, Rotation2d.kZero);
+  public static Pose2d blueHubPosition = new Pose2d(4.6255,4.0345, Rotation2d.kZero); // 4.3647, 4.0345
 
+  public static Pose2d redHubPosition = new Pose2d(TargetingConstants.fieldLengthMeters - blueHubPosition.getX(), blueHubPosition.getY(), Rotation2d.kZero);
 
-  public static Pose2d leftFerryingTarget = new Pose2d(0, 3.5, Rotation2d.kZero);
-  public static Pose2d rightFerryingTarget = new Pose2d(0, 7, Rotation2d.kZero);
+  public static Pose2d blueLeftFerryingTarget = new Pose2d(0, 3.5, Rotation2d.kZero);
+  public static Pose2d blueRightFerryingTarget = new Pose2d(0, 7, Rotation2d.kZero);
+  public static Pose2d redLeftFerryingTarget = new Pose2d(TargetingConstants.fieldLengthMeters - blueLeftFerryingTarget.getX(), blueLeftFerryingTarget.getY(), Rotation2d.kZero);
+  public static Pose2d redRightFerryingTarget = new Pose2d(TargetingConstants.fieldLengthMeters - blueRightFerryingTarget.getX(), blueRightFerryingTarget.getY(), Rotation2d.kZero);
 
   public static final InterpolatingTreeMap<Double, ShotSettings> hubShotMap =
       new InterpolatingTreeMap<>(InverseInterpolator.forDouble(), ShotSettings::interpolate);

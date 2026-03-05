@@ -14,6 +14,7 @@ import frc.robot.subsystems.shooter.targeting.TargetingConstants.ShootingParamet
 import frc.robot.subsystems.shooter.targeting.TargetingConstants.ShotSettings;
 import frc.robot.subsystems.shooter.turret.TurretConstants;
 
+import java.lang.annotation.Target;
 import java.util.List;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -33,9 +34,9 @@ public class TargetingSubsystem extends SubsystemBase {
   @AutoLogOutput public double targetFlywheelRPS;
 
   @AutoLogOutput
-  public Pose2d leftFerryingPosition = TargetingConstants.leftFerryingTarget;
+  public Pose2d leftFerryingPosition = TargetingConstants.blueLeftFerryingTarget;
   @AutoLogOutput
-  public Pose2d rightFerryingPosition = TargetingConstants.rightFerryingTarget;
+  public Pose2d rightFerryingPosition = TargetingConstants.blueRightFerryingTarget;
 
   List<Pose2d> ferryingPositions;
   
@@ -46,22 +47,22 @@ public class TargetingSubsystem extends SubsystemBase {
   public TargetingSubsystem(CommandSwerveDrivetrain dt) {
     //hubPosition = new Pose2d(new Translation2d(11.909, 4.027), new Rotation2d());
 
-    hubPosition = new Pose2d(new Translation2d(11.909 - 0.0381, 4.027), new Rotation2d());
+    //hubPosition = new Pose2d(new Translation2d(11.909 - 0.0381, 4.027), new Rotation2d());
     hubPosition = TargetingConstants.blueHubPosition;
 
     if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
-      hubPosition = new Pose2d(TargetingConstants.fieldLengthMeters - hubPosition.getX(), hubPosition.getY(), Rotation2d.kZero);
-      leftFerryingPosition = new Pose2d(TargetingConstants.fieldLengthMeters - leftFerryingPosition.getX(), leftFerryingPosition.getY(), Rotation2d.kZero);
-      rightFerryingPosition = new Pose2d(TargetingConstants.fieldLengthMeters - rightFerryingPosition.getX(), rightFerryingPosition.getY(), Rotation2d.kZero);
+      hubPosition = TargetingConstants.redHubPosition;
+      leftFerryingPosition = TargetingConstants.redLeftFerryingTarget;
+      rightFerryingPosition = TargetingConstants.redRightFerryingTarget;
     }
     //ferryingPositions = List.of(leftFerryingPosition, rightFerryingPosition);
 
     TargetingConstants.hubShotMap.put(
-        2.1, new ShotSettings(0.0, Rotation2d.fromRotations(0.04248), 70.0));
+        2.1, new ShotSettings(0.0, Rotation2d.fromRotations(0.06665), 70.0));
     TargetingConstants.hubShotMap.put(
-        2.706, new ShotSettings(0.0, Rotation2d.fromRotations(0.063721), 70.0));
+        2.706, new ShotSettings(0.0, Rotation2d.fromRotations(0.065), 70.0));
     TargetingConstants.hubShotMap.put(
-        3.486, new ShotSettings(0.0, Rotation2d.fromRotations(0.080780), 75.0));
+        3.486, new ShotSettings(0.0, Rotation2d.fromRotations(0.0698), 75.0)); // 0.08
     TargetingConstants.hubShotMap.put(
         4.135, new ShotSettings(0.0, Rotation2d.fromRotations(0.084229), 75.0));
     TargetingConstants.hubShotMap.put(
@@ -74,6 +75,15 @@ public class TargetingSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     
+    if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
+      hubPosition = TargetingConstants.redHubPosition;
+      leftFerryingPosition = TargetingConstants.redLeftFerryingTarget;
+      rightFerryingPosition = TargetingConstants.redRightFerryingTarget;
+    } else {
+      hubPosition = TargetingConstants.blueHubPosition;
+      leftFerryingPosition = TargetingConstants.blueLeftFerryingTarget;
+      rightFerryingPosition = TargetingConstants.blueRightFerryingTarget;
+    }
     Pose2d robotPose = drivetrain.getRobotPose();
     ChassisSpeeds fieldSpeeds = drivetrain.getFieldSpeeds();
     if (isFerrying) {
