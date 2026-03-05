@@ -193,12 +193,11 @@ public class RobotContainer {
         .getRightTrigger()
         .whileTrue(ShooterCommands.HubShot(flywheel, indexer, turret, hood, 65));
     // operatorController
-    //     .getRightTrigger()
-    //     .whileTrue(ShooterCommands.tuning(flywheel, indexer, hood, 70));
-    // operatorController.getLeftBumper().whileTrue(ShooterCommands.LeftTrench(flywheel, indexer,
-    // turret, hood, 65));
-    // operatorController.getRightBumper().whileTrue(ShooterCommands.RightTrench(flywheel, indexer,
-    // turret, hood, 65));
+
+    operatorController.getLeftBumper().onTrue(Commands.runOnce(() -> targeting.isFerrying(true), targeting));
+    operatorController.getRightBumper().onTrue(Commands.runOnce(() -> targeting.isFerrying(false), targeting));
+
+
 
     // operatorController.getDPadUp().onTrue(getAutonomousCommand()); //move shot up
     // operatorController.getDPadLeft().onTrue(getAutonomousCommand()); //move shot left

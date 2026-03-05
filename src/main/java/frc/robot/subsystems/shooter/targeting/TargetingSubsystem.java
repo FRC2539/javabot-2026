@@ -32,10 +32,14 @@ public class TargetingSubsystem extends SubsystemBase {
   @AutoLogOutput public Rotation2d targetHoodAngle;
   @AutoLogOutput public double targetFlywheelRPS;
 
+  @AutoLogOutput
   public Pose2d leftFerryingPosition = TargetingConstants.leftFerryingTarget;
+  @AutoLogOutput
   public Pose2d rightFerryingPosition = TargetingConstants.rightFerryingTarget;
 
   List<Pose2d> ferryingPositions;
+  
+  @AutoLogOutput
   public boolean isFerrying = false;
   CommandSwerveDrivetrain drivetrain;
 
@@ -43,12 +47,12 @@ public class TargetingSubsystem extends SubsystemBase {
     //hubPosition = new Pose2d(new Translation2d(11.909, 4.027), new Rotation2d());
 
     hubPosition = new Pose2d(new Translation2d(11.909 - 0.0381, 4.027), new Rotation2d());
-   // hubPosition = TargetingConstants.blueHubPosition;
+    hubPosition = TargetingConstants.blueHubPosition;
 
     if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
-      //hubPosition = new Pose2d(TargetingConstants.fieldLengthMeters - hubPosition.getX(), hubPosition.getY(), Rotation2d.kZero);
+      hubPosition = new Pose2d(TargetingConstants.fieldLengthMeters - hubPosition.getX(), hubPosition.getY(), Rotation2d.kZero);
       leftFerryingPosition = new Pose2d(TargetingConstants.fieldLengthMeters - leftFerryingPosition.getX(), leftFerryingPosition.getY(), Rotation2d.kZero);
-      rightFerryingPosition = new Pose2d(TargetingConstants.fieldLengthMeters - rightFerryingPosition.getX(), leftFerryingPosition.getY(), Rotation2d.kZero);
+      rightFerryingPosition = new Pose2d(TargetingConstants.fieldLengthMeters - rightFerryingPosition.getX(), rightFerryingPosition.getY(), Rotation2d.kZero);
     }
     //ferryingPositions = List.of(leftFerryingPosition, rightFerryingPosition);
 
@@ -69,17 +73,20 @@ public class TargetingSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    
     Pose2d robotPose = drivetrain.getRobotPose();
     ChassisSpeeds fieldSpeeds = drivetrain.getFieldSpeeds();
-
-    isFerrying = false;
     if (isFerrying) {
-      ShootingParameters ferryingParams = calculateShot(robotPose, fieldSpeeds, robotPose.nearest(ferryingPositions).getTranslation(), false);
+      if (Math.abs(robotPose.getY() - leftFerryingPosition.getY()) < Math.abs(robotPose.getY() - rightFerryingPosition.getY())) {
+        ShootingParameters ferryingParams = calculateShot(robotPose, fieldSpeeds, leftFerryingPosition.getTranslation(), false);
       calculatedParams = new ShootingParameters(ferryingParams.turretAngle(), TargetingConstants.ferryingHoodAngle, TargetingConstants.ferryingRPS);
+      } else {
+        ShootingParameters ferryingParams = calculateShot(robotPose, fieldSpeeds, rightFerryingPosition.getTranslation(), false);
+      calculatedParams = new ShootingParameters(ferryingParams.turretAngle(), TargetingConstants.ferryingHoodAngle, TargetingConstants.ferryingRPS);
+      }
     } else {
       calculatedParams = calculateShot(robotPose, fieldSpeeds, hubPosition.getTranslation(), false);
     }
-    
 
   }
 

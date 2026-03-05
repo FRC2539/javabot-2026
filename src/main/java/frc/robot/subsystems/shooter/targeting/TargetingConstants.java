@@ -12,12 +12,13 @@ import frc.robot.subsystems.shooter.hood.HoodConstants;
 public class TargetingConstants {
   public static double estimatedShotLatency = 0.04;
   public static double fieldLengthMeters = 16.54098798984;
-  public static Rotation2d ferryingHoodAngle = HoodConstants.maxHoodAngle;
+  public static Rotation2d ferryingHoodAngle = Rotation2d.fromRotations(HoodConstants.maxHoodAngle.getRotations() - 0.03);
   public static double ferryingRPS = 70;
   public static Pose2d blueHubPosition = new Pose2d(4.3647,4.0345, Rotation2d.kZero);
 
-  public static Pose2d leftFerryingTarget = new Pose2d(Units.inchesToMeters(40), Units.inchesToMeters(40), Rotation2d.kZero);
-  public static Pose2d rightFerryingTarget = new Pose2d(Units.inchesToMeters(40), Units.inchesToMeters(40), Rotation2d.kZero);
+
+  public static Pose2d leftFerryingTarget = new Pose2d(0, 3.5, Rotation2d.kZero);
+  public static Pose2d rightFerryingTarget = new Pose2d(0, 7, Rotation2d.kZero);
 
   public static final InterpolatingTreeMap<Double, ShotSettings> hubShotMap =
       new InterpolatingTreeMap<>(InverseInterpolator.forDouble(), ShotSettings::interpolate);
@@ -25,6 +26,7 @@ public class TargetingConstants {
   public static record ShotSettings(Double timeOfFlight, Rotation2d hoodAngle, Double wheelRPS)
       implements Interpolatable<ShotSettings> {
     @Override
+    
     public ShotSettings interpolate(ShotSettings endValue, double t) {
       return new ShotSettings(
           MathUtil.interpolate(this.timeOfFlight, endValue.timeOfFlight, t),
