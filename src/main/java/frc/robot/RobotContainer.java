@@ -9,13 +9,12 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.SHOOTONTHEFLY;
-import frc.robot.commands.ShooterCommands;
 import frc.robot.lib.controller.LogitechController;
 import frc.robot.lib.controller.ThrustmasterJoystick;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
@@ -85,7 +84,7 @@ public class RobotContainer {
       new VisionSubsystem(
           drivetrain::filterAndAddMeasurements,
           // new VisionIOLimelight("limelight-climber", drivetrain::getHeading),
-         new VisionIOLimelight("limelight-turret", drivetrain::getHeading),
+          new VisionIOLimelight("limelight-turret", drivetrain::getHeading),
           new VisionIOLimelight("limelight-right", drivetrain::getHeading),
           new VisionIOLimelight("limelight-left", drivetrain::getHeading));
 
@@ -167,8 +166,9 @@ public class RobotContainer {
     //     .getLeftTrigger()
     //     .whileTrue(ShooterCommands.HubShot(flywheel, indexer, turret, hood, 65));
 
-    operatorController.getRightTrigger().whileTrue(new SHOOTONTHEFLY(turret, hood, targeting,
-    flywheel, indexer));
+    operatorController
+        .getRightTrigger()
+        .whileTrue(new SHOOTONTHEFLY(turret, hood, targeting, flywheel, indexer));
 
     // operatorController
     //     .getA()

@@ -16,10 +16,12 @@ import com.ctre.phoenix6.signals.LarsonBounceValue;
 import com.ctre.phoenix6.signals.RGBWColor;
 import com.ctre.phoenix6.signals.StatusLedWhenActiveValue;
 import com.ctre.phoenix6.signals.StripTypeValue;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.input.InputSubsystem;
 import frc.robot.subsystems.input.InputSubsystem.MatchPeriod;
 import frc.robot.subsystems.input.InputSubsystem.MatchTimeframe;
+import frc.robot.subsystems.lights.LightsConstants.ColorPalette;
 import frc.robot.subsystems.shooter.flywheel.FlywheelIO;
 import frc.robot.subsystems.shooter.hood.HoodIO;
 import frc.robot.subsystems.shooter.turret.TurretIO;
@@ -37,22 +39,6 @@ public class LightsSubsystem extends SubsystemBase {
     candle.getConfigurator().apply(cfg);
   }
 
-  static class ColorPalette {
-    static RGBWColor Orange = new RGBWColor(240, 79, 37);
-    static RGBWColor Red = new RGBWColor(240, 2, 2);
-    static RGBWColor Yellow = new RGBWColor(232, 198, 28);
-    static RGBWColor Green = new RGBWColor(37, 235, 30);
-    static RGBWColor Blue = new RGBWColor(30, 88, 235);
-    static RGBWColor White = new RGBWColor(200, 200, 200);
-
-    static RGBWColor Crossfade(RGBWColor a, RGBWColor b, double ratio) {
-      return new RGBWColor(
-          (int) (a.Red * (1 - ratio) - b.Red),
-          (int) (a.Green * (1 - ratio) - b.Green),
-          (int) (a.Blue * (1 - ratio) - b.Blue));
-    }
-  }
-
   public enum AnimationState {
     DISABLED,
     PLAYING,
@@ -68,27 +54,34 @@ public class LightsSubsystem extends SubsystemBase {
   // #region Periodic
   @Override
   public void periodic() {
+    // setSolidColor(ColorPalette.Red);
+    // setRGBFadeAnimation(5);
+    // setSolidColor(ColorPalette.Red);
+    // return;
+
     switch (getAnimationState()) {
       case DISABLED:
         if (gameEnded) setRainbowAnimation(2, false);
         else setFlowAnimation(ColorPalette.Orange, 3, false);
         gameEnded = false;
       case PLAYING:
-        if (InputSubsystem.currentMatchTimeframe.duration - InputSubsystem.MatchTimeframeTimer.get() <= 3)
-            if (InputSubsystem.currentMatchTimeframe == MatchTimeframe.EndGame) {
-              setFadeAnimation(ColorPalette.Red, 0.5);
-            }
-            else if (InputSubsystem.getWillActivitySwap()) {
-              setFadeAnimation((InputSubsystem.IsHubActive()) ? ColorPalette.Orange : ColorPalette.Yellow, 1);
-            }
-        else
-          setSolidColor((InputSubsystem.IsHubActive()) ? ColorPalette.Orange : ColorPalette.Yellow);
+        if (InputSubsystem.currentMatchTimeframe.duration - InputSubsystem.MatchTimeframeTimer.get()
+            <= 3)
+          if (InputSubsystem.currentMatchTimeframe == MatchTimeframe.EndGame) {
+            setFadeAnimation(ColorPalette.Red, 0.5);
+          } else if (InputSubsystem.getWillActivitySwap()) {
+            setFadeAnimation(
+                (InputSubsystem.IsHubActive()) ? ColorPalette.Orange : ColorPalette.Yellow, 1);
+          } else
+            setSolidColor(
+                (InputSubsystem.IsHubActive()) ? ColorPalette.Orange : ColorPalette.Yellow);
         if (InputSubsystem.currentMatchTimeframe == MatchTimeframe.EndGame) gameEnded = true;
       case INTAKING:
         setFadeAnimation(ColorPalette.Blue, 0.5);
       case SHOOTING:
         double ready = 1;
-        if (turretIO.getExpectedDelta() > 0.01) ready -= Math.abs(turretIO.getExpectedDelta()) * 50; // TODO: Tweak Constants
+        if (turretIO.getExpectedDelta() > 0.01)
+          ready -= Math.abs(turretIO.getExpectedDelta()) * 50; // TODO: Tweak Constants
         if (hoodIO.getExpectedDelta() > 0.01) ready -= Math.abs(hoodIO.getExpectedDelta()) * 50;
         if (flywheelIO.getExpectedDelta() > 1) ready -= Math.abs(flywheelIO.getExpectedDelta()) / 5;
         if (ready < 0) ready = 0;

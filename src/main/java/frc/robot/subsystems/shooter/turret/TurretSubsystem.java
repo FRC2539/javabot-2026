@@ -40,7 +40,8 @@ public class TurretSubsystem extends SubsystemBase {
 
   public void setTargetAngle(Rotation2d angle) {
 
-    Rotation2d mechanicalTarget = angle.plus(Rotation2d.fromRotations(0.145508)).plus(Rotation2d.fromRotations(.03));
+    Rotation2d mechanicalTarget =
+        angle.plus(Rotation2d.fromRotations(0.145508)).plus(Rotation2d.fromRotations(.03));
     // .plus(Rotation2d.fromRotations(0.1549902))
     // .plus(Rotation2d.fromDegrees(30))
     // .minus(Rotation2d.fromRotations(0.04117))
@@ -72,6 +73,9 @@ public class TurretSubsystem extends SubsystemBase {
   @AutoLogOutput
   public Rotation2d currentTurretHeading() {
     return Rotation2d.fromDegrees(inputs.positionDeg)
-        .plus(Rotation2d.fromRotations(0.145508).plus(Rotation2d.fromRotations(.03))); // .minus(Rotation2d.fromRotations(0.1549902));
+        .plus(
+            Rotation2d.fromRotations(0.145508)
+                .plus(
+                    Rotation2d.fromRotations(.03))); // .minus(Rotation2d.fromRotations(0.1549902));
   }
 }

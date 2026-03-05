@@ -46,6 +46,7 @@ public class PneumaticsIORevPH implements PneumaticsIO {
   public void setIntakeSolenoid(Value value) {
     intakeSolenoid.set(value);
   }
+
   public Value getIntakeSolenoid() {
     return intakeSolenoid.get();
   }
