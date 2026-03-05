@@ -254,10 +254,13 @@ public class RobotContainer {
     operatorController.getA().onTrue(roller.setVoltage(-12.0)); // in case
 
     operatorController
-        .getBack()
-        .whileTrue(
-            new AlignToClimberMT2(
-                drivetrain, getAllianceClimbTag(), 2, -2, Rotation2d.fromDegrees(0)));
+    .getBack()
+    .whileTrue(
+        new AlignToClimberMT2(
+                drivetrain, getAllianceClimbTag(), 2, -2, Rotation2d.fromDegrees(0))
+            .alongWith(
+                turret.goToAngleCommand(
+                    () -> Rotation2d.fromRotations(-0.25))));
 
     operatorController
         .getStart()
