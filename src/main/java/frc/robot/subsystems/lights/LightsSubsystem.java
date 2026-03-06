@@ -56,7 +56,7 @@ public class LightsSubsystem extends SubsystemBase {
         if (gameEnded) Presets.RainbowSplit(false);
         else Presets.Fire(false);
         break;
-      case PLAYING, SHOOTING:
+      case PLAYING, SHOOTING, INTAKING:
         if (InputSubsystem.currentMatchTimeframe.duration - InputSubsystem.MatchTimeframeTimer.get()
             <= 5) {
           if (InputSubsystem.currentMatchTimeframe == MatchTimeframe.EndGame) {
@@ -66,9 +66,12 @@ public class LightsSubsystem extends SubsystemBase {
             gameEnded = false;
             if (InputSubsystem.getWillActivitySwap())
               Presets.Strobe(
-                  (InputSubsystem.IsHubActive()) ? ColorPalette.Orange : ColorPalette.Yellow, 0.3);
+                  (InputSubsystem.IsHubActive()) ? ColorPalette.Orange : ColorPalette.Purple, 0.3);
           }
-        } else {
+        } else if (InputSubsystem.currentMatchTimeframe.duration - InputSubsystem.MatchTimeframeTimer.get()
+            <= 15 && !InputSubsystem.IsHubActive()) {
+              Presets.Fade(ColorPalette.Purple, 1);
+        } else {\[]
           if (InputSubsystem.currentMatchTimeframe == MatchTimeframe.TransitionShift)
             Presets.FlowIndividualMerging(
                 (InputSubsystem.AutoLoser() == HubActivity.Ally)
@@ -78,13 +81,13 @@ public class LightsSubsystem extends SubsystemBase {
                 false);
           else
             Presets.SolidColor(
-                (InputSubsystem.IsHubActive()) ? ColorPalette.Orange : ColorPalette.Yellow);
+                (InputSubsystem.IsHubActive()) ? ColorPalette.Orange : ColorPalette.Purple);
           gameEnded = false;
         }
         break;
-      case INTAKING:
-        Presets.Fade(ColorPalette.Blue, 0.5);
-        break;
+      // case INTAKING:
+        // Presets.Fade(ColorPalette.Blue, 0.5);
+        // break;
         // case SHOOTING:
         //   double ready = 1;
         //   // if (turretIO.getExpectedDelta() > 0.01)
