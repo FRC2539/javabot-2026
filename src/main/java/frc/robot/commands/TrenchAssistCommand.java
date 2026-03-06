@@ -53,7 +53,7 @@ public class TrenchAssistCommand extends Command {
   @Override
   public void execute() {
     robotPose = () -> drivetrain.getRobotPose();
-    double distanceToTrench = Math.abs(robotPose.get().getX() - trenchPose.getX());
+    double distanceToTrench = Math.abs(robotPose.get().getX() - getClosestTrenchPose().getX());
     double assistWeight = MathUtil.clamp((3.5 - distanceToTrench) / 2, 0.0, 1.0);// first number is start distance, second is transition range
 
     double yAssist = lateralAssistController.calculate(robotPose.get().getY(), trenchPose.getY());

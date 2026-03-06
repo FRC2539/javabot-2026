@@ -15,8 +15,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.SHOOTONTHEFLY;
 import frc.robot.commands.ShooterCommands;
+import frc.robot.commands.TrenchAssistCommand;
 import frc.robot.lib.controller.LogitechController;
 import frc.robot.lib.controller.ThrustmasterJoystick;
+import frc.robot.subsystems.climber.ClimberIOTalonFX;
+import frc.robot.subsystems.climber.ClimberSubsystem;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 import frc.robot.subsystems.drive.DriveConstants;
 import frc.robot.subsystems.drive.TunerConstants;
@@ -59,7 +62,7 @@ public class RobotContainer {
 
   public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
-  // public final ClimberSubsystem climber = new ClimberSubsystem(new ClimberIOTalonFX());
+  public final ClimberSubsystem climber = new ClimberSubsystem(new ClimberIOTalonFX());
 
   public final RollerSubsystem roller = new RollerSubsystem(new RollerIOTalonFXS());
 
@@ -185,6 +188,7 @@ public class RobotContainer {
     rightDriveController.getTrigger().whileTrue(roller.setVoltage(8));
     leftDriveController.getTrigger().onTrue(pneumatics.toggleIntake());
 
+    // leftDriveController.getBottomThumb().whileTrue(new TrenchAssistCommand(getXVelocity(), getYVelocity(), getThetaVelocity(), drivetrain));
     // comp controls - operator
     operatorController
         .getLeftTrigger()
@@ -196,8 +200,6 @@ public class RobotContainer {
 
     operatorController.getLeftBumper().onTrue(Commands.runOnce(() -> targeting.isFerrying(true), targeting));
     operatorController.getRightBumper().onTrue(Commands.runOnce(() -> targeting.isFerrying(false), targeting));
-
-
 
     // operatorController.getDPadUp().onTrue(getAutonomousCommand()); //move shot up
     // operatorController.getDPadLeft().onTrue(getAutonomousCommand()); //move shot left

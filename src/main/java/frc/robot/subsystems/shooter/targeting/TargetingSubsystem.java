@@ -57,12 +57,25 @@ public class TargetingSubsystem extends SubsystemBase {
     }
     //ferryingPositions = List.of(leftFerryingPosition, rightFerryingPosition);
 
+    // TargetingConstants.hubShotMap.put(
+    //     2.1, new ShotSettings(0.0, Rotation2d.fromRotations(0.06665), 70.0));
+    // TargetingConstants.hubShotMap.put(
+    //     2.706, new ShotSettings(0.0, Rotation2d.fromRotations(0.065), 70.0));
+    // TargetingConstants.hubShotMap.put(
+    //     3.486, new ShotSettings(0.0, Rotation2d.fromRotations(0.0698), 75.0)); // 0.08
+    // TargetingConstants.hubShotMap.put(
+    //     4.135, new ShotSettings(0.0, Rotation2d.fromRotations(0.084229), 75.0));
+    // TargetingConstants.hubShotMap.put(
+    //     4.583, new ShotSettings(0.0, Rotation2d.fromRotations(0.091064), 80.0));
+    // TargetingConstants.hubShotMap.put(
+    //     5.122, new ShotSettings(0.0, Rotation2d.fromRotations(0.096), 80.0));
+
+        TargetingConstants.hubShotMap.put(
+        2.1, new ShotSettings(0.0, Rotation2d.fromRotations(0.04248), 70.0));
     TargetingConstants.hubShotMap.put(
-        2.1, new ShotSettings(0.0, Rotation2d.fromRotations(0.06665), 70.0));
+        2.706, new ShotSettings(0.0, Rotation2d.fromRotations(0.063721), 70.0));
     TargetingConstants.hubShotMap.put(
-        2.706, new ShotSettings(0.0, Rotation2d.fromRotations(0.065), 70.0));
-    TargetingConstants.hubShotMap.put(
-        3.486, new ShotSettings(0.0, Rotation2d.fromRotations(0.0698), 75.0)); // 0.08
+        3.486, new ShotSettings(0.0, Rotation2d.fromRotations(0.080780), 75.0));
     TargetingConstants.hubShotMap.put(
         4.135, new ShotSettings(0.0, Rotation2d.fromRotations(0.084229), 75.0));
     TargetingConstants.hubShotMap.put(
