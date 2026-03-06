@@ -14,7 +14,8 @@ import java.util.function.Supplier;
 import org.littletonrobotics.junction.AutoLogOutput;
 
 public class TargetingSubsystem extends SubsystemBase {
-  private ShootingParameters calculatedParams = new ShootingParameters(new Rotation2d(), new Rotation2d(), 0.0);
+  private ShootingParameters calculatedParams =
+      new ShootingParameters(new Rotation2d(), new Rotation2d(), 0.0);
 
   // private static final LinearFilter vxFilter = LinearFilter.movingAverage(5);
   // private static final LinearFilter vyFilter = LinearFilter.movingAverage(5);
@@ -74,7 +75,6 @@ public class TargetingSubsystem extends SubsystemBase {
     // getFerryingTarget(robotPose);
 
     calculatedParams = calculateShot(robotPose, fieldSpeeds, hubPosition.getTranslation(), false);
-
   }
 
   public ShootingParameters calculateShot(
@@ -128,7 +128,7 @@ public class TargetingSubsystem extends SubsystemBase {
 
     ShotSettings mapValues = TargetingConstants.hubShotMap.get(realDistance);
     if (mapValues == null) {
-        return calculatedParams; // Return last known good params
+      return calculatedParams; // Return last known good params
     }
 
     turretPos = new Pose2d(futureTurretPos, robotRelativeTurretAngle);

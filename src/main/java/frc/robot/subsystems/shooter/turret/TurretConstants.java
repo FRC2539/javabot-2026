@@ -36,7 +36,8 @@ public final class TurretConstants {
           .withFeedbackRemoteSensorID(turretEncoderID)
           .withRotorToSensorRatio(rotorToSensorRatio);
 
-  public static final Slot0Configs slot0configs = new Slot0Configs().withKP(80).withKS(.75).withKV(0);
+  public static final Slot0Configs slot0configs =
+      new Slot0Configs().withKP(80).withKS(.75).withKV(0);
 
   public static final SoftwareLimitSwitchConfigs limitSwitchConfigs =
       new SoftwareLimitSwitchConfigs()

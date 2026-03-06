@@ -57,9 +57,9 @@ public class InputSubsystem extends SubsystemBase {
 
   // #region Game Data
 
-  static Timer MatchTimer = new Timer();
-  static Timer MatchPeriodTimer = new Timer();
-  static Timer MatchTimeframeTimer = new Timer();
+  public static Timer MatchTimer = new Timer();
+  public static Timer MatchPeriodTimer = new Timer();
+  public static Timer MatchTimeframeTimer = new Timer();
   public static Alliance alliance;
 
   public static MatchPeriod getMatchPeriod() {
@@ -144,6 +144,17 @@ public class InputSubsystem extends SubsystemBase {
       case Opponent -> HubActivity.Ally;
       default -> HubActivity.Both;
     };
+  }
+
+  public static boolean getWillActivitySwap() {
+    return (currentMatchTimeframe.duration - MatchTimeframeTimer.get()) < 3
+        && ((currentMatchTimeframe == MatchTimeframe.TransitionShift
+                && AutoLoser() == HubActivity.Opponent)
+            || currentMatchTimeframe == MatchTimeframe.Shift1
+            || currentMatchTimeframe == MatchTimeframe.Shift2
+            || currentMatchTimeframe == MatchTimeframe.Shift3
+            || (currentMatchTimeframe == MatchTimeframe.Shift4
+                && AutoLoser() == HubActivity.Opponent));
   }
 
   // #region Period/Timeframe
@@ -259,15 +270,7 @@ public class InputSubsystem extends SubsystemBase {
         Math.max(0, newMatchTimeframe.duration - MatchTimeframeTimer.get())
             / newMatchTimeframe.duration);
 
-    boolean isGoingToSwap =
-        (newMatchTimeframe.duration - MatchTimeframeTimer.get()) < 3
-            && ((newMatchTimeframe == MatchTimeframe.TransitionShift
-                    && AutoLoser() == HubActivity.Opponent)
-                || newMatchTimeframe == MatchTimeframe.Shift1
-                || newMatchTimeframe == MatchTimeframe.Shift2
-                || newMatchTimeframe == MatchTimeframe.Shift3
-                || (newMatchTimeframe == MatchTimeframe.Shift4
-                    && AutoLoser() == HubActivity.Opponent));
+    boolean isGoingToSwap = getWillActivitySwap();
     switch (GetHubActivity()) {
       case Both, Ally -> LoggedHubActivity.set(
           isGoingToSwap

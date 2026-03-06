@@ -51,4 +51,9 @@ public class FlywheelIOTalonFX implements FlywheelIO {
   public void setVoltage(double voltage) {
     leftMotor.setVoltage(voltage);
   }
+
+  @Override
+  public double getExpectedDelta() {
+    return targetRPS - leftMotor.getVelocity().getValueAsDouble();
+  }
 }

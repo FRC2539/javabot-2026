@@ -54,4 +54,9 @@ public class TurretIOTalonFX implements TurretIO {
   public void setVoltage(double voltage) {
     motor.setVoltage(voltage);
   }
+
+  @Override
+  public double getExpectedDelta() {
+    return targetAngle - motor.getPosition().getValueAsDouble();
+  }
 }
