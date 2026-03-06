@@ -149,8 +149,7 @@ public class TargetingSubsystem extends SubsystemBase {
 
         virtualDistance = futureTurretPos.getDistance(virtualTarget);
 
-        double newFlightTime = 0; //
-        TargetingConstants.hubShotMap.get(virtualDistance).timeOfFlight();
+        double newFlightTime = TargetingConstants.hubShotMap.get(virtualDistance).timeOfFlight();
 
         if (Math.abs(newFlightTime - estimatedFlightTime) < 0.03) break;
         estimatedFlightTime = newFlightTime;
