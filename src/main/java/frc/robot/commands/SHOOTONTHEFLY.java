@@ -15,6 +15,7 @@ public class SHOOTONTHEFLY extends Command {
   IndexerSubsystem indexerSubsystem;
 
   public boolean hasSpunUp = false;
+
   public SHOOTONTHEFLY(
       TurretSubsystem turret,
       HoodSubsystem hood,
@@ -38,25 +39,24 @@ public class SHOOTONTHEFLY extends Command {
   @Override
   public void execute() {
 
-      turretSubsystem.setTargetAngle(targetingSubsystem.getIdealTurretAngle().get());
-      hoodSubsystem.setTargetAngle(targetingSubsystem.getIdealHoodAngle());
-      flywheelSubsystem.setTargetRPS(targetingSubsystem.getIdealFlywheelRPS().get());
-      //System.out.println(
-        //   "flywheel "
-        //       + targetingSubsystem.getIdealFlywheelRPS().get()
-        //       + "hood "
-        //       + targetingSubsystem.getIdealHoodAngle().get().getDegrees()
-        //       + "turret "
-        //       + targetingSubsystem.getIdealTurretAngle().get().getDegrees());
+    turretSubsystem.setTargetAngle(targetingSubsystem.getIdealTurretAngle().get());
+    hoodSubsystem.setTargetAngle(targetingSubsystem.getIdealHoodAngle());
+    flywheelSubsystem.setTargetRPS(targetingSubsystem.getIdealFlywheelRPS().get());
+    // System.out.println(
+    //   "flywheel "
+    //       + targetingSubsystem.getIdealFlywheelRPS().get()
+    //       + "hood "
+    //       + targetingSubsystem.getIdealHoodAngle().get().getDegrees()
+    //       + "turret "
+    //       + targetingSubsystem.getIdealTurretAngle().get().getDegrees());
 
-        if (flywheelSubsystem.atSetpoint()) {
-            hasSpunUp = true;
-        }
-      if (turretSubsystem.isAtSetpoint()
-          && hoodSubsystem.isAtSetpoint()
-          && (flywheelSubsystem.atSetpoint() || hasSpunUp)) {
-        indexerSubsystem.setVoltagesFunction(-12, 12);
-      }
-    
+    if (flywheelSubsystem.atSetpoint()) {
+      hasSpunUp = true;
+    }
+    if (turretSubsystem.isAtSetpoint()
+        && hoodSubsystem.isAtSetpoint()
+        && (flywheelSubsystem.atSetpoint() || hasSpunUp)) {
+      indexerSubsystem.setVoltagesFunction(-12, 12);
+    }
   }
 }

@@ -17,7 +17,7 @@ public class ShooterConstants {
       new Slot0Configs().withKP(0.45).withKI(0).withKD(0).withKS(0).withKA(0).withKV(.1);
 
   public static final CurrentLimitsConfigs currentLimits =
-      new CurrentLimitsConfigs().withSupplyCurrentLimitEnable(true).withSupplyCurrentLimit(80);
+      new CurrentLimitsConfigs().withSupplyCurrentLimitEnable(true).withSupplyCurrentLimit(45);
   // .withStatorCurrentLimit(100);
 
   //   public static final FeedbackConfigs feedbackConfig =

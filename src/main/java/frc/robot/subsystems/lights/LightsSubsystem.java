@@ -68,9 +68,11 @@ public class LightsSubsystem extends SubsystemBase {
               Presets.Strobe(
                   (InputSubsystem.IsHubActive()) ? ColorPalette.Orange : ColorPalette.Purple, 0.3);
           }
-        } else if (InputSubsystem.currentMatchTimeframe.duration - InputSubsystem.MatchTimeframeTimer.get()
-            <= 15 && !InputSubsystem.IsHubActive()) {
-              Presets.Fade(ColorPalette.Purple, 1);
+        } else if (InputSubsystem.currentMatchTimeframe.duration
+                    - InputSubsystem.MatchTimeframeTimer.get()
+                <= 15
+            && !InputSubsystem.IsHubActive()) {
+          Presets.Fade(ColorPalette.Purple, 1);
         } else {
           if (InputSubsystem.currentMatchTimeframe == MatchTimeframe.TransitionShift)
             Presets.FlowIndividualMerging(
@@ -85,7 +87,7 @@ public class LightsSubsystem extends SubsystemBase {
           gameEnded = false;
         }
         break;
-      // case INTAKING:
+        // case INTAKING:
         // Presets.Fade(ColorPalette.Blue, 0.5);
         // break;
         // case SHOOTING:

@@ -14,8 +14,6 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 import frc.robot.subsystems.shooter.targeting.TargetingConstants;
-
-import java.util.List;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
@@ -23,7 +21,7 @@ public class TrenchAssistCommand extends Command {
 
   CommandSwerveDrivetrain drivetrain;
 
-  PIDController lateralAssistController = new PIDController(5, 0, 0.1);
+  PIDController lateralAssistController = new PIDController(4, 0, 0.1);
 
   SwerveRequest.ApplyFieldSpeeds controlRequest =
       new ApplyFieldSpeeds()
@@ -37,7 +35,8 @@ public class TrenchAssistCommand extends Command {
   DoubleSupplier driverYVel;
   DoubleSupplier driverRotVel;
 
-  public TrenchAssistCommand(DoubleSupplier x, DoubleSupplier y, DoubleSupplier rot, CommandSwerveDrivetrain dt) {
+  public TrenchAssistCommand(
+      DoubleSupplier x, DoubleSupplier y, DoubleSupplier rot, CommandSwerveDrivetrain dt) {
     drivetrain = dt;
     driverXVel = x;
     driverYVel = y;
@@ -46,6 +45,7 @@ public class TrenchAssistCommand extends Command {
 
   @Override
   public void initialize() {
+    robotPose = () -> drivetrain.getRobotPose();
     trenchPose = getClosestTrenchPose();
     lateralAssistController.setSetpoint(trenchPose.getY());
   }
@@ -54,7 +54,11 @@ public class TrenchAssistCommand extends Command {
   public void execute() {
     robotPose = () -> drivetrain.getRobotPose();
     double distanceToTrench = Math.abs(robotPose.get().getX() - getClosestTrenchPose().getX());
-    double assistWeight = MathUtil.clamp((3.5 - distanceToTrench) / 2, 0.0, 1.0);// first number is start distance, second is transition range
+    double assistWeight =
+        MathUtil.clamp(
+            (2.75 - distanceToTrench) / 1.5,
+            0.0,
+            1.0); // first number is start distance, second is transition range
 
     double yAssist = lateralAssistController.calculate(robotPose.get().getY(), trenchPose.getY());
     yAssist = MathUtil.clamp(yAssist, -2.5, 2.5);
@@ -63,19 +67,33 @@ public class TrenchAssistCommand extends Command {
 
     drivetrain.setControl(
         controlRequest.withSpeeds(
-            new ChassisSpeeds(driverXVel.getAsDouble(), blendedY, driverRotVel.getAsDouble())));
+            new ChassisSpeeds(-driverXVel.getAsDouble(), blendedY, driverRotVel.getAsDouble())));
   }
 
   public Pose2d getClosestTrenchPose() {
     Pose2d rightTrench = new Pose2d(4.626, 0.644, Rotation2d.kZero);
     Pose2d leftTrench = new Pose2d(4.626, 7.425, Rotation2d.kZero);
 
-    if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
-      rightTrench = new Pose2d(TargetingConstants.fieldLengthMeters - rightTrench.getX(), rightTrench.getY(), rightTrench.getRotation());
-      leftTrench = new Pose2d(TargetingConstants.fieldLengthMeters - leftTrench.getX(), leftTrench.getY(), leftTrench.getRotation());
+    if (DriverStation.getAlliance().isPresent()
+        && DriverStation.getAlliance().get() == Alliance.Red) {
+      rightTrench =
+          new Pose2d(
+              TargetingConstants.fieldLengthMeters - rightTrench.getX(),
+              rightTrench.getY(),
+              rightTrench.getRotation());
+      leftTrench =
+          new Pose2d(
+              TargetingConstants.fieldLengthMeters - leftTrench.getX(),
+              leftTrench.getY(),
+              leftTrench.getRotation());
     }
 
- 
-    return robotPose.get().nearest(List.of(rightTrench, leftTrench));
+    if (Math.abs(robotPose.get().getY() - rightTrench.getY())
+        < Math.abs(robotPose.get().getY() - leftTrench.getY())) {
+
+      return rightTrench;
+    } else {
+      return leftTrench;
+    }
   }
 }

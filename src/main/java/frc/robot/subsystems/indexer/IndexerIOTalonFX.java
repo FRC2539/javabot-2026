@@ -1,5 +1,7 @@
 package frc.robot.subsystems.indexer;
 
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 public class IndexerIOTalonFX implements IndexerIO {
@@ -8,7 +10,16 @@ public class IndexerIOTalonFX implements IndexerIO {
 
   private final TalonFX indexerMotor = new TalonFX(IndexerConstants.transportMotorID);
 
-  public IndexerIOTalonFX() {}
+  public IndexerIOTalonFX() {
+    transportMotor
+        .getConfigurator()
+        .apply(
+            new TalonFXConfiguration()
+                .withCurrentLimits(
+                    new CurrentLimitsConfigs()
+                        .withSupplyCurrentLimitEnable(true)
+                        .withSupplyCurrentLimit(40)));
+  }
 
   @Override
   public void updateInputs(IndexerIOInputs inputs) {
