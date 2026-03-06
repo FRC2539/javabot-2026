@@ -22,10 +22,10 @@ public enum LEDSegment {
   RightTop(1, true, 23),
   RightBottom(2, false, 23),
   ShooterBottom(3, false, 31),
-  CenterBottom(4, true, 20),
-  LeftBottom(5, true, 35),
+  CenterBottom(4, true, 16),
+  LeftBottom(5, true, 39),
   LeftTop(6, false, 35),
-  CenterTop(7, false, 20),
+  CenterTop(7, false, 20),  
 
   // All
   All(0, false, ShooterTop.startIndex, CenterTop.endIndex),

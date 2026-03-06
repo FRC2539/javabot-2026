@@ -71,7 +71,7 @@ public class LightsSubsystem extends SubsystemBase {
         } else if (InputSubsystem.currentMatchTimeframe.duration - InputSubsystem.MatchTimeframeTimer.get()
             <= 15 && !InputSubsystem.IsHubActive()) {
               Presets.Fade(ColorPalette.Purple, 1);
-        } else {\[]
+        } else {
           if (InputSubsystem.currentMatchTimeframe == MatchTimeframe.TransitionShift)
             Presets.FlowIndividualMerging(
                 (InputSubsystem.AutoLoser() == HubActivity.Ally)
