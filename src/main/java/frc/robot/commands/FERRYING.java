@@ -7,20 +7,22 @@ import frc.robot.subsystems.shooter.hood.HoodSubsystem;
 import frc.robot.subsystems.shooter.targeting.TargetingSubsystem;
 import frc.robot.subsystems.shooter.turret.TurretSubsystem;
 
-public class SHOOTONTHEFLY extends Command {
+public class FERRYING extends Command {
   TurretSubsystem turretSubsystem;
   HoodSubsystem hoodSubsystem;
   TargetingSubsystem targetingSubsystem;
   FlywheelSubsystem flywheelSubsystem;
   IndexerSubsystem indexerSubsystem;
+  boolean ferryingLeft;
 
   public boolean hasSpunUp = false;
-  public SHOOTONTHEFLY(
+  public FERRYING(
       TurretSubsystem turret,
       HoodSubsystem hood,
       TargetingSubsystem targeting,
       FlywheelSubsystem flywheel,
-      IndexerSubsystem indexer) {
+      IndexerSubsystem indexer,
+      boolean fL) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(turret, hood, targeting, flywheel, indexer);
     turretSubsystem = turret;
@@ -28,11 +30,14 @@ public class SHOOTONTHEFLY extends Command {
     targetingSubsystem = targeting;
     flywheelSubsystem = flywheel;
     indexerSubsystem = indexer;
+    ferryingLeft = fL;
   }
 
   @Override
   public void initialize() {
-    targetingSubsystem.isFerrying(false);
+    targetingSubsystem.isFerrying(true);
+
+    targetingSubsystem.ferryingLeft = ferryingLeft;
   }
 
   @Override

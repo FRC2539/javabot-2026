@@ -38,6 +38,10 @@ public class TargetingSubsystem extends SubsystemBase {
   @AutoLogOutput
   public Pose2d rightFerryingPosition = TargetingConstants.blueRightFerryingTarget;
 
+
+  @AutoLogOutput
+  public boolean ferryingLeft = true;
+  
   List<Pose2d> ferryingPositions;
   
   @AutoLogOutput
@@ -71,7 +75,7 @@ public class TargetingSubsystem extends SubsystemBase {
     //     5.122, new ShotSettings(0.0, Rotation2d.fromRotations(0.096), 80.0));
 
         TargetingConstants.hubShotMap.put(
-        2.1, new ShotSettings(0.0, Rotation2d.fromRotations(0.04248), 70.0));
+        2.1, new ShotSettings(0.0, Rotation2d.fromRotations(0.0522), 70.0));
     TargetingConstants.hubShotMap.put(
         2.706, new ShotSettings(0.0, Rotation2d.fromRotations(0.063721), 70.0));
     TargetingConstants.hubShotMap.put(
@@ -100,13 +104,12 @@ public class TargetingSubsystem extends SubsystemBase {
     Pose2d robotPose = drivetrain.getRobotPose();
     ChassisSpeeds fieldSpeeds = drivetrain.getFieldSpeeds();
     if (isFerrying) {
-      if (Math.abs(robotPose.getY() - leftFerryingPosition.getY()) < Math.abs(robotPose.getY() - rightFerryingPosition.getY())) {
-        ShootingParameters ferryingParams = calculateShot(robotPose, fieldSpeeds, leftFerryingPosition.getTranslation(), false);
-      calculatedParams = new ShootingParameters(ferryingParams.turretAngle(), TargetingConstants.ferryingHoodAngle, TargetingConstants.ferryingRPS);
-      } else {
-        ShootingParameters ferryingParams = calculateShot(robotPose, fieldSpeeds, rightFerryingPosition.getTranslation(), false);
-      calculatedParams = new ShootingParameters(ferryingParams.turretAngle(), TargetingConstants.ferryingHoodAngle, TargetingConstants.ferryingRPS);
+      Pose2d currentFerryingPos = rightFerryingPosition;
+      if (ferryingLeft) {
+        currentFerryingPos = leftFerryingPosition;
       }
+        ShootingParameters ferryingParams = calculateShot(robotPose, fieldSpeeds, currentFerryingPos.getTranslation(), false);
+      calculatedParams = new ShootingParameters(ferryingParams.turretAngle(), TargetingConstants.ferryingHoodAngle, TargetingConstants.ferryingRPS);
     } else {
       calculatedParams = calculateShot(robotPose, fieldSpeeds, hubPosition.getTranslation(), false);
     }

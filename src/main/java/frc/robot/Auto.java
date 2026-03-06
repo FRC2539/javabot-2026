@@ -105,9 +105,10 @@ public class Auto {
 
     NamedCommands.registerCommand(
         "deployintakewithkicker",
-        Commands.parallel(
-            robotContainer.roller.setVoltage(IntakeConstants.dropvoltage),
-            robotContainer.pneumatics.setIntakePosition(PneumaticPosition.FORWARD)));
+        Commands.sequence(
+            robotContainer.pneumatics.setIntakePosition(PneumaticPosition.FORWARD),
+            robotContainer.roller.setVoltage(IntakeConstants.dropvoltage)
+            ));
 
 
     NamedCommands.registerCommand(

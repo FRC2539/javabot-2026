@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.commands.FERRYING;
 import frc.robot.commands.SHOOTONTHEFLY;
 import frc.robot.commands.ShooterCommands;
 import frc.robot.commands.TrenchAssistCommand;
@@ -83,10 +84,10 @@ public class RobotContainer {
   public final VisionSubsystem vision =
       new VisionSubsystem(
           drivetrain::filterAndAddMeasurements,
-          // new VisionIOLimelight("limelight-climber", drivetrain::getHeading),
+          new VisionIOLimelight("limelight-climber", drivetrain::getHeading),
          new VisionIOLimelight("limelight-turret", drivetrain::getHeading),
-          new VisionIOLimelight("limelight-right", drivetrain::getHeading));
-          //new VisionIOLimelight("limelight-left", drivetrain::getHeading));
+          new VisionIOLimelight("limelight-right", drivetrain::getHeading),
+          new VisionIOLimelight("limelight-left", drivetrain::getHeading));
 
   PneumaticHub pneumaticHub;
   Compressor compressor;
@@ -188,7 +189,10 @@ public class RobotContainer {
     rightDriveController.getTrigger().whileTrue(roller.setVoltage(8));
     leftDriveController.getTrigger().onTrue(pneumatics.toggleIntake());
 
-    // leftDriveController.getBottomThumb().whileTrue(new TrenchAssistCommand(getXVelocity(), getYVelocity(), getThetaVelocity(), drivetrain));
+    operatorController.getLeftBumper().whileTrue(new FERRYING(turret, hood, targeting, flywheel, indexer, true));
+    operatorController.getRightBumper().whileTrue(new FERRYING(turret, hood, targeting, flywheel, indexer, false));
+
+    //leftDriveController.getBottomThumb().whileTrue(new TrenchAssistCommand(getXVelocity(), getYVelocity(), getThetaVelocity(), drivetrain));
     // comp controls - operator
     operatorController
         .getLeftTrigger()
@@ -198,8 +202,8 @@ public class RobotContainer {
         .whileTrue(ShooterCommands.HubShot(flywheel, indexer, turret, hood, 65));
     // operatorController
 
-    operatorController.getLeftBumper().onTrue(Commands.runOnce(() -> targeting.isFerrying(true), targeting));
-    operatorController.getRightBumper().onTrue(Commands.runOnce(() -> targeting.isFerrying(false), targeting));
+    // operatorController.getLeftBumper().onTrue(Commands.runOnce(() -> targeting.isFerrying(true), targeting));
+    // operatorController.getRightBumper().onTrue(Commands.runOnce(() -> targeting.isFerrying(false), targeting));
 
     // operatorController.getDPadUp().onTrue(getAutonomousCommand()); //move shot up
     // operatorController.getDPadLeft().onTrue(getAutonomousCommand()); //move shot left
