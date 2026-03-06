@@ -64,16 +64,16 @@
     },
     {
       "anchor": {
-        "x": 3.5415639810426542,
-        "y": 0.5638981042654019
+        "x": 1.8221327014218005,
+        "y": 0.8003199052132686
       },
       "prevControl": {
-        "x": 4.960094786729858,
-        "y": 0.6606161137440756
+        "x": 3.240663507109004,
+        "y": 0.8970379146919423
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "trenchscore"
     }
   ],
   "rotationTargets": [

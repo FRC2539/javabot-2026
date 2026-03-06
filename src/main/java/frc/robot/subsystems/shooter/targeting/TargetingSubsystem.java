@@ -80,6 +80,8 @@ public class TargetingSubsystem extends SubsystemBase {
         4.583, new ShotSettings(0.0, Rotation2d.fromRotations(0.091064), 80.0));
     TargetingConstants.hubShotMap.put(
         5.122, new ShotSettings(0.0, Rotation2d.fromRotations(0.096), 80.0));
+    TargetingConstants.hubShotMap.put(
+        5.664, new ShotSettings(0.0, Rotation2d.fromRotations(0.1), 80.0));
     drivetrain = dt;
   }
 
@@ -134,7 +136,7 @@ public class TargetingSubsystem extends SubsystemBase {
     realDistance = realDisplacementToHub.getNorm();
 
     // System.out.println(realDistance);
-    realDistance = MathUtil.clamp(realDistance, 2.1, 5.122);
+    realDistance = MathUtil.clamp(realDistance, 2.1, 5.664);
     // double estimatedFlightTime = TargetingConstants.hubShotMap.get(realDistance).timeOfFlight();
 
     // Translation2d virtualTarget = targetPose;
