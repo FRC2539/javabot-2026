@@ -1,6 +1,7 @@
 package frc.robot.subsystems.shooter.targeting;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -20,8 +21,8 @@ public class TargetingSubsystem extends SubsystemBase {
   private ShootingParameters calculatedParams =
       new ShootingParameters(new Rotation2d(), new Rotation2d(), 0.0);
 
-  // private static final LinearFilter vxFilter = LinearFilter.movingAverage(5);
-  // private static final LinearFilter vyFilter = LinearFilter.movingAverage(5);
+  private static final LinearFilter vxFilter = LinearFilter.movingAverage(5);
+  private static final LinearFilter vyFilter = LinearFilter.movingAverage(5);
 
   @AutoLogOutput public Pose2d hubPosition;
   @AutoLogOutput public Pose2d turretPos;
@@ -69,17 +70,17 @@ public class TargetingSubsystem extends SubsystemBase {
     //     5.122, new ShotSettings(0.0, Rotation2d.fromRotations(0.096), 80.0));
 
     TargetingConstants.hubShotMap.put(
-        2.1, new ShotSettings(0.0, Rotation2d.fromRotations(0.0522), 70.0));
+        2.1, new ShotSettings(1.12, Rotation2d.fromRotations(0.0522), 70.0));
     TargetingConstants.hubShotMap.put(
-        2.706, new ShotSettings(0.0, Rotation2d.fromRotations(0.063721), 70.0));
+        2.706, new ShotSettings(1.13, Rotation2d.fromRotations(0.063721), 70.0)); // found it
     TargetingConstants.hubShotMap.put(
-        3.486, new ShotSettings(0.0, Rotation2d.fromRotations(0.075684), 75.0));
+        3.486, new ShotSettings(1.15, Rotation2d.fromRotations(0.075684), 75.0)); // found it
     TargetingConstants.hubShotMap.put(
-        4.135, new ShotSettings(0.0, Rotation2d.fromRotations(0.084229), 75.0));
+        4.135, new ShotSettings(1.16, Rotation2d.fromRotations(0.084229), 75.0)); // found it
     TargetingConstants.hubShotMap.put(
-        4.583, new ShotSettings(0.0, Rotation2d.fromRotations(0.091064), 80.0));
+        4.583, new ShotSettings(1.17, Rotation2d.fromRotations(0.091064), 80.0));
     TargetingConstants.hubShotMap.put(
-        5.122, new ShotSettings(0.0, Rotation2d.fromRotations(0.096), 80.0));
+        5.122, new ShotSettings(1.17, Rotation2d.fromRotations(0.096), 80.0));
     drivetrain = dt;
   }
 
@@ -118,10 +119,10 @@ public class TargetingSubsystem extends SubsystemBase {
   public ShootingParameters calculateShot(
       Pose2d robotPose, ChassisSpeeds fieldSpeeds, Translation2d targetPose, boolean SOTM) {
 
-    // Translation2d filteredRobotVelocity =
-    //     new Translation2d(
-    //         vxFilter.calculate(fieldSpeeds.vxMetersPerSecond),
-    //         vyFilter.calculate(fieldSpeeds.vyMetersPerSecond));
+    Translation2d filteredRobotVelocity =
+        new Translation2d(
+            vxFilter.calculate(fieldSpeeds.vxMetersPerSecond),
+            vyFilter.calculate(fieldSpeeds.vyMetersPerSecond));
 
     Translation2d futureTurretPos =
         robotPose
@@ -135,26 +136,26 @@ public class TargetingSubsystem extends SubsystemBase {
 
     // System.out.println(realDistance);
     realDistance = MathUtil.clamp(realDistance, 2.1, 5.122);
-    // double estimatedFlightTime = TargetingConstants.hubShotMap.get(realDistance).timeOfFlight();
+    double estimatedFlightTime = TargetingConstants.hubShotMap.get(realDistance).timeOfFlight();
 
-    // Translation2d virtualTarget = targetPose;
+    Translation2d virtualTarget = targetPose;
 
-    // double virtualDistance = realDistance;
+    double virtualDistance = realDistance;
 
-    // if (SOTM) { // Shooting on the move!
-    //   for (int i = 0; i < 5; i++) {
+    if (SOTM) { // Shooting on the move!
+      for (int i = 0; i < 5; i++) {
 
-    //     virtualTarget = targetPose.minus(filteredRobotVelocity.times(estimatedFlightTime));
+        virtualTarget = targetPose.minus(filteredRobotVelocity.times(estimatedFlightTime));
 
-    //     virtualDistance = futureTurretPos.getDistance(virtualTarget);
+        virtualDistance = futureTurretPos.getDistance(virtualTarget);
 
-    //     double newFlightTime = 0;//
-    // TargetingConstants.hubShotMap.get(virtualDistance).timeOfFlight();
+        double newFlightTime = 0; //
+        TargetingConstants.hubShotMap.get(virtualDistance).timeOfFlight();
 
-    //     if (Math.abs(newFlightTime - estimatedFlightTime) < 0.03) break;
-    //     estimatedFlightTime = newFlightTime;
-    //   }
-    // }
+        if (Math.abs(newFlightTime - estimatedFlightTime) < 0.03) break;
+        estimatedFlightTime = newFlightTime;
+      }
+    }
 
     Translation2d aimingVector =
         realDisplacementToHub; // realDisplacementToHub.minus(futureTurretPos);
