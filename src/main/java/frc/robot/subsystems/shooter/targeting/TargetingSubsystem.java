@@ -5,11 +5,17 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 import frc.robot.subsystems.shooter.targeting.TargetingConstants.ShootingParameters;
 import frc.robot.subsystems.shooter.targeting.TargetingConstants.ShotSettings;
 import frc.robot.subsystems.shooter.turret.TurretConstants;
+
+import java.lang.annotation.Target;
+import java.util.List;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.AutoLogOutput;
 
@@ -28,30 +34,49 @@ public class TargetingSubsystem extends SubsystemBase {
   @AutoLogOutput public Rotation2d targetHoodAngle;
   @AutoLogOutput public double targetFlywheelRPS;
 
-  boolean isFerrying = false;
+  @AutoLogOutput
+  public Pose2d leftFerryingPosition = TargetingConstants.blueLeftFerryingTarget;
+  @AutoLogOutput
+  public Pose2d rightFerryingPosition = TargetingConstants.blueRightFerryingTarget;
+
+
+  @AutoLogOutput
+  public boolean ferryingLeft = true;
+  
+  List<Pose2d> ferryingPositions;
+  
+  @AutoLogOutput
+  public boolean isFerrying = false;
   CommandSwerveDrivetrain drivetrain;
 
   public TargetingSubsystem(CommandSwerveDrivetrain dt) {
-    // hubPosition = AllianceFlipUtil.apply(FieldConstants.Hub.innerCenterPoint.toTranslation2d());
-    // hubPosition = FieldConstants.Hub.innerCenterPoint.toTranslation2d();
+    //hubPosition = new Pose2d(new Translation2d(11.909, 4.027), new Rotation2d());
 
-    // TargetingConstants.hubShotMap.put(0, new ShotSettings(0.0, Rotation2d.fromRotations(0), 0));
+    //hubPosition = new Pose2d(new Translation2d(11.909 - 0.0381, 4.027), new Rotation2d());
+    hubPosition = TargetingConstants.blueHubPosition;
+
+    if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
+      hubPosition = TargetingConstants.redHubPosition;
+      leftFerryingPosition = TargetingConstants.redLeftFerryingTarget;
+      rightFerryingPosition = TargetingConstants.redRightFerryingTarget;
+    }
+    //ferryingPositions = List.of(leftFerryingPosition, rightFerryingPosition);
 
     // TargetingConstants.hubShotMap.put(
-    //     2.1, new ShotSettings(0.0, Rotation2d.fromRotations(0.052002), 75.0));
+    //     2.1, new ShotSettings(0.0, Rotation2d.fromRotations(0.06665), 70.0));
     // TargetingConstants.hubShotMap.put(
-    //     2.78, new ShotSettings(0.0, Rotation2d.fromRotations(0.064697), 75.0));
+    //     2.706, new ShotSettings(0.0, Rotation2d.fromRotations(0.065), 70.0));
     // TargetingConstants.hubShotMap.put(
-    //     3.237, new ShotSettings(0.0, Rotation2d.fromRotations(0.073468), 75.0));
+    //     3.486, new ShotSettings(0.0, Rotation2d.fromRotations(0.0698), 75.0)); // 0.08
     // TargetingConstants.hubShotMap.put(
-    //     4.52, new ShotSettings(0.0, Rotation2d.fromRotations(0.0964), 75.0));
+    //     4.135, new ShotSettings(0.0, Rotation2d.fromRotations(0.084229), 75.0));
     // TargetingConstants.hubShotMap.put(
-    //     4.607, new ShotSettings(0.0, Rotation2d.fromRotations(0.08231), 75.0));
+    //     4.583, new ShotSettings(0.0, Rotation2d.fromRotations(0.091064), 80.0));
     // TargetingConstants.hubShotMap.put(
-    //     5.46, new ShotSettings(0.0, Rotation2d.fromRotations(0.095215), 75.0));
+    //     5.122, new ShotSettings(0.0, Rotation2d.fromRotations(0.096), 80.0));
 
-    TargetingConstants.hubShotMap.put(
-        2.1, new ShotSettings(0.0, Rotation2d.fromRotations(0.04248), 70.0));
+        TargetingConstants.hubShotMap.put(
+        2.1, new ShotSettings(0.0, Rotation2d.fromRotations(0.0522), 70.0));
     TargetingConstants.hubShotMap.put(
         2.706, new ShotSettings(0.0, Rotation2d.fromRotations(0.063721), 70.0));
     TargetingConstants.hubShotMap.put(
@@ -62,19 +87,34 @@ public class TargetingSubsystem extends SubsystemBase {
         4.583, new ShotSettings(0.0, Rotation2d.fromRotations(0.091064), 80.0));
     TargetingConstants.hubShotMap.put(
         5.122, new ShotSettings(0.0, Rotation2d.fromRotations(0.096), 80.0));
-    hubPosition = new Pose2d(new Translation2d(11.909, 4.027), new Rotation2d());
     drivetrain = dt;
   }
 
   @Override
   public void periodic() {
+    
+    if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
+      hubPosition = TargetingConstants.redHubPosition;
+      leftFerryingPosition = TargetingConstants.redLeftFerryingTarget;
+      rightFerryingPosition = TargetingConstants.redRightFerryingTarget;
+    } else {
+      hubPosition = TargetingConstants.blueHubPosition;
+      leftFerryingPosition = TargetingConstants.blueLeftFerryingTarget;
+      rightFerryingPosition = TargetingConstants.blueRightFerryingTarget;
+    }
     Pose2d robotPose = drivetrain.getRobotPose();
     ChassisSpeeds fieldSpeeds = drivetrain.getFieldSpeeds();
+    if (isFerrying) {
+      Pose2d currentFerryingPos = rightFerryingPosition;
+      if (ferryingLeft) {
+        currentFerryingPos = leftFerryingPosition;
+      }
+        ShootingParameters ferryingParams = calculateShot(robotPose, fieldSpeeds, currentFerryingPos.getTranslation(), false);
+      calculatedParams = new ShootingParameters(ferryingParams.turretAngle(), TargetingConstants.ferryingHoodAngle, TargetingConstants.ferryingRPS);
+    } else {
+      calculatedParams = calculateShot(robotPose, fieldSpeeds, hubPosition.getTranslation(), false);
+    }
 
-    // Translation2d target = isInAllianceZone(robotPose) ? hubPosition :
-    // getFerryingTarget(robotPose);
-
-    calculatedParams = calculateShot(robotPose, fieldSpeeds, hubPosition.getTranslation(), false);
   }
 
   public ShootingParameters calculateShot(
@@ -152,16 +192,7 @@ public class TargetingSubsystem extends SubsystemBase {
     return () -> calculatedParams.flywheelRPS();
   }
 
-  // public static boolean isInAllianceZone(Pose2d robotPose) {
-  //   double boundaryLine = AllianceFlipUtil.applyX(FieldConstants.LinesVertical.allianceZone);
-
-  //   return DriverStation.getAlliance().get() == Alliance.Blue
-  //       ? (robotPose.getX() < boundaryLine)
-  //       : (robotPose.getX() > boundaryLine);
-  // }
-
-  // public static Translation2d getFerryingTarget(Pose2d robotPose) {
-  //   return AllianceFlipUtil.apply(
-  //       robotPose.getTranslation().nearest(TargetingConstants.ferryingTargets));
-  // }
+  public void isFerrying(boolean x) {
+    isFerrying = x;
+  }
 }

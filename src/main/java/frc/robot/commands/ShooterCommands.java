@@ -44,8 +44,8 @@ public class ShooterCommands {
     return Commands.sequence(
         Commands.parallel(
             flywheel.setShooterRPSCommand(() -> shooterRPS),
-            hood.setHoodAngle(() -> Rotation2d.fromRotations(0.0464))), // 0.05273
-        turret.goToAngleCommand(() -> Rotation2d.fromRotations(-0.5)),
+            hood.setHoodAngle(() -> Rotation2d.fromRotations(0.0517)), // 0.05273
+        turret.goToAngleCommand(() -> Rotation2d.fromRotations(0))),
         indexer.indexToShooter());
   }
 
