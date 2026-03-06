@@ -22,6 +22,7 @@ import frc.robot.subsystems.drive.DriveConstants;
 import frc.robot.subsystems.drive.TunerConstants;
 import frc.robot.subsystems.indexer.IndexerIOTalonFX;
 import frc.robot.subsystems.indexer.IndexerSubsystem;
+import frc.robot.subsystems.input.InputSubsystem;
 import frc.robot.subsystems.lights.LightsSubsystem;
 import frc.robot.subsystems.raspberry.PneumaticsConstants;
 import frc.robot.subsystems.raspberry.PneumaticsIORevPH;
@@ -76,6 +77,7 @@ public class RobotContainer {
 
   public final TargetingSubsystem targeting = new TargetingSubsystem(drivetrain);
 
+  public final InputSubsystem input = new InputSubsystem();
   public final LightsSubsystem lights = new LightsSubsystem();
 
   public final Auto auto;

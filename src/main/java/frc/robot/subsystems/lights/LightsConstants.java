@@ -5,7 +5,7 @@ import com.ctre.phoenix6.signals.RGBWColor;
 public class LightsConstants {
   //#region Constants
   public static int CandleID = 10;
-  public static int lastIndex = 0;
+  public static int lastIndex = 8;
   
   //#region Segments
   public static LEDSegment[] RightSegments = { LEDSegment.RightBottom, LEDSegment.RightTop };
@@ -28,12 +28,13 @@ public class LightsConstants {
   
   //#region Colors
   public static class ColorPalette {
-    static RGBWColor Orange = new RGBWColor(240, 50, 10);
-    static RGBWColor Red = new RGBWColor(200, 0, 0);
-    static RGBWColor Yellow = new RGBWColor(230, 200, 20);
-    static RGBWColor Green = new RGBWColor(0, 235, 0);
-    static RGBWColor Blue = new RGBWColor(0, 0, 230);
-    static RGBWColor White = new RGBWColor(200, 200, 200);
+    static RGBWColor Orange = new RGBWColor(255, 25, 0);
+    static RGBWColor Red = new RGBWColor(255, 0, 0);
+    static RGBWColor Yellow = new RGBWColor(242, 60, 0);
+    static RGBWColor Green = new RGBWColor(56, 209, 0);
+    static RGBWColor Blue = new RGBWColor(8, 32, 255);
+    static RGBWColor White = new RGBWColor(255, 255, 255);
+    static RGBWColor Purple = new RGBWColor(200, 0, 200);
 
     static RGBWColor Crossfade(RGBWColor a, RGBWColor b, double ratio) {
       return new RGBWColor(
