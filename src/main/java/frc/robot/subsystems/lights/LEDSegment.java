@@ -14,7 +14,8 @@ import com.ctre.phoenix6.signals.LarsonBounceValue;
 import com.ctre.phoenix6.signals.RGBWColor;
 
 public enum LEDSegment {
-  // NOTE: All segments point towards the middle of the robot (meaning between the center and shooter segments) by default
+  // NOTE: All segments point towards the middle of the robot (meaning between the center and
+  // shooter segments) by default
 
   // Individual
   ShooterTop(0, true, 31), // TODO: Sizing
@@ -39,7 +40,7 @@ public enum LEDSegment {
   QuadRightBottom(1, false, RightBottom.startIndex, ShooterBottom.endIndex),
   QuadLeftBottom(2, true, CenterBottom.startIndex, LeftBottom.endIndex),
   QuadLeftTop(3, false, LeftTop.startIndex, CenterTop.endIndex);
-  
+
   public final int animSlot;
   public final boolean reversed;
   public final int segmentSize;
@@ -54,6 +55,7 @@ public enum LEDSegment {
     LightsConstants.lastIndex += size;
     endIndex = LightsConstants.lastIndex - 1;
   }
+
   LEDSegment(int animSlot, boolean reversed, int startIndex, int endIndex) {
     this.animSlot = animSlot;
     this.reversed = reversed;
@@ -64,7 +66,7 @@ public enum LEDSegment {
 
   public static void ClearAnimIDs(int min, int max) {
     for (int i = min; i <= max; i++) LightsConstants.AllSegments[i].clearAnimation();
-  } 
+  }
 
   // #region Animations
 
@@ -74,9 +76,7 @@ public enum LEDSegment {
 
   public void setSolidColor(RGBWColor color) {
     LightsSubsystem.candle.setControl(new EmptyAnimation(animSlot));
-    LightsSubsystem.candle.setControl(
-        new SolidColor(startIndex, endIndex)
-            .withColor(color));
+    LightsSubsystem.candle.setControl(new SolidColor(startIndex, endIndex).withColor(color));
   }
 
   public void setStrobeAnimation(RGBWColor color, double periodSeconds) {
@@ -100,9 +100,7 @@ public enum LEDSegment {
   public void setRGBFadeAnimation(double periodSeconds) {
     double frameRateHz = 600.0 / periodSeconds; // Hz of 600 = 1 cycle per second
     LightsSubsystem.candle.setControl(
-        new RgbFadeAnimation(startIndex, endIndex)
-            .withFrameRate(frameRateHz)
-            .withSlot(animSlot));
+        new RgbFadeAnimation(startIndex, endIndex).withFrameRate(frameRateHz).withSlot(animSlot));
   }
 
   public void setRainbowAnimation(double periodSeconds, boolean inverted) {
@@ -111,25 +109,28 @@ public enum LEDSegment {
         new RainbowAnimation(startIndex, endIndex)
             .withFrameRate(frameRateHz)
             .withDirection(
-                (reversed != inverted) ? AnimationDirectionValue.Backward : AnimationDirectionValue.Forward)
+                (reversed != inverted)
+                    ? AnimationDirectionValue.Backward
+                    : AnimationDirectionValue.Forward)
             .withSlot(animSlot));
   }
 
   public void setFlowAnimation(RGBWColor color, double periodSeconds, boolean inverted) {
-    double frameRateHz =
-        2.0 * segmentSize / periodSeconds; // Hz of 2 = 1 cycle per second
-    LightsSubsystem.candle.setControl(new ColorFlowAnimation(startIndex, endIndex)
+    double frameRateHz = 2.0 * segmentSize / periodSeconds; // Hz of 2 = 1 cycle per second
+    LightsSubsystem.candle.setControl(
+        new ColorFlowAnimation(startIndex, endIndex)
             .withColor(color)
             .withFrameRate(frameRateHz)
             .withDirection(
-                (reversed != inverted) ? AnimationDirectionValue.Backward : AnimationDirectionValue.Forward)
+                (reversed != inverted)
+                    ? AnimationDirectionValue.Backward
+                    : AnimationDirectionValue.Forward)
             .withSlot(animSlot));
   }
 
   public void setLarsonAnimation(RGBWColor color, double periodSeconds, int size) {
     size = Math.min(size, 15);
-    double frameRateHz =
-        2.0 * (segmentSize - size) / periodSeconds; // Hz of 2 = 1 cycle per second
+    double frameRateHz = 2.0 * (segmentSize - size) / periodSeconds; // Hz of 2 = 1 cycle per second
     LightsSubsystem.candle.setControl(
         new LarsonAnimation(startIndex, endIndex)
             .withColor(color)
@@ -146,7 +147,9 @@ public enum LEDSegment {
             .withSparking(sparking)
             .withFrameRate(fps)
             .withDirection(
-                (reversed != inverted) ? AnimationDirectionValue.Backward : AnimationDirectionValue.Forward)
+                (reversed != inverted)
+                    ? AnimationDirectionValue.Backward
+                    : AnimationDirectionValue.Forward)
             .withSlot(animSlot));
   }
 }
