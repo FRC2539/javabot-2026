@@ -170,12 +170,12 @@ public class RobotContainer {
     //     .onTrue(pneumatics.setIntakePosition(PneumaticsSubsystem.PneumaticPosition.REVERSE));
 
     // operatorController
-    //     .getLeftTrigger()
+    //     .getRightTrigger()
     //     .whileTrue(ShooterCommands.HubShot(flywheel, indexer, turret, hood, 65));
 
-    operatorController
-        .getRightTrigger()
-        .whileTrue(new SHOOTONTHEFLY(turret, hood, targeting, flywheel, indexer));
+    // operatorController
+    //     .getLeftTrigger()
+    //     .whileTrue(new SHOOTONTHEFLY(turret, hood, targeting, flywheel, indexer));
 
     // operatorController
     //     .getA()
