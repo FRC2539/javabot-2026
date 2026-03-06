@@ -9,7 +9,7 @@ import edu.wpi.first.math.interpolation.InverseInterpolator;
 import frc.robot.subsystems.shooter.hood.HoodConstants;
 
 public class TargetingConstants {
-  public static double estimatedShotLatency = 0.04;
+  public static double estimatedShotLatency = 0.9;
   public static double fieldLengthMeters = 16.54098798984;
   public static Rotation2d ferryingHoodAngle =
       Rotation2d.fromRotations(HoodConstants.maxHoodAngle.getRotations() - 0.03);

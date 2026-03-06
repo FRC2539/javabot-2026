@@ -21,8 +21,8 @@ public class TargetingSubsystem extends SubsystemBase {
   private ShootingParameters calculatedParams =
       new ShootingParameters(new Rotation2d(), new Rotation2d(), 0.0);
 
-  private static final LinearFilter vxFilter = LinearFilter.movingAverage(5);
-  private static final LinearFilter vyFilter = LinearFilter.movingAverage(5);
+  // private static final LinearFilter vxFilter = LinearFilter.movingAverage(5);
+  // private static final LinearFilter vyFilter = LinearFilter.movingAverage(5);
 
   @AutoLogOutput public Pose2d hubPosition;
   @AutoLogOutput public Pose2d turretPos;
@@ -121,14 +121,14 @@ public class TargetingSubsystem extends SubsystemBase {
 
     Translation2d filteredRobotVelocity =
         new Translation2d(
-            vxFilter.calculate(fieldSpeeds.vxMetersPerSecond),
-            vyFilter.calculate(fieldSpeeds.vyMetersPerSecond));
+            fieldSpeeds.vxMetersPerSecond,
+            fieldSpeeds.vyMetersPerSecond);
 
     Translation2d futureTurretPos =
         robotPose
             .getTranslation()
-            .plus(TurretConstants.turretOffset.rotateBy(robotPose.getRotation()));
-    // .plus(filteredRobotVelocity.times(TargetingConstants.estimatedShotLatency));
+            .plus(TurretConstants.turretOffset.rotateBy(robotPose.getRotation()))
+    .plus(filteredRobotVelocity.times(TargetingConstants.estimatedShotLatency));
 
     Translation2d realDisplacementToHub = targetPose.minus(futureTurretPos);
 
