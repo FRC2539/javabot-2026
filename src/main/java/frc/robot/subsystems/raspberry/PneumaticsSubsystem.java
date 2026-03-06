@@ -46,4 +46,8 @@ public class PneumaticsSubsystem extends SubsystemBase {
 
     SmartDashboard.putNumber("Pneumatics Pressure (PSI)", inputs.pressurePsi);
   }
+
+  public Value getIntakeState() {
+    return io.getIntakeSolenoid();
+  }
 }

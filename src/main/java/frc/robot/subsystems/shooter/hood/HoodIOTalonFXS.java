@@ -60,4 +60,8 @@ public class HoodIOTalonFXS implements HoodIO {
   public void setHoodVoltage(double voltage) {
     motor.setVoltage(voltage);
   }
+
+  public double getExpectedDelta() {
+    return targetAngle.getRotations() - motor.getPosition().getValueAsDouble();
+  }
 }

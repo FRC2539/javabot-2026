@@ -5,9 +5,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.subsystems.vision.LimelightHelpers.PoseEstimate;
 import java.util.function.Supplier;
 
-import org.littletonrobotics.junction.AutoLog;
-import org.littletonrobotics.junction.AutoLogOutput;
-
 public class VisionIOLimelight implements VisionIO {
 
   String cameraName = "";
@@ -33,7 +30,7 @@ public class VisionIOLimelight implements VisionIO {
     updateHeading(currentHeading);
   }
 
-  @Override 
+  @Override
   public PoseEstimate getPoseEstimateMT2() {
     return LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(cameraName);
   }

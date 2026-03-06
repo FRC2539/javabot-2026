@@ -9,6 +9,7 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -26,6 +27,8 @@ import frc.robot.subsystems.drive.DriveConstants;
 import frc.robot.subsystems.drive.TunerConstants;
 import frc.robot.subsystems.indexer.IndexerIOTalonFX;
 import frc.robot.subsystems.indexer.IndexerSubsystem;
+import frc.robot.subsystems.input.InputSubsystem;
+import frc.robot.subsystems.lights.LightsSubsystem;
 import frc.robot.subsystems.raspberry.PneumaticsConstants;
 import frc.robot.subsystems.raspberry.PneumaticsIORevPH;
 import frc.robot.subsystems.raspberry.PneumaticsSubsystem;
@@ -78,6 +81,9 @@ public class RobotContainer {
   public final FlywheelSubsystem flywheel = new FlywheelSubsystem(new FlywheelIOTalonFX());
 
   public final TargetingSubsystem targeting = new TargetingSubsystem(drivetrain);
+
+  public final InputSubsystem input = new InputSubsystem();
+  public final LightsSubsystem lights = new LightsSubsystem();
 
   public final Auto auto;
 
@@ -167,9 +173,9 @@ public class RobotContainer {
     //     .getLeftTrigger()
     //     .whileTrue(ShooterCommands.HubShot(flywheel, indexer, turret, hood, 65));
 
-    // operatorController.getRightTrigger().whileTrue(new 
-    // SHOOTONTHEFLY(turret, hood, targeting,
-    // flywheel, indexer));
+    operatorController
+        .getRightTrigger()
+        .whileTrue(new SHOOTONTHEFLY(turret, hood, targeting, flywheel, indexer));
 
     // operatorController
     //     .getA()
@@ -214,6 +220,11 @@ public class RobotContainer {
     operatorController.getX().onTrue(pneumatics.toggleIntake()); // in case
     operatorController.getB().whileTrue(indexer.setVoltages(4, -4)); // in case
     operatorController.getA().onTrue(roller.setVoltage(-12.0)); // in case
+
+    // #region Lights Suppliers
+    lights.isAiming = () -> operatorController.getA().getAsBoolean();
+    lights.isShooting = () -> operatorController.getBack().getAsBoolean();
+    lights.isIntaking = () -> pneumatics.getIntakeState() == Value.kForward;
   }
 
   private ChassisSpeeds getDriverChassisSpeeds() {

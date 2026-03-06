@@ -21,4 +21,6 @@ public interface FlywheelIO {
 
   @AutoLogOutput
   public void setControlVelocityRPS(double targetVelocity);
+
+  public double getExpectedDelta();
 }

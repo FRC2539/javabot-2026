@@ -21,4 +21,6 @@ public interface TurretIO {
   void setTargetHeading(Rotation2d desiredAngle);
 
   boolean isAtSetpoint();
+
+  public double getExpectedDelta();
 }
