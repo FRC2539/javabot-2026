@@ -50,8 +50,7 @@ public class FERRYING extends Command {
 
     Rotation2d mechanicalTarget =
         targetTurretAngle
-            .plus(Rotation2d.fromRotations(0.145508))
-            .plus(Rotation2d.fromRotations(.03));
+            .plus(Rotation2d.fromRotations(0.146484));
 
     turretSubsystem.setTargetAngle(targetingSubsystem.getIdealTurretAngle().get());
     hoodSubsystem.setTargetAngle(targetingSubsystem.getIdealHoodAngle());

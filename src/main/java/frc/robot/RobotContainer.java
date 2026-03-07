@@ -32,6 +32,8 @@ import frc.robot.subsystems.lights.LightsSubsystem;
 import frc.robot.subsystems.raspberry.PneumaticsConstants;
 import frc.robot.subsystems.raspberry.PneumaticsIORevPH;
 import frc.robot.subsystems.raspberry.PneumaticsSubsystem;
+import frc.robot.subsystems.raspberry.PneumaticsSubsystem.PneumaticPosition;
+import frc.robot.subsystems.roller.IntakeConstants;
 import frc.robot.subsystems.roller.RollerIOTalonFXS;
 import frc.robot.subsystems.roller.RollerSubsystem;
 import frc.robot.subsystems.shooter.flywheel.FlywheelIOTalonFX;
@@ -227,9 +229,13 @@ public class RobotContainer {
     // operatorController.getDPadDown().onTrue(getAutonomousCommand()); //move shot down
 
     // operatorController.getY().whileTrue(getAutonomousCommand()); //feed
-    operatorController.getX().onTrue(pneumatics.toggleIntake()); // in case
+    operatorController.getX().onTrue(Commands.sequence(
+            pneumatics.setIntakePosition(PneumaticPosition.FORWARD),
+            Commands.waitSeconds(0.75),
+            roller.setVoltage(IntakeConstants.dropvoltage)));
+            
     operatorController.getB().whileTrue(indexer.setVoltages(4, -4)); // in case
-    operatorController.getA().onTrue(roller.setVoltage(-12.0)); // in case
+    operatorController.getA().whileTrue(roller.setVoltage(-12.0)); // in case
 
     // #region Lights Suppliers
     lights.isAiming = () -> operatorController.getA().getAsBoolean();

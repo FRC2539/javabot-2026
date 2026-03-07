@@ -1,7 +1,6 @@
 package frc.robot.subsystems.shooter.targeting;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -120,15 +119,13 @@ public class TargetingSubsystem extends SubsystemBase {
       Pose2d robotPose, ChassisSpeeds fieldSpeeds, Translation2d targetPose, boolean SOTM) {
 
     Translation2d filteredRobotVelocity =
-        new Translation2d(
-            fieldSpeeds.vxMetersPerSecond,
-            fieldSpeeds.vyMetersPerSecond);
+        new Translation2d(fieldSpeeds.vxMetersPerSecond, fieldSpeeds.vyMetersPerSecond);
 
     Translation2d futureTurretPos =
         robotPose
             .getTranslation()
             .plus(TurretConstants.turretOffset.rotateBy(robotPose.getRotation()))
-    .plus(filteredRobotVelocity.times(TargetingConstants.estimatedShotLatency));
+            .plus(filteredRobotVelocity.times(TargetingConstants.estimatedShotLatency));
 
     Translation2d realDisplacementToHub = targetPose.minus(futureTurretPos);
 
@@ -143,7 +140,7 @@ public class TargetingSubsystem extends SubsystemBase {
     double virtualDistance = realDistance;
 
     if (SOTM) { // Shooting on the move!
-      for (int i = 0; i < 5; i++) {
+      for (int i = 0; i < 3; i++) {
 
         virtualTarget = targetPose.minus(filteredRobotVelocity.times(estimatedFlightTime));
 

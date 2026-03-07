@@ -16,7 +16,7 @@ public class RollerIOTalonFXS implements RollerIO {
 
     rollerConfig.Commutation.MotorArrangement = MotorArrangementValue.Minion_JST;
     rollerMotor.getConfigurator().apply(rollerConfig);
-    rollerMotor.setNeutralMode(NeutralModeValue.Brake);
+    rollerMotor.setNeutralMode(NeutralModeValue.Coast);
   }
 
   @Override
