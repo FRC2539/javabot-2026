@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.SHOOTONTHEFLY;
+import frc.robot.commands.ShooterCommands;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 import frc.robot.subsystems.drive.DriveConstants;
 import frc.robot.subsystems.raspberry.PneumaticsSubsystem.PneumaticPosition;
@@ -117,6 +118,8 @@ public class Auto {
             robotContainer.targeting,
             robotContainer.flywheel,
             robotContainer.indexer));
+
+    NamedCommands.registerCommand("hubshot", ShooterCommands.HubShot(robotContainer.flywheel, robotContainer.indexer, robotContainer.turret, robotContainer.hood, 65));
   }
 
   public Command getAutoCommand() {

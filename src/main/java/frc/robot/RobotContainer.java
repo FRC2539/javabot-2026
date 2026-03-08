@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.FERRYING;
+import frc.robot.commands.ROTATEDRIVETRAIN;
 import frc.robot.commands.SHOOTONTHEFLY;
 import frc.robot.commands.ShooterCommands;
 import frc.robot.commands.TrenchAssistCommand;
@@ -175,9 +176,9 @@ public class RobotContainer {
     //     .getRightTrigger()
     //     .whileTrue(ShooterCommands.HubShot(flywheel, indexer, turret, hood, 65));
 
-    // operatorController
-    //     .getLeftTrigger()
-    //     .whileTrue(new SHOOTONTHEFLY(turret, hood, targeting, flywheel, indexer));
+    operatorController
+        .getLeftTrigger()
+        .whileTrue(new ROTATEDRIVETRAIN(hood, targeting, flywheel, indexer, drivetrain));
 
     // operatorController
     //     .getA()
@@ -199,10 +200,10 @@ public class RobotContainer {
 
     operatorController
         .getLeftBumper()
-        .whileTrue(new FERRYING(turret, hood, targeting, flywheel, indexer, true));
+        .whileTrue(ShooterCommands.EvilFeed(flywheel, indexer, hood, maxAngularRate));
     operatorController
         .getRightBumper()
-        .whileTrue(new FERRYING(turret, hood, targeting, flywheel, indexer, false));
+        .whileTrue(ShooterCommands.EvilFeed(flywheel, indexer, hood, maxAngularRate));
 
     leftDriveController
         .getBottomThumb()
@@ -210,9 +211,9 @@ public class RobotContainer {
             new TrenchAssistCommand(
                 () -> getXVelocity(), () -> getYVelocity(), () -> getThetaVelocity(), drivetrain));
     // comp controls - operator
-    operatorController
-        .getLeftTrigger()
-        .whileTrue(new SHOOTONTHEFLY(turret, hood, targeting, flywheel, indexer));
+    // operatorController
+    //     .getLeftTrigger()
+    //     .whileTrue(new SHOOTONTHEFLY(turret, hood, targeting, flywheel, indexer));
     operatorController
         .getRightTrigger()
         .whileTrue(ShooterCommands.HubShot(flywheel, indexer, turret, hood, 65));
@@ -228,7 +229,7 @@ public class RobotContainer {
     // operatorController.getDPadRight().onTrue(getAutonomousCommand()); //move shot right
     // operatorController.getDPadDown().onTrue(getAutonomousCommand()); //move shot down
 
-    // operatorController.getY().whileTrue(getAutonomousCommand()); //feed
+    operatorController.getY().onTrue(pneumatics.toggleIntake());
     operatorController.getX().onTrue(Commands.sequence(
             pneumatics.setIntakePosition(PneumaticPosition.FORWARD),
             Commands.waitSeconds(0.75),

@@ -19,7 +19,7 @@ public class TurretSubsystem extends SubsystemBase {
     this.io = io;
     LightsSubsystem.turretIO = io;
 
-    setDefaultCommand(setVoltage(0));
+    // setDefaultCommand(setVoltage(0));
   }
 
   @Override

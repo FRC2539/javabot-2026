@@ -44,8 +44,8 @@ public class ShooterCommands {
     return Commands.sequence(
         Commands.parallel(
             flywheel.setShooterRPSCommand(() -> shooterRPS),
-            hood.setHoodAngle(() -> Rotation2d.fromRotations(0.0517)), // 0.05273
-            turret.goToAngleCommand(() -> Rotation2d.fromRotations(0))),
+            hood.setHoodAngle(() -> Rotation2d.fromRotations(0.0517))), // 0.05273
+    
         indexer.indexToShooter());
   }
 
@@ -55,6 +55,19 @@ public class ShooterCommands {
         Commands.parallel(
             flywheel.setShooterRPSCommand(() -> shooterRPS),
             hood.setHoodAngle(() -> Rotation2d.fromRotations(0.04248))),
+        indexer.indexToShooter());
+  }
+  
+    public static Command EvilFeed(
+      FlywheelSubsystem flywheel,
+      IndexerSubsystem indexer,
+      HoodSubsystem hood,
+      double shooterRPS) {
+    return Commands.sequence(
+        Commands.parallel(
+            flywheel.setShooterRPSCommand(() -> 70.0),
+            hood.setHoodAngle(() -> Rotation2d.fromRotations(0.12))), 
+    
         indexer.indexToShooter());
   }
 
