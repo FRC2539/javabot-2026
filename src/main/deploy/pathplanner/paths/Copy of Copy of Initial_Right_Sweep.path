@@ -64,16 +64,16 @@
     },
     {
       "anchor": {
-        "x": 1.8221327014218005,
-        "y": 0.8003199052132686
+        "x": 2.7140876777251184,
+        "y": 0.9615165876777234
       },
       "prevControl": {
-        "x": 3.240663507109004,
-        "y": 0.8970379146919423
+        "x": 3.8854502369668253,
+        "y": 0.47792654028435894
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "trenchscore"
+      "linkedName": "rshoot"
     }
   ],
   "rotationTargets": [
@@ -104,7 +104,7 @@
       "minWaypointRelativePos": 3.162162162162155,
       "maxWaypointRelativePos": 4.5,
       "constraints": {
-        "maxVelocity": 1.2,
+        "maxVelocity": 2.0,
         "maxAcceleration": 12.3,
         "maxAngularVelocity": 1000.0,
         "maxAngularAcceleration": 1200.0,

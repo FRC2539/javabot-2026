@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.FERRYING;
+import frc.robot.commands.ROTATEDRIVETRAIN;
 import frc.robot.commands.SHOOTONTHEFLY;
 import frc.robot.commands.ShooterCommands;
 import frc.robot.commands.TrenchAssistCommand;
@@ -32,6 +33,8 @@ import frc.robot.subsystems.lights.LightsSubsystem;
 import frc.robot.subsystems.raspberry.PneumaticsConstants;
 import frc.robot.subsystems.raspberry.PneumaticsIORevPH;
 import frc.robot.subsystems.raspberry.PneumaticsSubsystem;
+import frc.robot.subsystems.raspberry.PneumaticsSubsystem.PneumaticPosition;
+import frc.robot.subsystems.roller.IntakeConstants;
 import frc.robot.subsystems.roller.RollerIOTalonFXS;
 import frc.robot.subsystems.roller.RollerSubsystem;
 import frc.robot.subsystems.shooter.flywheel.FlywheelIOTalonFX;
@@ -173,9 +176,9 @@ public class RobotContainer {
     //     .getRightTrigger()
     //     .whileTrue(ShooterCommands.HubShot(flywheel, indexer, turret, hood, 65));
 
-    // operatorController
-    //     .getLeftTrigger()
-    //     .whileTrue(new SHOOTONTHEFLY(turret, hood, targeting, flywheel, indexer));
+    operatorController
+        .getLeftTrigger()
+        .whileTrue(new ROTATEDRIVETRAIN(hood, targeting, flywheel, indexer, drivetrain));
 
     // operatorController
     //     .getA()
@@ -197,10 +200,10 @@ public class RobotContainer {
 
     operatorController
         .getLeftBumper()
-        .whileTrue(new FERRYING(turret, hood, targeting, flywheel, indexer, true));
+        .whileTrue(ShooterCommands.EvilFeed(flywheel, indexer, hood, maxAngularRate));
     operatorController
         .getRightBumper()
-        .whileTrue(new FERRYING(turret, hood, targeting, flywheel, indexer, false));
+        .whileTrue(ShooterCommands.EvilFeed(flywheel, indexer, hood, maxAngularRate));
 
     leftDriveController
         .getBottomThumb()
@@ -208,9 +211,9 @@ public class RobotContainer {
             new TrenchAssistCommand(
                 () -> getXVelocity(), () -> getYVelocity(), () -> getThetaVelocity(), drivetrain));
     // comp controls - operator
-    operatorController
-        .getLeftTrigger()
-        .whileTrue(new SHOOTONTHEFLY(turret, hood, targeting, flywheel, indexer));
+    // operatorController
+    //     .getLeftTrigger()
+    //     .whileTrue(new SHOOTONTHEFLY(turret, hood, targeting, flywheel, indexer));
     operatorController
         .getRightTrigger()
         .whileTrue(ShooterCommands.HubShot(flywheel, indexer, turret, hood, 65));
@@ -226,10 +229,14 @@ public class RobotContainer {
     // operatorController.getDPadRight().onTrue(getAutonomousCommand()); //move shot right
     // operatorController.getDPadDown().onTrue(getAutonomousCommand()); //move shot down
 
-    // operatorController.getY().whileTrue(getAutonomousCommand()); //feed
-    operatorController.getX().onTrue(pneumatics.toggleIntake()); // in case
+    operatorController.getY().onTrue(pneumatics.toggleIntake());
+    operatorController.getX().onTrue(Commands.sequence(
+            pneumatics.setIntakePosition(PneumaticPosition.FORWARD),
+            Commands.waitSeconds(0.75),
+            roller.setVoltage(IntakeConstants.dropvoltage)));
+            
     operatorController.getB().whileTrue(indexer.setVoltages(4, -4)); // in case
-    operatorController.getA().onTrue(roller.setVoltage(-12.0)); // in case
+    operatorController.getA().whileTrue(roller.setVoltage(-12.0)); // in case
 
     // #region Lights Suppliers
     lights.isAiming = () -> operatorController.getA().getAsBoolean();

@@ -287,10 +287,10 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         rejectPose = true;
       }
 
-      if (estimate.avgTagDist
-          > 3.5) { // reject tags if estimate is the average tag distance is more than 2 meters awa
-        rejectPose = true;
-      }
+      // if (estimate.avgTagDist
+      //     > 3.5) { // reject tags if estimate is the average tag distance is more than 2 meters awa
+      //   rejectPose = true;
+      // }
 
       if (!rejectPose) {
         // Logger.recordOutput("accepted limelight pose", estimate.pose);
@@ -300,7 +300,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             // VecBuilder.fill(
             //     0, 0, .99999)); // increase values to trust vision estimate less. (x, y, heading)
             VecBuilder.fill(
-                0.65, 0.65,
+                0.5, 0.5,
                 .99999)); // increase values to trust vision estimate less. (x, y, heading)
       }
     }

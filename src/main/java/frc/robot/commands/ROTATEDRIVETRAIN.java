@@ -1,58 +1,59 @@
 package frc.robot.commands;
 
+import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.ctre.phoenix6.swerve.SwerveRequest;
+
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 import frc.robot.subsystems.indexer.IndexerSubsystem;
 import frc.robot.subsystems.shooter.flywheel.FlywheelSubsystem;
 import frc.robot.subsystems.shooter.hood.HoodSubsystem;
 import frc.robot.subsystems.shooter.targeting.TargetingSubsystem;
-import frc.robot.subsystems.shooter.turret.TurretConstants;
 import frc.robot.subsystems.shooter.turret.TurretSubsystem;
 
-public class FERRYING extends Command {
-  TurretSubsystem turretSubsystem;
+public class ROTATEDRIVETRAIN extends Command {
   HoodSubsystem hoodSubsystem;
   TargetingSubsystem targetingSubsystem;
   FlywheelSubsystem flywheelSubsystem;
   IndexerSubsystem indexerSubsystem;
-  boolean ferryingLeft;
+  CommandSwerveDrivetrain dt;
+
+    private final SwerveRequest.FieldCentric driveRequest =
+      new SwerveRequest.FieldCentric()
+          .withDriveRequestType(DriveRequestType.Velocity);
+
+  PIDController thetaController = new PIDController(3, 0, 0);
 
   public boolean hasSpunUp = false;
 
-  public FERRYING(
-      TurretSubsystem turret,
+  public ROTATEDRIVETRAIN(
       HoodSubsystem hood,
       TargetingSubsystem targeting,
       FlywheelSubsystem flywheel,
       IndexerSubsystem indexer,
-      boolean fL) {
+      CommandSwerveDrivetrain drivetrain) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(turret, hood, targeting, flywheel, indexer);
-    turretSubsystem = turret;
+    addRequirements(hood, targeting, flywheel, indexer);
     hoodSubsystem = hood;
     targetingSubsystem = targeting;
     flywheelSubsystem = flywheel;
     indexerSubsystem = indexer;
-    ferryingLeft = fL;
+    dt = drivetrain;
   }
 
   @Override
   public void initialize() {
-    targetingSubsystem.isFerrying(true);
-
-    targetingSubsystem.ferryingLeft = ferryingLeft;
+    targetingSubsystem.isFerrying(false);
+    thetaController.setTolerance(Units.degreesToRotations(7.5));
+    thetaController.enableContinuousInput(Units.degreesToRotations(-180), Units.degreesToRotations(-180));
   }
 
   @Override
   public void execute() {
 
-    Rotation2d targetTurretAngle = targetingSubsystem.getIdealTurretAngle().get();
-
-    Rotation2d mechanicalTarget =
-        targetTurretAngle
-            .plus(Rotation2d.fromRotations(0.146484));
-
-    turretSubsystem.setTargetAngle(targetingSubsystem.getIdealTurretAngle().get());
     hoodSubsystem.setTargetAngle(targetingSubsystem.getIdealHoodAngle());
     flywheelSubsystem.setTargetRPS(targetingSubsystem.getIdealFlywheelRPS().get());
     // System.out.println(
@@ -63,17 +64,17 @@ public class FERRYING extends Command {
     //       + "turret "
     //       + targetingSubsystem.getIdealTurretAngle().get().getDegrees());
 
+
+    double desiredRotationalRate = thetaController.calculate(dt.getRobotPose().getRotation().getRotations(), targetingSubsystem.getIdealTurretAngle().get().getRotations());
+    dt.setControl(driveRequest.withRotationalRate(desiredRotationalRate));
+
     if (flywheelSubsystem.atSetpoint()) {
       hasSpunUp = true;
     }
-
-    if (mechanicalTarget.getRotations() < TurretConstants.maxAngle.getRotations()
-        && mechanicalTarget.getRotations() > TurretConstants.minAngle.getRotations()) {
-      if (turretSubsystem.isAtSetpoint()
-          && hoodSubsystem.isAtSetpoint()
-          && (flywheelSubsystem.atSetpoint() || hasSpunUp)) {
-        indexerSubsystem.setVoltagesFunction(-12, 12);
-      }
+    if (thetaController.atSetpoint()
+        && hoodSubsystem.isAtSetpoint()
+        && (flywheelSubsystem.atSetpoint() || hasSpunUp)) {
+      indexerSubsystem.setVoltagesFunction(-12, 12);
     }
   }
 }

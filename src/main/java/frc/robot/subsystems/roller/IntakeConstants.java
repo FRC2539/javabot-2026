@@ -10,5 +10,5 @@ public class IntakeConstants {
 
   public static final double intakeVoltage = 6;
 
-  public static final double dropvoltage = -3;
+  public static final double dropvoltage = -6;
 }

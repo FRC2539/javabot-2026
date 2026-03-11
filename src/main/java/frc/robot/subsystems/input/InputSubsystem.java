@@ -128,12 +128,12 @@ public class InputSubsystem extends SubsystemBase {
     if (s.isEmpty() || DriverStation.getAlliance().isEmpty()) return HubActivity.Both;
     if (s.substring(0, 1).equals("R"))
       return (DriverStation.getAlliance().get().equals(Alliance.Red))
-          ? HubActivity.Ally
-          : HubActivity.Opponent;
+          ? HubActivity.Opponent
+          : HubActivity.Ally;
     if (s.substring(0, 1).equals("B"))
       return (DriverStation.getAlliance().get().equals(Alliance.Blue))
-          ? HubActivity.Ally
-          : HubActivity.Opponent;
+          ? HubActivity.Opponent
+          : HubActivity.Ally;
     return HubActivity.Both;
   }
 
