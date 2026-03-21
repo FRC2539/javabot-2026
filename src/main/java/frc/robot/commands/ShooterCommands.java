@@ -65,11 +65,12 @@ public class ShooterCommands {
       double shooterRPS) {
     return Commands.sequence(
         Commands.parallel(
-            flywheel.setShooterRPSCommand(() -> 70.0),
-            hood.setHoodAngle(() -> Rotation2d.fromRotations(0.12))), 
+            flywheel.setShooterRPSCommand(() -> 80.0),
+            hood.setHoodAngle(() -> Rotation2d.fromRotations(0.13))), 
     
         indexer.indexToShooter());
   }
+
 
   // public static Command rangedShot(FlywheelSubsystem flywheel, IndexerSubsystem indexer,
   // TurretSubsystem turret, HoodSubsystem hood, TargetingSubsystem targeting) {

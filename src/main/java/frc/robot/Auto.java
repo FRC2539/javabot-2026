@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.commands.ROTATEDRIVETRAIN;
 import frc.robot.commands.SHOOTONTHEFLY;
 import frc.robot.commands.ShooterCommands;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
@@ -118,6 +119,8 @@ public class Auto {
             robotContainer.targeting,
             robotContainer.flywheel,
             robotContainer.indexer));
+
+      NamedCommands.registerCommand("rotatedrivetrain", new ROTATEDRIVETRAIN(robotContainer.hood, robotContainer.targeting, robotContainer.flywheel, robotContainer.indexer, robotContainer.drivetrain));
 
     NamedCommands.registerCommand("hubshot", ShooterCommands.HubShot(robotContainer.flywheel, robotContainer.indexer, robotContainer.turret, robotContainer.hood, 65));
   }

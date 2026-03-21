@@ -156,7 +156,7 @@ public class TargetingSubsystem extends SubsystemBase {
     Translation2d aimingVector =
         realDisplacementToHub; // realDisplacementToHub.minus(futureTurretPos);
 
-    Rotation2d robotRelativeTurretAngle = aimingVector.getAngle().minus(robotPose.getRotation());
+    Rotation2d robotRelativeTurretAngle = aimingVector.getAngle();
 
     // double rots = robotRelativeTurretAngle.getRotations();
     // rots = Math.round(rots * Math.pow(10, 2)) / Math.pow(10, 2);

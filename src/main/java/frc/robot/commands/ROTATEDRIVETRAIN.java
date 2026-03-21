@@ -3,6 +3,7 @@ package frc.robot.commands;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
@@ -12,6 +13,7 @@ import frc.robot.subsystems.indexer.IndexerSubsystem;
 import frc.robot.subsystems.shooter.flywheel.FlywheelSubsystem;
 import frc.robot.subsystems.shooter.hood.HoodSubsystem;
 import frc.robot.subsystems.shooter.targeting.TargetingSubsystem;
+import frc.robot.subsystems.shooter.turret.TurretConstants;
 import frc.robot.subsystems.shooter.turret.TurretSubsystem;
 
 public class ROTATEDRIVETRAIN extends Command {
@@ -25,7 +27,7 @@ public class ROTATEDRIVETRAIN extends Command {
       new SwerveRequest.FieldCentric()
           .withDriveRequestType(DriveRequestType.Velocity);
 
-  PIDController thetaController = new PIDController(3, 0, 0);
+  PIDController thetaController = new PIDController(25, 0, 0.03);
 
   public boolean hasSpunUp = false;
 
@@ -36,7 +38,7 @@ public class ROTATEDRIVETRAIN extends Command {
       IndexerSubsystem indexer,
       CommandSwerveDrivetrain drivetrain) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(hood, targeting, flywheel, indexer);
+    addRequirements(hood, targeting, flywheel, indexer, drivetrain);
     hoodSubsystem = hood;
     targetingSubsystem = targeting;
     flywheelSubsystem = flywheel;
@@ -47,8 +49,9 @@ public class ROTATEDRIVETRAIN extends Command {
   @Override
   public void initialize() {
     targetingSubsystem.isFerrying(false);
-    thetaController.setTolerance(Units.degreesToRotations(7.5));
-    thetaController.enableContinuousInput(Units.degreesToRotations(-180), Units.degreesToRotations(-180));
+    thetaController.setTolerance(Units.degreesToRotations(3.5));
+    thetaController.enableContinuousInput(Units.degreesToRotations(-180), Units.degreesToRotations(180));
+    thetaController.setSetpoint(targetingSubsystem.getIdealTurretAngle().get().getRotations());
   }
 
   @Override
@@ -65,7 +68,13 @@ public class ROTATEDRIVETRAIN extends Command {
     //       + targetingSubsystem.getIdealTurretAngle().get().getDegrees());
 
 
-    double desiredRotationalRate = thetaController.calculate(dt.getRobotPose().getRotation().getRotations(), targetingSubsystem.getIdealTurretAngle().get().getRotations());
+    double currentHeadingRot =  MathUtil.inputModulus(
+            dt.getHeading().getRotations(),
+            -.5,
+            .5);
+    double desiredRotationalRate = thetaController.calculate(currentHeadingRot, (targetingSubsystem.getIdealTurretAngle()).get().getRotations());
+
+    System.out.println(desiredRotationalRate);
     dt.setControl(driveRequest.withRotationalRate(desiredRotationalRate));
 
     if (flywheelSubsystem.atSetpoint()) {

@@ -70,8 +70,14 @@ public class TurretSubsystem extends SubsystemBase {
     return Commands.run(() -> io.setVoltage(volts), this);
   }
 
-  @AutoLogOutput
+  // @AutoLogOutput
+  // public Rotation2d currentTurretHeading() {
+  //   return Rotation2d.fromDegrees(inputs.positionDeg).plus(Rotation2d.fromRotations(0.1519));
+  // }
+
+    @AutoLogOutput
   public Rotation2d currentTurretHeading() {
-    return Rotation2d.fromDegrees(inputs.positionDeg).plus(Rotation2d.fromRotations(0.1519));
+    return Rotation2d.fromDegrees(inputs.positionDeg);
   }
+
 }

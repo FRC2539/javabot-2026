@@ -15,10 +15,7 @@ public class IndexerIOTalonFX implements IndexerIO {
         .getConfigurator()
         .apply(
             new TalonFXConfiguration()
-                .withCurrentLimits(
-                    new CurrentLimitsConfigs()
-                        .withSupplyCurrentLimitEnable(true)
-                        .withSupplyCurrentLimit(40)));
+                );
   }
 
   @Override
