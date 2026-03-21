@@ -21,7 +21,7 @@ public class TrenchAssistCommand extends Command {
 
   CommandSwerveDrivetrain drivetrain;
 
-  PIDController lateralAssistController = new PIDController(4, 0, 0.1);
+  PIDController lateralAssistController = new PIDController(5.5, 0, 0.1);
 
   SwerveRequest.ApplyFieldSpeeds controlRequest =
       new ApplyFieldSpeeds()
